@@ -1,10 +1,30 @@
-name: Actions 😎
+name: Build Game
 
 on: [push, pull_request]
 
 jobs:
+  test:
+    name: Test project
+  - uses: game-ci/unity-test-runner@v2
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    with:
+      projectPath: path/to/your/project
+      githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  - uses: game-ci/unity-test-runner@v2
+    with:
+      githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  - uses: actions/upload-artifact@v2
+    if: always()
+    with:
+      name: Test results
+      path: artifacts
+      
+jobs:
   build:
-    name: Build my project ✨
+    name: Build project
     runs-on: ubuntu-latest
     steps:
       # Checkout (without LFS)
