@@ -18,6 +18,7 @@ class InputBehaviour :MonoBehaviour
 
     private void DetecTouchTriggered()
     {
+#if DEBUG
         if (Input.touchCount <= 0) return;
    
         m_touch = Input.GetTouch(0);
@@ -27,5 +28,7 @@ class InputBehaviour :MonoBehaviour
         {
             hit.transform.GetComponent<ICustomer>().OnTouch();
         }
+
+#endif
     }
 }
