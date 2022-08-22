@@ -1,10 +1,10 @@
-name: Actions 😎
+name: Actions 
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: Build my project ✨
+    name: Build for Android
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -45,5 +45,5 @@ jobs:
       # Output
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
+          name: Android
           path: build
