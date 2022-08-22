@@ -40,8 +40,8 @@ namespace AdverGame.Player
 
         m_touch = Input.GetTouch(0);
         Debug.Log("toc");
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.down, 2f, m_customerMask);
-        if (hit.collider.CompareTag("Customer"))
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.down, 2f, m_clickablerMask);
+        if (hit.collider && hit.collider.CompareTag("Customer"))
         {
             hit.transform.GetComponent<ICustomer>().OnTouch();
         }
