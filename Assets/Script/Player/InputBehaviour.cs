@@ -22,30 +22,21 @@ namespace AdverGame.Player
         private void DetecTouchTriggered()
         {
 
-#if UNITY_STANDALONE_WIN
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.touchCount <= 0) return;
+
+            m_touch = Input.GetTouch(0);
+            Debug.Log("toc");
+            if (m_touch.phase == TouchPhase.Began)
             {
-                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down, 2f, m_clickablerMask);
-
+                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.down, m_clickablerMask);
                 if (hit.collider && hit.collider.CompareTag("Customer"))
                 {
                     hit.transform.GetComponent<ICustomer>().OnTouch();
                 }
             }
 
-#elif UNITY_ANDROID
 
-        if (Input.touchCount <= 0) return;
-
-        m_touch = Input.GetTouch(0);
-        Debug.Log("toc");
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.down, 2f, m_clickablerMask);
-        if (hit.collider && hit.collider.CompareTag("Customer"))
-        {
-            hit.transform.GetComponent<ICustomer>().OnTouch();
-        }
-#endif
         }
     }
 }
