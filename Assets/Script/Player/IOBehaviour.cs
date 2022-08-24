@@ -14,6 +14,7 @@ namespace AdverGame.Player
 
         public void SaveData(PlayerData data)
         {
+           
             try
             {
                 lock (m_persistanDataLock)
@@ -38,7 +39,8 @@ namespace AdverGame.Player
 
         public PlayerData LoadData(ref PlayerData data)
         {
-            PlayerData tempPd = null;
+            Debug.Log(m_path);
+            PlayerData tempPd = new();
             try
             {
                 if (File.Exists(m_path))

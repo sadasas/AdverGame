@@ -35,7 +35,7 @@ namespace AdverGame.Player
             m_inputPlayer = new(m_clickableMask);
             m_io = new();
             Data = new();
-           // StartCoroutine(LoadDataPlayer());
+            StartCoroutine(LoadDataPlayer());
         }
 
         IEnumerator LoadDataPlayer()
@@ -53,7 +53,7 @@ namespace AdverGame.Player
         {
             Data.Coin += coin;
             OnIncreaseCoin?.Invoke(Data.Coin);
-           // m_io.SaveData(Data);
+            m_io.SaveData(Data);
         }
     }
 
