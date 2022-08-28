@@ -18,6 +18,7 @@ namespace AdverGame.Player
         IOBehaviour m_io;
         public PlayerData Data;
 
+        [SerializeField] GameObject m_playerPrefab;
         [Header("INPUT BEHAVIOUR SETTING")]
         [SerializeField] LayerMask m_clickableMask;
 
@@ -36,6 +37,8 @@ namespace AdverGame.Player
             m_io = new();
             Data = new();
             StartCoroutine(LoadDataPlayer());
+
+            Instantiate(m_playerPrefab, GameObject.Find("PlayerPos").transform.position, Quaternion.identity);
         }
 
         IEnumerator LoadDataPlayer()

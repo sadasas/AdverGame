@@ -1,7 +1,6 @@
 ﻿using AdverGame.Customer;
 using AdverGame.Player;
 using AdverGame.UI;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdverGame.GameManager
@@ -10,17 +9,16 @@ namespace AdverGame.GameManager
     {
         public static GameManager s_Instance;
 
-        CustomerController m_customerController;
+        CustomerManager m_customerManager;
+        PlayerManager m_playerManager;
 
-        [Header("CUSTOMER SETTING")]
-        [SerializeField] int m_delaySpawner;
-        [SerializeField] List<GameObject> m_custPrefab;
 
-        [Header("UI SETTING")]
+
         [SerializeField] GameObject m_UIPrefab;
 
-        [Header("PlAYER SETTING")]
-        [SerializeField] GameObject m_playerPrefab;
+
+        [SerializeField] GameObject m_playerManagerPrefab;
+        [SerializeField] GameObject m_customerManagerPrefab;
         private void Awake()
         {
             if (s_Instance) Destroy(s_Instance.gameObject);
@@ -31,11 +29,13 @@ namespace AdverGame.GameManager
 
         private void Start()
         {
-            Instantiate(m_playerPrefab);
+            m_playerManager = Instantiate(m_playerManagerPrefab).GetComponent<PlayerManager>();
+            m_customerManager = Instantiate(m_customerManagerPrefab).GetComponent<CustomerManager>();
+
             var canvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
             var ui = Instantiate(m_UIPrefab, canvas).GetComponent<TestUI>();
-            PlayerManager.s_Instance.OnIncreaseCoin += ui.UpdateCoin;
-            m_customerController = new(m_delaySpawner, this, m_custPrefab);
+            m_playerManager.OnIncreaseCoin += ui.UpdateCoin;
+
         }
 
 

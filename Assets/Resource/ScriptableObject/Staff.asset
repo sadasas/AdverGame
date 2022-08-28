@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
-  m_Name: Student
+  m_Name: Staff
   m_EditorClassIdentifier: 
-  Speed: 0.5
-  SpawnDelay: 100
-  WaitOrderMaxTime: 8
-  Coin: 2
+  Speed: 1
+  SpawnDelay: 2
+  WaitOrderMaxTime: 5
+  Coin: 1

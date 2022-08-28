@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4463876704756076048
+--- !u!1001 &5832229513960148240
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,10 +10,22 @@ PrefabInstance:
     - target: {fileID: 5939639263599437575, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_variant
       value: 
-      objectReference: {fileID: 11400000, guid: 890b230e62a60004590e863eb834c301, type: 2}
+      objectReference: {fileID: 11400000, guid: f1033d71f17d7a346ac66d95eb3e89f2, type: 2}
     - target: {fileID: 6256139682781594760, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_Name
-      value: Student
+      value: Staff
+      objectReference: {fileID: 0}
+    - target: {fileID: 6256139682781594761, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+      propertyPath: m_Color.b
+      value: 0.15806337
+      objectReference: {fileID: 0}
+    - target: {fileID: 6256139682781594761, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+      propertyPath: m_Color.g
+      value: 0.15806337
+      objectReference: {fileID: 0}
+    - target: {fileID: 6256139682781594761, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+      propertyPath: m_Color.r
+      value: 0.9056604
       objectReference: {fileID: 0}
     - target: {fileID: 6256139682781594762, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_RootOrder
@@ -29,11 +41,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6256139682781594762, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.504
+      value: -1.68
       objectReference: {fileID: 0}
     - target: {fileID: 6256139682781594762, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.504
+      value: -4.02
       objectReference: {fileID: 0}
     - target: {fileID: 6256139682781594762, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_LocalPosition.z
