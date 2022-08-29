@@ -23,6 +23,9 @@ namespace AdverGame.Player
         {
 
 #if  UNITY_STANDALONE_WIN
+
+   Screen.SetResolution(640, 480, true);
+
         if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down, 2f, m_clickablerMask);
@@ -46,7 +49,7 @@ namespace AdverGame.Player
                 }
             }
 #endif
-
+  
         }
     }
 }
