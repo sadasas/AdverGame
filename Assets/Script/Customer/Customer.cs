@@ -1,6 +1,5 @@
 
 using AdverGame.Chair;
-using AdverGame.Player;
 using System.Collections;
 using UnityEngine;
 
@@ -143,7 +142,7 @@ namespace AdverGame.Customer
 
         private void IncreaseCoin()
         {
-            PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
+            //PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
         }
 
         bool IsReachDestination()
@@ -164,7 +163,7 @@ namespace AdverGame.Customer
             m_targetPos.x = -m_targetPos.x;
             m_countDownMove = m_variant.SpawnDelay;
             m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
-            if(m_currentChair)m_currentChair.Customer = null;
+            if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
             m_currentState = CustomerState.IDLE;
         }
