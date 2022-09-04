@@ -34,7 +34,7 @@ namespace AdverGame.Customer
         int m_countDownMove = 0;
         float m_countDownWaitOrder = 0;
         float m_countDownIdle = 0;
-
+        SpriteRenderer m_sprite;
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_orderImage;
         [SerializeField] CustomerVariant m_variant;
@@ -71,6 +71,7 @@ namespace AdverGame.Customer
 
         IEnumerator Setup()
         {
+            m_sprite = GetComponent<SpriteRenderer>();
             m_itemsRegistered = AssetHelpers.GetAllItemRegistered();
 
             m_widhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
@@ -86,8 +87,17 @@ namespace AdverGame.Customer
             m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
             m_countDownIdle = m_variant.WaitChairAvailableTime;
 
+            ChangeSprite(m_variant.DummylCustomerImage);
+
             m_currentState = CustomerState.WALK;
 
+        }
+
+        private void ChangeSprite(Sprite image)
+        {
+            m_sprite.sprite = image;
+            m_sprite.drawMode = SpriteDrawMode.Sliced;
+            m_sprite.size = new Vector2(1, 1);
         }
 
         Vector2 SetRandomPos()
@@ -123,6 +133,7 @@ namespace AdverGame.Customer
                     {
                         m_currentState = CustomerState.TOCHAIR;
 
+                        ChangeSprite(m_variant.RealCustomerImage);
                         m_targetPos = m_currentChair.transform.position;
                         m_touchSlider.gameObject.SetActive(false);
                         m_touchCount = 0;
@@ -153,8 +164,6 @@ namespace AdverGame.Customer
             {
                 m_currentState = CustomerState.WALK;
                 m_countDownIdle = m_variant.WaitChairAvailableTime;
-                m_touchSlider.gameObject.SetActive(false);
-                m_touchCount = 0;
             }
         }
         void WaitChairAvailable()
@@ -167,6 +176,8 @@ namespace AdverGame.Customer
                     m_currentState = CustomerState.TOCHAIR;
                     m_targetPos = m_currentChair.transform.position;
                     m_touchCount = 0;
+
+                    ChangeSprite(m_variant.RealCustomerImage);
                     m_touchSlider.gameObject.SetActive(false);
                 }
             }
@@ -180,8 +191,8 @@ namespace AdverGame.Customer
         }
         void Order()
         {
-           var index = UnityEngine.Random.Range(0, m_itemsRegistered.Count);
-           var item = m_itemsRegistered[index];
+            var index = UnityEngine.Random.Range(0, m_itemsRegistered.Count);
+            var item = m_itemsRegistered[index];
             m_orderImage.sprite = item.Content.Image;
             m_orderImage.gameObject.SetActive(true);
 
@@ -252,6 +263,9 @@ namespace AdverGame.Customer
 
             m_touchSlider.gameObject.SetActive(false);
             m_orderImage.gameObject.SetActive(false);
+
+
+            ChangeSprite(m_variant.DummylCustomerImage);
             m_currentState = CustomerState.WALK;
         }
 

@@ -6,11 +6,20 @@ namespace AdverGame.Customer
     [CreateAssetMenu(fileName = "Variant", menuName = "Customer Variant")]
     public class CustomerVariant : ScriptableObject
     {
-        public float Speed;
-        public int SpawnDelay;
-        public float WaitOrderMaxTime;
-        public float WaitChairAvailableTime;
-        public int Coin;
+        [field:SerializeField]
+        public float Speed { get; private set; }
+        [field: SerializeField]
+        public int SpawnDelay { get; private set; }
+        [field: SerializeField]
+        public float WaitOrderMaxTime { get; private set; }
+        [field: SerializeField]
+        public float WaitChairAvailableTime { get; private set; }
+        [field: SerializeField]
+        public Sprite RealCustomerImage { get; private set; }
+        [field: SerializeField]
+        public Sprite DummylCustomerImage { get; private set; }
+        [field: SerializeField]
+        public int Coin { get; private set; }
     }
 }
 
