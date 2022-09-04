@@ -27,15 +27,14 @@ namespace AdverGame.Player
 
 #if  UNITY_STANDALONE_WIN
 
-   Screen.SetResolution(640, 480, false);
 
         if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down, 2f, m_clickablerMask);
 
-                if (hit.collider && hit.collider.CompareTag("Customer"))
+                if (hit.collider && !EventSystem.current.IsPointerOverGameObject() )
                 {
-                    hit.transform.GetComponent<ICustomer>().OnTouch();
+                    OnLeftClick?.Invoke(hit.transform.gameObject);
                 }
             }
  #elif UNITY_ANDROID
