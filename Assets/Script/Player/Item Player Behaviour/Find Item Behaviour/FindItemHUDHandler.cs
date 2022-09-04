@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +12,7 @@ namespace AdverGame.Player
 
         [SerializeField] Slider m_slider;
         [SerializeField] Transform m_itemPlace;
+        [SerializeField] TextMeshProUGUI m_itemFounded;
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
 
@@ -26,10 +29,11 @@ namespace AdverGame.Player
 
         }
 
-        public void TrackItemFinded(int itemfindedTot)
+        public void TrackItemFinded(int itemfindedTot , float itemMaxFounded)
         {
 
-            m_slider.value = 1f / (8f / itemfindedTot);
+            m_slider.value = 1f / (itemMaxFounded / itemfindedTot);
+            m_itemFounded.text = itemfindedTot.ToString() + " / " + itemMaxFounded;
 
         }
 

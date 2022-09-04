@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace AdverGame.Player
 {
@@ -45,7 +46,7 @@ namespace AdverGame.Player
             if (m_touch.phase == TouchPhase.Began)
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
-                if (hit.collider)
+                if (hit.collider && !EventSystem.current.IsPointerOverGameObject())
                 {
                   
                     OnLeftClick?.Invoke(hit.transform.gameObject);
