@@ -128,5 +128,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   m_findItemHUDPrefab: {fileID: 5371667888219808421, guid: 14cdbf69079166a4fb96f34498202204, type: 3}
-  m_ItemListHUDPrefab: {fileID: 5371667888219808421, guid: e05ee9f4335d7434a9e4941b4b501cb1, type: 3}
-  m_ItemListButtonPrefab: {fileID: 3875473712482379255, guid: b48122aeaea9e74459087863d07a412c, type: 3}
+  m_itemAvailableHUDPrefab: {fileID: 5371667888219808421, guid: e05ee9f4335d7434a9e4941b4b501cb1, type: 3}
+  m_itemAvailableButtonPrefab: {fileID: 3875473712482379255, guid: b48122aeaea9e74459087863d07a412c, type: 3}
+  m_maxItemGetted: 8
+  m_searchItemTime: 4

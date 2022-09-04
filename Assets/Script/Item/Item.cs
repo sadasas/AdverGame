@@ -4,31 +4,36 @@ using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
+    public class ItemSerializable
+    {
+        public ItemContent Content;
+        public int Stack { get; private set; } = 1;
+
+        public ItemSerializable(ItemContent content)
+        {
+            Content = content;
+        }
+
+        public void IncreaseItem(int stack)
+        {
+            Stack += stack;
+        }
+
+    }
     public class Item : MonoBehaviour
     {
-        [SerializeField] TextMeshProUGUI m_name;
+        [field: SerializeField]
+        public TextMeshProUGUI Name { get; private set; }
         [SerializeField] TextMeshProUGUI m_stack;
         [SerializeField] Image m_image;
 
-        [field: SerializeField]
-        public ItemContent m_content { get; private set; }
-        public int Stack { get; private set; } = 1;
 
-        private void Start()
+        public void UpdateItem(ItemContent content, int stack)
         {
-            UpdateItem();
-        }
-        public void UpdateItem()
-        {
-            m_name.text = m_content.Name;
-            m_image.sprite = m_content.Image;
+            Name.text = content.Name;
+            m_image.sprite = content.Image;
+            m_stack.text = stack.ToString();
 
-        }
-
-        public void IncreaseItem()
-        {
-            Stack++;
-            m_stack.text = Stack.ToString();
         }
 
     }

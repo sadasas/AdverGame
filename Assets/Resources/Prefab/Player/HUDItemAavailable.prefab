@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5371667888219808419}
   - component: {fileID: -1720957065268232451}
   m_Layer: 5
-  m_Name: Panel-ItemListHUD
+  m_Name: HUDItemAavailable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -9,7 +9,7 @@ using UnityEngine;
 public class PlayerData
 {
     public int Coin;
-    public List<Item> Items;
+    public List<ItemSerializable> Items;
 }
 namespace AdverGame.Player
 {

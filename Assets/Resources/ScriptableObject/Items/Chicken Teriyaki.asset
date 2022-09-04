@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Chicken Teriyaki
   <Image>k__BackingField: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  <ItemPrefab>k__BackingField: {fileID: 2403073905997433827, guid: ba49f40aebdd0294f9d406387e734060, type: 3}

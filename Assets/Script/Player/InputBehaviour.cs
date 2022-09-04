@@ -1,5 +1,4 @@
-﻿using AdverGame.Customer;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace AdverGame.Player
@@ -29,7 +28,7 @@ namespace AdverGame.Player
             if (Input.touchCount <= 0) return;
 
             m_touch = Input.GetTouch(0);
-           
+
             if (m_touch.phase == TouchPhase.Began)
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
@@ -37,7 +36,7 @@ namespace AdverGame.Player
                 {
                     OnLeftClick?.Invoke(hit.transform.gameObject);
                 }
-                
+
             }
 
 

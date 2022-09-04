@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Chicken Barbeque
   <Image>k__BackingField: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  <ItemPrefab>k__BackingField: {fileID: 2403073905997433827, guid: 2503efe18ddac994895e6d21b7c957d3, type: 3}

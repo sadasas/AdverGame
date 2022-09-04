@@ -10,6 +10,8 @@ namespace AdverGame.Player
 
         [field: SerializeField]
         public Sprite Image { get; private set; }
+        [field: SerializeField]
+        public GameObject ItemPrefab { get; private set; }
 
     }
 

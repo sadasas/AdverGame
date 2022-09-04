@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 2605528708008392480}
   - component: {fileID: 2921202265108428447}
   m_Layer: 5
-  m_Name: Panel-ItemListButton
+  m_Name: ButtonItemAavailable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9bbb79f7534c72438126937d7465dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_itemListHUD: {fileID: 0}
+  m_itemAvailableHUD: {fileID: 0}
 --- !u!114 &2921202265108428447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,8 +376,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2605528708008392480}
-        m_TargetAssemblyTypeName: AdverGame.Player.ItemAvailableManager, Assembly-CSharp
-        m_MethodName: SpawnItemListHUD
+        m_TargetAssemblyTypeName: AdverGame.Player.ItemAvailableButtonHandler, Assembly-CSharp
+        m_MethodName: DisplayItemListHUD
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
