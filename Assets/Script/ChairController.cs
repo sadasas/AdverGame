@@ -7,6 +7,8 @@ namespace AdverGame.Chair
 {
     public class ChairController:MonoBehaviour
     {
-        public ICustomer Customer = null;
+        public CustomerController Customer = null;
+
+      
     }
 }

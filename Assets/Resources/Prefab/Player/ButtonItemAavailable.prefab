@@ -146,8 +146,8 @@ GameObject:
   - component: {fileID: 3875473712482379254}
   - component: {fileID: 3875473712482379248}
   - component: {fileID: 3875473712482379249}
-  - component: {fileID: 2605528708008392480}
   - component: {fileID: 2921202265108428447}
+  - component: {fileID: 8347741430995204545}
   m_Layer: 5
   m_Name: ButtonItemAavailable
   m_TagString: Untagged
@@ -214,19 +214,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2605528708008392480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3875473712482379255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9bbb79f7534c72438126937d7465dec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_itemAvailableHUD: {fileID: 0}
 --- !u!114 &2921202265108428447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +240,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &8347741430995204545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875473712482379255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 616f9dd674565004384f1278f9b4d1af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_itemAvailableHUD: {fileID: 0}
 --- !u!1 &5255727199630548569
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2605528708008392480}
+      - m_Target: {fileID: 8347741430995204545}
         m_TargetAssemblyTypeName: AdverGame.Player.ItemAvailableButtonHandler, Assembly-CSharp
         m_MethodName: DisplayItemListHUD
         m_Mode: 1

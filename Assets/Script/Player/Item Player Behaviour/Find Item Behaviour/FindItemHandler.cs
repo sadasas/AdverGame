@@ -9,7 +9,7 @@ namespace AdverGame.Player
 {
     public class FindItemHandler
     {
-
+        readonly object m_locker = new object();
         List<ItemSerializable> m_allItems;
         int m_searchItemTime = 5;
         FindItemHUDHandler m_HUDHandler;
@@ -48,16 +48,16 @@ namespace AdverGame.Player
             {
 
                 //Find item
-                var index = UnityEngine.Random.Range(0, m_allItems.Count - 1);
+                var index = UnityEngine.Random.Range(0, m_allItems.Count);
                 ItemFounded.Add(new ItemSerializable(m_allItems[index].Content));
 
                 OnFindItem?.Invoke(ItemFounded.Count);
 
                 //display item
-                Debug.Log("searching");
+
                 if (m_HUDHandler != null)
                 {
-                    if (m_HUDHandler.gameObject.activeInHierarchy) m_HUDHandler.DisplayItemFounded(m_allItems[index].Content.ItemPrefab);
+                    if (m_HUDHandler.gameObject.activeInHierarchy) m_HUDHandler.DisplayItemFounded(m_allItems[index]);
                     else
                     {
                         m_ItemFoundedND ??= new();
@@ -81,29 +81,32 @@ namespace AdverGame.Player
 
         void PutItemFinded()
         {
-
-
-            foreach (var item in ItemFounded)
+            lock (m_locker)
             {
-                if (m_itemContainer.Items != null && m_itemContainer.Items.Count > 0)
+                foreach (var item in ItemFounded)
                 {
-                    var isSameItem = false;
-                    foreach (var itempl in m_itemContainer.Items)
+                    if (m_itemContainer.Items != null && m_itemContainer.Items.Count > 0)
                     {
-                        if (itempl.Content.Name.Equals(item.Content.Name))
+                        var isSameItem = false;
+                        foreach (var itempl in m_itemContainer.Items)
                         {
-                            itempl.IncreaseItem(item.Stack);
-                            isSameItem = true;
-                            break;
+                            if (itempl.Content.Name.Equals(item.Content.Name))
+                            {
+                                itempl.IncreaseItem(item.Stack);
+                                isSameItem = true;
+                                break;
+                            }
                         }
                         if (!isSameItem) m_itemContainer.AddItem(item);
                     }
-                }
-                else m_itemContainer.AddItem(newItem: item);
+                    else m_itemContainer.AddItem(newItem: item);
 
+                }
+
+                ResetItemFounded();
             }
 
-            ResetItemFounded();
+
 
 
 
@@ -145,7 +148,7 @@ namespace AdverGame.Player
                             {
                                 foreach (var item in m_ItemFoundedND)
                                 {
-                                    m_HUDHandler.DisplayItemFounded(item.Content.ItemPrefab);
+                                    m_HUDHandler.DisplayItemFounded(item);
                                 }
                             }
 
@@ -157,16 +160,16 @@ namespace AdverGame.Player
                     {
                         foreach (var item in ItemFounded)
                         {
-                            m_HUDHandler.DisplayItemFounded(item.Content.ItemPrefab);
+                            m_HUDHandler.DisplayItemFounded(item);
                         }
 
                     }
                 }
 
+                UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
 
             }
 
-            UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
         }
     }
 

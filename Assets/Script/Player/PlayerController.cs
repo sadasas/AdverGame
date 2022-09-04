@@ -4,7 +4,7 @@ namespace AdverGame.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        InputBehaviour m_inputBehaviour;
+        public InputBehaviour InputBehaviour { get; private set; }
         ItemPlayerBehaviour m_itemPlayerBehaviour;
 
 
@@ -22,13 +22,13 @@ namespace AdverGame.Player
 
         private void Start()
         {
-            m_inputBehaviour = new(m_clickableMask);
-            m_itemPlayerBehaviour = new(m_inputBehaviour, this.transform, m_findItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted);
+            InputBehaviour = new(m_clickableMask);
+            m_itemPlayerBehaviour = new(InputBehaviour, this.transform, m_findItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted);
         }
 
         private void Update()
         {
-            m_inputBehaviour.Update();
+            InputBehaviour.Update();
         }
 
         private void OnDisable()
@@ -48,6 +48,14 @@ namespace AdverGame.Player
             PlayerManager.s_Instance.SaveDataPlayer();
         }
 
+
+        public bool IsInstanced()
+        {
+            if(InputBehaviour == null) return false;
+            if(m_itemPlayerBehaviour == null) return false;
+
+            return true;
+        }
     }
 
 }

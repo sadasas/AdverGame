@@ -9,6 +9,7 @@ namespace AdverGame.Customer
         public float Speed;
         public int SpawnDelay;
         public float WaitOrderMaxTime;
+        public float WaitChairAvailableTime;
         public int Coin;
     }
 }

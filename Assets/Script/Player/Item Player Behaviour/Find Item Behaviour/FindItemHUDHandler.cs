@@ -16,12 +16,13 @@ namespace AdverGame.Player
 
         public Action OnGetTriggered;
 
-        public void DisplayItemFounded(GameObject itemfounded)
+        public void DisplayItemFounded(ItemSerializable itemfounded)
         {
             m_itemDisplayed ??= new();
-            var obj = Instantiate(itemfounded, m_itemPlace.transform);
+            var obj = Instantiate(itemfounded.Content.ItemPrefab, m_itemPlace.transform);
             obj.transform.localScale = obj.transform.localScale / 2;
             m_itemDisplayed.Add(obj);
+            obj.GetComponent<Item>().UpdateItem(itemfounded.Content, 1);
 
         }
 

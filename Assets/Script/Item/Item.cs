@@ -13,7 +13,7 @@ namespace AdverGame.Player
         {
             Content = content;
         }
-
+      
         public void IncreaseItem(int stack)
         {
             Stack += stack;

@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 5371667888219808420}
   - component: {fileID: 5371667888219808418}
   - component: {fileID: 5371667888219808419}
-  - component: {fileID: -1720957065268232451}
+  - component: {fileID: 8394561660052253877}
   m_Layer: 5
   m_Name: HUDItemAavailable
   m_TagString: Untagged
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-1720957065268232451
+--- !u!114 &8394561660052253877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,9 +223,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5371667888219808421}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35f61aeca416cd147af8e354d07c9627, type: 3}
+  m_Script: {fileID: 11500000, guid: 509a30d5367984144be2cb6b235b99ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ItemsDisplayed: []
   m_itemPlace: {fileID: 7261013776803639077}
 --- !u!1 &6460065076371030793
 GameObject:

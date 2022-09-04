@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
   m_Name: Staff
   m_EditorClassIdentifier: 
-  Speed: 1
+  Speed: 0.5
   SpawnDelay: 2
-  WaitOrderMaxTime: 5
+  WaitOrderMaxTime: 20
+  WaitChairAvailableTime: 4
   Coin: 1

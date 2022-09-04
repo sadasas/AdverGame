@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace AdverGame.Player
 {
@@ -21,10 +22,16 @@ namespace AdverGame.Player
             m_mainCanvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
             m_itemContainer = itemContainer;
 
-            InitItemAvailableHUD();
-            InitItemAvailableButton();
+            PlayerManager.s_Instance.StartCoroutine(Setup());
+
         }
 
+        IEnumerator Setup()
+        {
+            InitItemAvailableHUD();
+            yield return null;
+            InitItemAvailableButton();
+        }
         void InitItemAvailableButton()
         {
 
@@ -44,6 +51,7 @@ namespace AdverGame.Player
 
         void UpdateItem()
         {
+            if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0) return;
             if (m_menuAvailableHUDHandler.ItemsDisplayed == null || m_menuAvailableHUDHandler.ItemsDisplayed.Count == 0)
             {
 
