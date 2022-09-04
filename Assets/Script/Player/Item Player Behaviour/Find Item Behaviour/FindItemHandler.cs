@@ -19,7 +19,7 @@ namespace AdverGame.Player
         int m_maxItemGetted = 8;
         ItemContainer m_itemContainer;
         bool isSearching = false;
-        Action<int> OnFindItem;
+        Action<int,float> OnFindItem;
         public List<ItemSerializable> ItemFounded { get; private set; }
 
         public FindItemHandler(MonoBehaviour player, GameObject findItemHUDPrefab, int searchItemTime, int maxItemGetted, ItemContainer itemContainer)
@@ -51,7 +51,7 @@ namespace AdverGame.Player
                 var index = UnityEngine.Random.Range(0, m_allItems.Count);
                 ItemFounded.Add(new ItemSerializable(m_allItems[index].Content));
 
-                OnFindItem?.Invoke(ItemFounded.Count);
+                OnFindItem?.Invoke(ItemFounded.Count,m_maxItemGetted);
 
                 //display item
 

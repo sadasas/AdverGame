@@ -96,8 +96,8 @@ namespace AdverGame.Customer
         private void ChangeSprite(Sprite image)
         {
             m_sprite.sprite = image;
-            m_sprite.drawMode = SpriteDrawMode.Sliced;
-            m_sprite.size = new Vector2(1, 1);
+
+            m_sprite.sortingOrder = 1;
         }
 
         Vector2 SetRandomPos()
@@ -185,8 +185,8 @@ namespace AdverGame.Customer
             {
                 m_currentState = CustomerState.WALK;
                 m_countDownIdle = m_variant.WaitChairAvailableTime;
-
-                m_touchCount--;
+                m_touchSlider.gameObject.SetActive(false);
+                m_touchCount = 3;
             }
         }
         void Order()
