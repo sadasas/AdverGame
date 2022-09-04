@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AdverGame.Player;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -7,22 +9,24 @@ using UnityEngine;
 public class PlayerData
 {
     public int Coin;
+    public List<ItemSerializable> Items;
 }
 namespace AdverGame.Player
 {
+
+
     public class PlayerManager : MonoBehaviour
     {
         public static PlayerManager s_Instance;
 
-        InputBehaviour m_inputPlayer;
         IOBehaviour m_io;
-        public PlayerData Data;
 
         [SerializeField] GameObject m_playerPrefab;
-        [Header("INPUT BEHAVIOUR SETTING")]
-        [SerializeField] LayerMask m_clickableMask;
 
-        public Action<int> OnIncreaseCoin;
+        public PlayerController Player { get; private set; }
+
+        public PlayerData Data;
+     
         private void Awake()
         {
             if (s_Instance != null) Destroy(s_Instance.gameObject);
@@ -33,29 +37,23 @@ namespace AdverGame.Player
 
         private void Start()
         {
-            m_inputPlayer = new(m_clickableMask);
             m_io = new();
             Data = new();
-            StartCoroutine(LoadDataPlayer());
 
-            Instantiate(m_playerPrefab, GameObject.Find("PlayerPos").transform.position, Quaternion.identity);
+            Player = Instantiate(m_playerPrefab, GameObject.Find("PlayerPos").transform.position, Quaternion.identity).GetComponent<PlayerController>();
+            StartCoroutine(LoadDataPlayer());
         }
+
 
         IEnumerator LoadDataPlayer()
         {
             yield return m_io.LoadData(ref Data);
-            OnIncreaseCoin?.Invoke(Data.Coin);
+            Player.OnIncreaseCoin?.Invoke(Data.Coin);
         }
 
-        private void Update()
+      
+        public void SaveDataPlayer()
         {
-            m_inputPlayer.Update();
-        }
-
-        public void IncreaseCoin(int coin)
-        {
-            Data.Coin += coin;
-            OnIncreaseCoin?.Invoke(Data.Coin);
             m_io.SaveData(Data);
         }
     }

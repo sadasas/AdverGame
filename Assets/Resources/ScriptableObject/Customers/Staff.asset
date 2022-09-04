@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
+  m_Name: Staff
+  m_EditorClassIdentifier: 
+  <Speed>k__BackingField: 0.5
+  <SpawnDelay>k__BackingField: 1
+  <WaitOrderMaxTime>k__BackingField: 5
+  <WaitChairAvailableTime>k__BackingField: 2
+  <RealCustomerImage>k__BackingField: {fileID: 21300000, guid: 484ba9ccf7ac6f342a372aaa8242a04f, type: 3}
+  <DummylCustomerImage>k__BackingField: {fileID: 21300000, guid: 7b76dd7be683f7c4a9ae88a6624d29fc, type: 3}
+  <Coin>k__BackingField: 0

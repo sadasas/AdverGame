@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AdverGame.Player;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdverGame.Customer
@@ -8,8 +9,9 @@ namespace AdverGame.Customer
         public static CustomerManager s_Instance;
 
         [SerializeField] List<GameObject> m_customerPrefab;
+        InputBehaviour m_playerInput;
 
-        public List<Customer> Customers;
+        public List<CustomerController> Customers;
 
         private void Awake()
         {
@@ -21,6 +23,7 @@ namespace AdverGame.Customer
 
         private void Start()
         {
+            m_playerInput = PlayerManager.s_Instance.Player.InputBehaviour;
             SpawnCustomer();
         }
 
@@ -30,8 +33,9 @@ namespace AdverGame.Customer
             for (int i = 0; i < m_customerPrefab.Count; i++)
             {
 
-                var newCust = GameObject.Instantiate(m_customerPrefab[i]).GetComponent<Customer>();
+                var newCust = GameObject.Instantiate(m_customerPrefab[i]).GetComponent<CustomerController>();
                 Customers.Add(newCust);
+                m_playerInput.OnLeftClick += newCust.OnTouch;
 
             }
         }
