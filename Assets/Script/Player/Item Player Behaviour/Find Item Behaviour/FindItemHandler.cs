@@ -92,7 +92,7 @@ namespace AdverGame.Player
                         {
                             if (itempl.Content.Name.Equals(item.Content.Name))
                             {
-                                itempl.IncreaseItem(item.Stack);
+                                itempl.UpdateStack(item.Stack);
                                 isSameItem = true;
                                 break;
                             }

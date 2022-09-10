@@ -4,14 +4,30 @@ using UnityEngine;
 
 namespace AdverGame.Customer
 {
+    public struct Order
+    {
+        public ItemSerializable ItemOrder { get; private set; }
+        public CustomerController Customer { get; private set; }
+
+        public Order(ItemSerializable itemOrder, CustomerController customer)
+        {
+            ItemOrder = itemOrder;
+            Customer = customer;
+        }
+
+    }
     public class CustomerManager : MonoBehaviour
     {
         public static CustomerManager s_Instance;
 
-        [SerializeField] List<GameObject> m_customerPrefab;
+
         InputBehaviour m_playerInput;
 
+        [SerializeField] List<GameObject> m_customerPrefab;
+
         public List<CustomerController> Customers;
+
+        public List<Order> CustomerOrders { get; private set; }
 
         private void Awake()
         {
@@ -20,10 +36,10 @@ namespace AdverGame.Customer
 
             DontDestroyOnLoad(gameObject);
         }
-
         private void Start()
         {
             m_playerInput = PlayerManager.s_Instance.Player.InputBehaviour;
+
             SpawnCustomer();
         }
 
@@ -36,10 +52,49 @@ namespace AdverGame.Customer
                 var newCust = GameObject.Instantiate(m_customerPrefab[i]).GetComponent<CustomerController>();
                 Customers.Add(newCust);
                 m_playerInput.OnLeftClick += newCust.OnTouch;
+                newCust.OnCreateOrder += AddOrder;
+                newCust.OnCancelOrder += RemoveOrder;
 
             }
         }
+        void AddOrder(CustomerController obj, ItemSerializable order)
+        {
+            CustomerOrders ??= new();
+            var cusOrder = new Order(order, obj);
+            CustomerOrders.Add(cusOrder);
 
+            Debug.Log(CustomerOrders.Count);
+        }
+
+        void RemoveOrder(ItemSerializable menu)
+        {
+            if (CheckOrder(menu, out Order order)) CustomerOrders.Remove(order);
+        }
+
+        public void GetOrder(Order menu)
+        {
+            menu.Customer.ResetOrder();
+            CustomerOrders.Remove(menu);
+
+
+        }
+
+        public bool CheckOrder(ItemSerializable menu, out Order order)
+        {
+            order = new();
+            if (CustomerOrders == null) return false;
+            foreach (var item in CustomerOrders)
+            {
+                if (item.ItemOrder.Content.name.Equals(menu.Content.name))
+                {
+                    order = item;
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
 
     }
 }

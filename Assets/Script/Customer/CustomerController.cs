@@ -2,26 +2,18 @@
 using AdverGame.Chair;
 using AdverGame.Player;
 using AdverGame.Utility;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace AdverGame.Customer
 {
-
-    enum CustomerState
-    {
-        IDLE,
-        WALK,
-        TOCHAIR,
-        WAITCHAIRAVAILABLE,
-        ORDER,
-        WAITORDER,
-        DEFAULT
-    }
     public class CustomerController : MonoBehaviour, ICustomer
     {
+        ItemSerializable m_currentOrder;
 
         Vector3 m_targetPos;
         Vector2 m_defaultPos;
@@ -39,13 +31,15 @@ namespace AdverGame.Customer
         [SerializeField] Image m_orderImage;
         [SerializeField] CustomerVariant m_variant;
 
+        public Action<CustomerController, ItemSerializable> OnCreateOrder;
+        public Action<ItemSerializable> OnCancelOrder;
+
 
         private void Start()
         {
             StartCoroutine(Setup());
 
         }
-
 
         private void Update()
         {
@@ -92,67 +86,17 @@ namespace AdverGame.Customer
             m_currentState = CustomerState.WALK;
 
         }
-
-        private void ChangeSprite(Sprite image)
+        void ChangeSprite(Sprite image)
         {
             m_sprite.sprite = image;
 
             m_sprite.sortingOrder = 1;
         }
-
         Vector2 SetRandomPos()
         {
             var stageDimension = Camera.main.ScreenToWorldPoint(new Vector3(Screen.currentResolution.width, Screen.currentResolution.height, 0));
             return new Vector2(stageDimension.x + m_widhtOffset, UnityEngine.Random.Range(-3, -(stageDimension.y - m_heightOffset)));
         }
-        public void Move()
-        {
-
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(m_targetPos.x, m_targetPos.y), m_variant.Speed * Time.deltaTime);
-        }
-
-        public void OnTouch(GameObject obj)
-        {
-
-            if (obj == this.gameObject)
-            {
-
-
-
-                if (m_touchCount == 0 && m_currentState == CustomerState.WALK)
-                {
-                    m_touchCount++;
-                    m_currentState = CustomerState.IDLE;
-                    m_touchSlider.gameObject.SetActive(true);
-
-                }
-                else if (m_touchCount == 1 && m_currentState == CustomerState.IDLE || m_touchCount == 1 && m_currentState == CustomerState.WALK)
-                {
-                    m_touchSlider.gameObject.SetActive(true);
-                    if (IsChairAvailable())
-                    {
-                        m_currentState = CustomerState.TOCHAIR;
-
-                        ChangeSprite(m_variant.RealCustomerImage);
-                        m_targetPos = m_currentChair.transform.position;
-                        m_touchSlider.gameObject.SetActive(false);
-                        m_touchCount = 0;
-                    }
-                    else
-                    {
-                        m_touchCount++;
-                        m_currentState = CustomerState.WAITCHAIRAVAILABLE;
-
-                    }
-                }
-
-
-
-
-            }
-
-        }
-
         void WaitTofindChair()
         {
             if (m_countDownIdle > 0)
@@ -192,12 +136,13 @@ namespace AdverGame.Customer
         void Order()
         {
             var index = UnityEngine.Random.Range(0, m_itemsRegistered.Count);
-            var item = m_itemsRegistered[index];
-            m_orderImage.sprite = item.Content.Image;
+            m_currentOrder = m_itemsRegistered[index];
+            m_orderImage.sprite = m_currentOrder.Content.Image;
             m_orderImage.gameObject.SetActive(true);
 
-        }
+            OnCreateOrder?.Invoke(this, m_currentOrder);
 
+        }
         bool IsChairAvailable()
         {
             var chairs = GameObject.FindGameObjectsWithTag("Chair");
@@ -215,8 +160,6 @@ namespace AdverGame.Customer
 
             return false;
         }
-
-
         void WaitOrder()
         {
 
@@ -227,16 +170,14 @@ namespace AdverGame.Customer
             }
             else
             {
-
+                OnCancelOrder?.Invoke(m_currentOrder);
                 StartCoroutine(ResetPos());
             }
         }
-
-        private void IncreaseCoin()
+        void Pay()
         {
             //PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
         }
-
         bool IsReachDestination()
         {
 
@@ -244,7 +185,6 @@ namespace AdverGame.Customer
             if (Vector2.Distance(transform.position, m_targetPos) == 0) return true;
             return false;
         }
-
         IEnumerator ResetPos()
         {
             Debug.Log("Reset");
@@ -261,14 +201,68 @@ namespace AdverGame.Customer
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
 
+            ResetOrder();
             m_touchSlider.gameObject.SetActive(false);
-            m_orderImage.gameObject.SetActive(false);
-
 
             ChangeSprite(m_variant.DummylCustomerImage);
             m_currentState = CustomerState.WALK;
         }
 
+        public void Move()
+        {
+
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(m_targetPos.x, m_targetPos.y), m_variant.Speed * Time.deltaTime);
+        }
+        public void OnTouch(GameObject obj)
+        {
+
+            if (obj == this.gameObject && !EventSystem.current.IsPointerOverGameObject())
+            {
+
+
+
+                if (m_touchCount == 0 && m_currentState == CustomerState.WALK)
+                {
+                    m_touchCount++;
+                    m_currentState = CustomerState.IDLE;
+                    m_touchSlider.gameObject.SetActive(true);
+
+                }
+                else if (m_touchCount == 1 && m_currentState == CustomerState.IDLE || m_touchCount == 1 && m_currentState == CustomerState.WALK)
+                {
+                    m_touchSlider.gameObject.SetActive(true);
+                    if (IsChairAvailable())
+                    {
+                        m_currentState = CustomerState.TOCHAIR;
+
+                        ChangeSprite(m_variant.RealCustomerImage);
+                        m_targetPos = m_currentChair.transform.position;
+                        m_touchSlider.gameObject.SetActive(false);
+                        m_touchCount = 0;
+                    }
+                    else
+                    {
+                        m_touchCount++;
+                        m_currentState = CustomerState.WAITCHAIRAVAILABLE;
+
+                    }
+                }
+
+
+
+
+            }
+
+        }
+
+        public void ResetOrder()
+        {
+            if (m_currentOrder == null) return;
+            m_currentOrder = null;
+            m_orderImage.gameObject.SetActive(false);
+
+            StartCoroutine(ResetPos());
+        }
     }
 }
 

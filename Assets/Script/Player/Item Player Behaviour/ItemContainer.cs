@@ -49,6 +49,26 @@ namespace AdverGame.Player
             SaveItems();
         }
 
+        public void DecreaseItem(ItemSerializable currentItem)
+        {
+            var isAvailable = true;
+            var tempItem = new ItemSerializable(null);
+            foreach (var item in Items)
+            {
+                if (item == currentItem)
+                {
+                    if (item.Stack > 1) item.UpdateStack(-1);
+                    else
+                    {
+                        isAvailable = false;
+                        tempItem = item;
+                    }
+
+                }
+            }
+
+            if (!isAvailable) Items.Remove(tempItem);
+        }
 
         void SaveItems()
         {

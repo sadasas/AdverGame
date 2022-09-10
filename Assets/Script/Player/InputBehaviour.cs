@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace AdverGame.Player
 {
@@ -25,7 +24,7 @@ namespace AdverGame.Player
         private void DetecTouchTriggered()
         {
 
-#if  UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN
 
    Screen.SetResolution(640, 480, false);
 
@@ -38,7 +37,7 @@ namespace AdverGame.Player
                     hit.transform.GetComponent<ICustomer>().OnTouch();
                 }
             }
- #elif UNITY_ANDROID
+#elif UNITY_ANDROID
             if (Input.touchCount <= 0) return;
 
             m_touch = Input.GetTouch(0);
@@ -46,15 +45,15 @@ namespace AdverGame.Player
             if (m_touch.phase == TouchPhase.Began)
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
-                if (hit.collider && !EventSystem.current.IsPointerOverGameObject())
+                if (hit.collider)
                 {
-                  
+
                     OnLeftClick?.Invoke(hit.transform.gameObject);
                 }
 
             }
 #endif
-  
+
         }
     }
 }

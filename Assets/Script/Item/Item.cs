@@ -1,33 +1,21 @@
-﻿using TMPro;
+﻿using AdverGame.Customer;
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
-    public class ItemSerializable
+    public class Item : MonoBehaviour, IPointerDownHandler
     {
-        public ItemContent Content;
-        public int Stack { get; private set; } = 1;
-
-        public ItemSerializable(ItemContent content)
-        {
-            Content = content;
-        }
-      
-        public void IncreaseItem(int stack)
-        {
-            Stack += stack;
-        }
-
-    }
-    public class Item : MonoBehaviour
-    {
-        [field: SerializeField]
-        public TextMeshProUGUI Name { get; private set; }
         [SerializeField] TextMeshProUGUI m_stack;
         [SerializeField] Image m_image;
 
-
+        [field: SerializeField]
+        public TextMeshProUGUI Name { get; private set; }
+        public ItemSerializable Content;
+        public Action<Item> OnTouch;
         public void UpdateItem(ItemContent content, int stack)
         {
             Name.text = content.Name;
@@ -36,6 +24,12 @@ namespace AdverGame.Player
 
         }
 
+      
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            OnTouch?.Invoke(this);
+        }
     }
 
 

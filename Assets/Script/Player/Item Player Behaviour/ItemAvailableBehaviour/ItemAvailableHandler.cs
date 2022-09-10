@@ -1,17 +1,24 @@
-﻿using System.Collections;
+﻿using AdverGame.Customer;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdverGame.Player
 {
+    /// <summary>
+    /// TODO: Refactor displayupdteitem method
+    /// </summary>
     public class ItemAvailableHandler
     {
         ItemAvailableHUDHandler m_menuAvailableHUDHandler;
-        private Transform m_mainCanvas;
+        Transform m_mainCanvas;
         ItemAvailableButtonHandler m_menuAvailableButtonHandler;
         GameObject m_menuAvailableHUDPrefab;
         GameObject m_buttonmenuAvailablePrefab;
 
         ItemContainer m_itemContainer;
+
+
 
         public ItemAvailableHandler(GameObject HUDmenuAvailablePrefab, GameObject buttonmenuAvailablePrefab, ItemContainer itemContainer)
         {
@@ -38,18 +45,18 @@ namespace AdverGame.Player
             m_menuAvailableButtonHandler = GameObject.Instantiate(m_buttonmenuAvailablePrefab, m_mainCanvas).GetComponent<ItemAvailableButtonHandler>();
             m_menuAvailableButtonHandler.m_itemAvailableHUD = m_menuAvailableHUDHandler;
 
-            m_menuAvailableButtonHandler.OnDisplayItemAvailableHUD += UpdateItem;
+            m_menuAvailableButtonHandler.OnDisplayItemAvailableHUD += DisplayUpdateItem;
 
         }
         void InitItemAvailableHUD()
         {
             m_menuAvailableHUDHandler = GameObject.Instantiate(m_menuAvailableHUDPrefab, m_mainCanvas).GetComponent<ItemAvailableHUDHandler>();
-
+            m_menuAvailableHUDHandler.OnUpdateItem += UpdateItem;
             m_menuAvailableHUDHandler.gameObject.SetActive(false);
 
         }
 
-        void UpdateItem()
+        void DisplayUpdateItem()
         {
             if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0) return;
             if (m_menuAvailableHUDHandler.ItemsDisplayed == null || m_menuAvailableHUDHandler.ItemsDisplayed.Count == 0)
@@ -63,14 +70,37 @@ namespace AdverGame.Player
             }
             else
             {
+                if (m_menuAvailableHUDHandler.ItemsDisplayed.Count > m_itemContainer.Items.Count)
+                {
+                    var itemTrash = new List<Item>();
+                    foreach (var itemDisplayed in m_menuAvailableHUDHandler.ItemsDisplayed)
+                    {
+                        var isSame = false;
+                        foreach (var item in m_itemContainer.Items)
+                        {
+                            if (item == itemDisplayed.Value) isSame = true;
+                        }
+                        if (!isSame) itemTrash.Add(itemDisplayed.Key);
+                    }
+                    if (itemTrash.Count > 0)
+                    {
+                        foreach (var item in itemTrash)
+                        {
+
+                            m_menuAvailableHUDHandler.DestroyItem(item);
+                        }
+                    }
+
+                }
                 foreach (var itemInventory in m_itemContainer.Items)
                 {
                     var isSame = false;
                     foreach (var itemDisplayed in m_menuAvailableHUDHandler.ItemsDisplayed)
                     {
-                        if (itemDisplayed.Name.text.Equals(itemInventory.Content.Name))
+                        if (itemDisplayed.Value == itemInventory)
                         {
-                            itemDisplayed.UpdateItem(itemInventory.Content, itemInventory.Stack);
+                            /// VIOLETE SINGLE RESPONABILITY PRINCIPLE
+                            itemDisplayed.Key.UpdateItem(itemInventory.Content, itemInventory.Stack);
                             isSame = true;
                         }
                     }
@@ -79,6 +109,18 @@ namespace AdverGame.Player
                 }
 
             }
+        }
+
+        void UpdateItem(ItemSerializable item)
+        {
+
+            if (CustomerManager.s_Instance.CheckOrder(item, out var order))
+            {
+                CustomerManager.s_Instance.GetOrder(order);
+                m_itemContainer.DecreaseItem(item);
+                DisplayUpdateItem();
+            }
+
         }
 
     }
