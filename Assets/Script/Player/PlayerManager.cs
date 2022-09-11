@@ -10,6 +10,7 @@ public class PlayerData
 {
     public int Coin;
     public List<ItemSerializable> Items;
+
 }
 namespace AdverGame.Player
 {
@@ -26,7 +27,8 @@ namespace AdverGame.Player
         public PlayerController Player { get; private set; }
 
         public PlayerData Data;
-     
+
+        public Action<int> OnIncreaseCoin;
         private void Awake()
         {
             if (s_Instance != null) Destroy(s_Instance.gameObject);
@@ -48,14 +50,29 @@ namespace AdverGame.Player
         IEnumerator LoadDataPlayer()
         {
             yield return m_io.LoadData(ref Data);
-            Player.OnIncreaseCoin?.Invoke(Data.Coin);
+            OnIncreaseCoin?.Invoke(Data.Coin);
         }
 
-      
+
         public void SaveDataPlayer()
         {
             m_io.SaveData(Data);
         }
+
+        public void SaveItem(List<ItemSerializable> items)
+        {
+            Data.Items = items;
+            SaveDataPlayer();
+        }
+
+        public void IncreaseCoin(int coin)
+        {
+            Data.Coin += coin;
+            OnIncreaseCoin?.Invoke(Data.Coin);
+            SaveDataPlayer();
+
+        }
+
     }
 
 }

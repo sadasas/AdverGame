@@ -18,7 +18,7 @@ namespace AdverGame.Player
         [SerializeField] int m_maxItemGetted;
         [SerializeField] int m_searchItemTime;
 
-        public Action<int> OnIncreaseCoin;
+      
 
         private void Start()
         {
@@ -40,13 +40,7 @@ namespace AdverGame.Player
         {
             m_itemPlayerBehaviour.OnDestroy();
         }
-        public void IncreaseCoin(int coin)
-        {
-            var data = PlayerManager.s_Instance.Data;
-            data.Coin += coin;
-            OnIncreaseCoin?.Invoke(data.Coin);
-            PlayerManager.s_Instance.SaveDataPlayer();
-        }
+       
 
 
         public bool IsInstanced()

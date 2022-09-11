@@ -1,6 +1,7 @@
 
 using AdverGame.Chair;
 using AdverGame.Player;
+using AdverGame.UI;
 using AdverGame.Utility;
 using System;
 using System.Collections;
@@ -174,14 +175,12 @@ namespace AdverGame.Customer
                 StartCoroutine(ResetPos());
             }
         }
-        void Pay()
+        public void Pay()
         {
-            //PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
+            PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
         }
         bool IsReachDestination()
         {
-
-
             if (Vector2.Distance(transform.position, m_targetPos) == 0) return true;
             return false;
         }
@@ -247,7 +246,10 @@ namespace AdverGame.Customer
 
                     }
                 }
-
+                else if(m_currentState == CustomerState.WAITORDER)
+                {
+                    UIManager.s_Instance.FindHUD(HUDName.ITEM_AVAILABLE);
+                }
 
 
 

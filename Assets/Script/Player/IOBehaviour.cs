@@ -14,7 +14,7 @@ namespace AdverGame.Player
 
         public void SaveData(PlayerData data)
         {
-           
+
             try
             {
                 lock (m_persistanDataLock)

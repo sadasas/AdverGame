@@ -26,8 +26,6 @@ namespace AdverGame.Player
 
 #if UNITY_STANDALONE_WIN
 
-   Screen.SetResolution(480
-, 640, false);
 
         if (Input.GetMouseButtonDown(0))
             {

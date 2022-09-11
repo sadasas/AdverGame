@@ -1,4 +1,5 @@
 ﻿using AdverGame.Customer;
+using AdverGame.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,11 +55,24 @@ namespace AdverGame.Player
             m_menuAvailableHUDHandler.OnUpdateItem += UpdateItem;
             m_menuAvailableHUDHandler.gameObject.SetActive(false);
 
+            UIManager.s_Instance.HUDRegistered.Add(HUDName.ITEM_AVAILABLE, m_menuAvailableHUDHandler.gameObject);
+
         }
 
         void DisplayUpdateItem()
         {
-            if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0) return;
+            if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0)
+            {
+                if (m_menuAvailableHUDHandler.ItemsDisplayed != null && m_menuAvailableHUDHandler.ItemsDisplayed.Count > 0)
+                {
+                    foreach (var item in m_menuAvailableHUDHandler.ItemsDisplayed)
+                    {
+                        m_menuAvailableHUDHandler.DestroyItem(item.Key);
+                    }
+                }
+
+                return;
+            }
             if (m_menuAvailableHUDHandler.ItemsDisplayed == null || m_menuAvailableHUDHandler.ItemsDisplayed.Count == 0)
             {
 

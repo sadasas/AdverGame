@@ -74,6 +74,7 @@ namespace AdverGame.Customer
         public void GetOrder(Order menu)
         {
             menu.Customer.ResetOrder();
+            menu.Customer.Pay();
             CustomerOrders.Remove(menu);
 
 

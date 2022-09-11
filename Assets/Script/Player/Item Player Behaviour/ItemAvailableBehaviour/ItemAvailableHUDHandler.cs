@@ -13,7 +13,7 @@ namespace AdverGame.Player
         [SerializeField] Transform m_itemPlace;
 
 
-        public Dictionary<Item,ItemSerializable> ItemsDisplayed { get; private set; }
+        public Dictionary<Item, ItemSerializable> ItemsDisplayed { get; private set; }
 
         public Action<ItemSerializable> OnUpdateItem;
         public void DisplayItem(ItemSerializable item)
@@ -22,7 +22,7 @@ namespace AdverGame.Player
             var obj = Instantiate(item.Content.ItemPrefab, m_itemPlace).GetComponent<Item>();
             obj.UpdateItem(item.Content, item.Stack);
 
-            ItemsDisplayed.Add(obj,item);
+            ItemsDisplayed.Add(obj, item);
             obj.OnTouch += UpdateItem;
 
         }

@@ -1,5 +1,4 @@
-﻿using AdverGame.Customer;
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,7 +23,7 @@ namespace AdverGame.Player
 
         }
 
-      
+
 
         public void OnPointerDown(PointerEventData eventData)
         {
