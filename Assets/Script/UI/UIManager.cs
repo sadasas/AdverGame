@@ -43,7 +43,7 @@ namespace AdverGame.UI
             s_CurrentHUDSelected = hud;
         }
 
-        public void FindHUD(HUDName name)
+        public void ForceHUD(HUDName name)
         {
 
             HUDRegistered[name].SetActive(true);

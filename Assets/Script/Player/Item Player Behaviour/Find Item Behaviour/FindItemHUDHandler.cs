@@ -17,6 +17,7 @@ namespace AdverGame.Player
 
 
         public Action OnGetTriggered;
+        public Action OnResetTriggered;
 
         public void DisplayItemFounded(ItemSerializable itemfounded)
         {
@@ -28,7 +29,7 @@ namespace AdverGame.Player
 
         }
 
-        public void TrackItemFinded(int itemfindedTot , float itemMaxFounded)
+        public void TrackItemFinded(int itemfindedTot, float itemMaxFounded)
         {
 
             m_slider.value = 1f / (itemMaxFounded / itemfindedTot);
@@ -43,15 +44,18 @@ namespace AdverGame.Player
 
 
 
-        public void CheckItemFinded()
+        public void GetItemFinded()
         {
             m_itemPlace.parent.gameObject.SetActive(true);
+            OnGetTriggered?.Invoke();
         }
 
         public void ResetItemFinded()
         {
-            OnGetTriggered?.Invoke();
 
+            OnResetTriggered?.Invoke();
+
+            if (m_itemDisplayed == null || m_itemDisplayed.Count == 0) return;
             foreach (var item in m_itemDisplayed)
             {
                 Destroy(item);

@@ -63,7 +63,7 @@ namespace AdverGame.Customer
             var cusOrder = new Order(order, obj);
             CustomerOrders.Add(cusOrder);
 
-            Debug.Log(CustomerOrders.Count);
+
         }
 
         void RemoveOrder(ItemSerializable menu)

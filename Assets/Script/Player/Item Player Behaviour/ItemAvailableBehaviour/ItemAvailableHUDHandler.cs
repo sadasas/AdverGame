@@ -15,7 +15,17 @@ namespace AdverGame.Player
 
         public Dictionary<Item, ItemSerializable> ItemsDisplayed { get; private set; }
 
-        public Action<ItemSerializable> OnUpdateItem;
+        public Action<ItemSerializable> OnItemTouched;
+        public Action OnActive;
+        private void OnEnable()
+        {
+            OnActive?.Invoke();
+        }
+
+        void ItemTouched(Item item)
+        {
+            OnItemTouched?.Invoke(ItemsDisplayed[item]);
+        }
         public void DisplayItem(ItemSerializable item)
         {
             ItemsDisplayed ??= new();
@@ -23,19 +33,23 @@ namespace AdverGame.Player
             obj.UpdateItem(item.Content, item.Stack);
 
             ItemsDisplayed.Add(obj, item);
-            obj.OnTouch += UpdateItem;
+            obj.OnTouch += ItemTouched;
 
         }
-
-        void UpdateItem(Item item)
-        {
-            OnUpdateItem?.Invoke(ItemsDisplayed[item]);
-        }
-
         public void DestroyItem(Item item)
         {
-            ItemsDisplayed.Remove(item);
+           
             Destroy(item.gameObject);
+        }
+        public void RemoveItem(Item item)
+        {
+            ItemsDisplayed.Remove(item);
+         
+        }
+        public void RemoveItem()
+        {
+            ItemsDisplayed.Clear();
+
         }
     }
 }

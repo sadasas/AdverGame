@@ -1,6 +1,5 @@
 ﻿using AdverGame.Customer;
 using AdverGame.UI;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,30 +29,27 @@ namespace AdverGame.Player
             m_mainCanvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
             m_itemContainer = itemContainer;
 
-            PlayerManager.s_Instance.StartCoroutine(Setup());
-
-        }
-
-        IEnumerator Setup()
-        {
             InitItemAvailableHUD();
-            yield return null;
-            InitItemAvailableButton();
+
         }
+
+
         void InitItemAvailableButton()
         {
 
             m_menuAvailableButtonHandler = GameObject.Instantiate(m_buttonmenuAvailablePrefab, m_mainCanvas).GetComponent<ItemAvailableButtonHandler>();
             m_menuAvailableButtonHandler.m_itemAvailableHUD = m_menuAvailableHUDHandler;
 
-            m_menuAvailableButtonHandler.OnDisplayItemAvailableHUD += DisplayUpdateItem;
+
 
         }
         void InitItemAvailableHUD()
         {
             m_menuAvailableHUDHandler = GameObject.Instantiate(m_menuAvailableHUDPrefab, m_mainCanvas).GetComponent<ItemAvailableHUDHandler>();
-            m_menuAvailableHUDHandler.OnUpdateItem += UpdateItem;
+            m_menuAvailableHUDHandler.OnItemTouched += ItemTouched;
             m_menuAvailableHUDHandler.gameObject.SetActive(false);
+
+            m_menuAvailableHUDHandler.OnActive += DisplayUpdateItem;
 
             UIManager.s_Instance.HUDRegistered.Add(HUDName.ITEM_AVAILABLE, m_menuAvailableHUDHandler.gameObject);
 
@@ -67,8 +63,10 @@ namespace AdverGame.Player
                 {
                     foreach (var item in m_menuAvailableHUDHandler.ItemsDisplayed)
                     {
+
                         m_menuAvailableHUDHandler.DestroyItem(item.Key);
                     }
+                    m_menuAvailableHUDHandler.RemoveItem();
                 }
 
                 return;
@@ -102,6 +100,7 @@ namespace AdverGame.Player
                         {
 
                             m_menuAvailableHUDHandler.DestroyItem(item);
+                            m_menuAvailableHUDHandler.RemoveItem(item);
                         }
                     }
 
@@ -125,7 +124,7 @@ namespace AdverGame.Player
             }
         }
 
-        void UpdateItem(ItemSerializable item)
+        void ItemTouched(ItemSerializable item)
         {
 
             if (CustomerManager.s_Instance.CheckOrder(item, out var order))

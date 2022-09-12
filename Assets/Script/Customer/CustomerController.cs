@@ -246,9 +246,9 @@ namespace AdverGame.Customer
 
                     }
                 }
-                else if(m_currentState == CustomerState.WAITORDER)
+                else if (m_currentState == CustomerState.WAITORDER)
                 {
-                    UIManager.s_Instance.FindHUD(HUDName.ITEM_AVAILABLE);
+                    UIManager.s_Instance.ForceHUD(HUDName.ITEM_AVAILABLE);
                 }
 
 
