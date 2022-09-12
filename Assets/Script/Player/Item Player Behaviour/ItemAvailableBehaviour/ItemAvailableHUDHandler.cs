@@ -17,14 +17,10 @@ namespace AdverGame.Player
 
         public Action<ItemSerializable> OnItemTouched;
         public Action OnActive;
-        private void OnEnable()
+
+        void OnEnable()
         {
             OnActive?.Invoke();
-        }
-
-        void ItemTouched(Item item)
-        {
-            OnItemTouched?.Invoke(ItemsDisplayed[item]);
         }
         public void DisplayItem(ItemSerializable item)
         {
