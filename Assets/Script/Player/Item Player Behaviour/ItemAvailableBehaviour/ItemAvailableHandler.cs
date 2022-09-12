@@ -47,10 +47,8 @@ namespace AdverGame.Player
         {
             m_menuAvailableHUDHandler = GameObject.Instantiate(m_menuAvailableHUDPrefab, m_mainCanvas).GetComponent<ItemAvailableHUDHandler>();
             m_menuAvailableHUDHandler.OnItemTouched += ItemTouched;
+            m_menuAvailableHUDHandler.OnActive += DisplayUpdateItem;
             m_menuAvailableHUDHandler.gameObject.SetActive(false);
-            
-            m_menuAvailableHUDHandler.OnActive+= DisplayUpdateItem;
-
             UIManager.s_Instance.HUDRegistered.Add(HUDName.ITEM_AVAILABLE, m_menuAvailableHUDHandler.gameObject);
 
         }

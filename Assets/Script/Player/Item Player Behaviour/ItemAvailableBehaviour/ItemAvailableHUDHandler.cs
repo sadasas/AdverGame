@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,11 +18,6 @@ namespace AdverGame.Player
 
         public Action<ItemSerializable> OnItemTouched;
         public Action OnActive;
-
-        void OnEnable()
-        {
-            OnActive?.Invoke();
-        }
         public void DisplayItem(ItemSerializable item)
         {
             ItemsDisplayed ??= new();
