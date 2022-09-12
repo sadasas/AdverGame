@@ -47,9 +47,11 @@ namespace AdverGame.Player
 
             m_menuAvailableHUDHandler.gameObject.SetActive(false);
 
+            m_menuAvailableHUDHandler.OnEnable+= UpdateItem;
+
         }
 
-        void UpdateItem()
+       public void UpdateItem()
         {
             if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0) return;
             if (m_menuAvailableHUDHandler.ItemsDisplayed == null || m_menuAvailableHUDHandler.ItemsDisplayed.Count == 0)

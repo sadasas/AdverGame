@@ -7,7 +7,13 @@ namespace AdverGame.Player
     {
         public List<Item> ItemsDisplayed = null;
         [SerializeField] Transform m_itemPlace;
+        
+        public Action OnEnable;
 
+        void OnEnable
+        {
+            OnEnable?.Invoke();
+        }
         public void DisplayItem(ItemSerializable item)
         {
             ItemsDisplayed ??= new();
