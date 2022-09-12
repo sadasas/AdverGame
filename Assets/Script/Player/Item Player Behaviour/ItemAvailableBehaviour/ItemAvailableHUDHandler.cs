@@ -16,6 +16,12 @@ namespace AdverGame.Player
         public Dictionary<Item, ItemSerializable> ItemsDisplayed { get; private set; }
 
         public Action<ItemSerializable> OnUpdateItem;
+        public Action OnActive;
+
+        void OnEnable()
+        {
+            OnActive?.Invoke();
+        }
         public void DisplayItem(ItemSerializable item)
         {
             ItemsDisplayed ??= new();
