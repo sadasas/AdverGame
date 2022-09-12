@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +17,16 @@ namespace AdverGame.Player
 
         public Action<ItemSerializable> OnItemTouched;
         public Action OnActive;
+
+        private void OnEnable()
+        {
+            OnActive?.Invoke();
+        }
+
+        void ItemTouched(Item item)
+        {
+            OnItemTouched?.Invoke(ItemsDisplayed[item]);
+        }
         public void DisplayItem(ItemSerializable item)
         {
             ItemsDisplayed ??= new();
@@ -30,13 +39,13 @@ namespace AdverGame.Player
         }
         public void DestroyItem(Item item)
         {
-           
+
             Destroy(item.gameObject);
         }
         public void RemoveItem(Item item)
         {
             ItemsDisplayed.Remove(item);
-         
+
         }
         public void RemoveItem()
         {
