@@ -30,6 +30,7 @@ namespace AdverGame.Player
             m_itemContainer = itemContainer;
 
             InitItemAvailableHUD();
+            InitItemAvailableButton();
 
         }
 

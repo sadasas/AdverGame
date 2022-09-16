@@ -4,7 +4,6 @@ using AdverGame.Player;
 using AdverGame.UI;
 using AdverGame.Utility;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,68 +14,78 @@ namespace AdverGame.Customer
     public class CustomerController : MonoBehaviour, ICustomer
     {
         ItemSerializable m_currentOrder;
-
-        Vector3 m_targetPos;
-        Vector2 m_defaultPos;
-        float m_widhtOffset;
-        float m_heightOffset;
-        [SerializeField] CustomerState m_currentState = CustomerState.DEFAULT;
         ChairController m_currentChair;
+        SpriteRenderer m_sprite;
         int m_touchCount = 0;
-        List<ItemSerializable> m_itemsRegistered;
         int m_countDownMove = 0;
         float m_countDownWaitOrder = 0;
         float m_countDownIdle = 0;
-        SpriteRenderer m_sprite;
+        List<ItemSerializable> m_itemsRegistered;
+
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_orderImage;
         [SerializeField] CustomerVariant m_variant;
 
+        public float widhtOffset { get; private set; }
+        public float heightOffset { get; private set; }
+
+        public Vector3 TargetPos;
+        public Vector2 DefaultPos;
+        public float SpawnDelay = 0;
+        public CustomerState CurrentState  = CustomerState.DEFAULT;
         public Action<CustomerController, ItemSerializable> OnCreateOrder;
         public Action<ItemSerializable> OnCancelOrder;
+        public Action<CustomerController> OnResetPos;
+        public Action OnToChair;
 
 
         private void Start()
         {
-            StartCoroutine(Setup());
+            Setup();
 
         }
-
         private void Update()
         {
 
 
-            if (m_currentState == CustomerState.WALK) Move();
-            if (m_currentState == CustomerState.WALK && IsReachDestination()) StartCoroutine(ResetPos());
+            if (CurrentState == CustomerState.WALK)
+            {
+                if (SpawnDelay > 0) SpawnDelay -= Time.deltaTime;
+                else
+                {
+                    SpawnDelay = 0;
+                    Move();
+                }
+            }
+            if (CurrentState == CustomerState.WALK && IsReachDestination()) OnResetPos.Invoke(this);
 
-            if (m_currentState == CustomerState.TOCHAIR) Move();
-            if (m_currentState == CustomerState.TOCHAIR && IsReachDestination())
+            if (CurrentState == CustomerState.TOCHAIR) Move();
+            if (CurrentState == CustomerState.TOCHAIR && IsReachDestination())
             {
                 Order();
-                m_currentState = CustomerState.WAITORDER;
+                CurrentState = CustomerState.WAITORDER;
             }
-            if (m_currentState == CustomerState.WAITORDER) WaitOrder();
+            if (CurrentState == CustomerState.WAITORDER) WaitOrder();
 
-            if (m_currentState == CustomerState.WAITCHAIRAVAILABLE) WaitChairAvailable();
-            if (m_currentState == CustomerState.IDLE) WaitTofindChair();
+            if (CurrentState == CustomerState.WAITCHAIRAVAILABLE) WaitChairAvailable();
+            if (CurrentState == CustomerState.IDLE) WaitTofindChair();
 
             m_touchSlider.value = m_touchCount;
         }
 
 
-        IEnumerator Setup()
+        void Setup()
         {
             m_sprite = GetComponent<SpriteRenderer>();
             m_itemsRegistered = AssetHelpers.GetAllItemRegistered();
 
-            m_widhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
-            m_heightOffset = GetComponent<SpriteRenderer>().bounds.size.y / 2;
+            widhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
+            heightOffset = GetComponent<SpriteRenderer>().bounds.size.y / 2;
 
-            yield return transform.position = SetRandomPos();
-
-            m_defaultPos = transform.position;
-            m_targetPos = transform.position;
-            m_targetPos.x = -m_targetPos.x;
+            SpawnDelay += m_variant.SpawnDelay;
+            DefaultPos = transform.position;
+            TargetPos = transform.position;
+            TargetPos.x = -TargetPos.x;
 
             m_countDownMove = m_variant.SpawnDelay;
             m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
@@ -84,7 +93,6 @@ namespace AdverGame.Customer
 
             ChangeSprite(m_variant.DummylCustomerImage);
 
-            m_currentState = CustomerState.WALK;
 
         }
         void ChangeSprite(Sprite image)
@@ -92,11 +100,6 @@ namespace AdverGame.Customer
             m_sprite.sprite = image;
 
             m_sprite.sortingOrder = 1;
-        }
-        Vector2 SetRandomPos()
-        {
-            var stageDimension = Camera.main.ScreenToWorldPoint(new Vector3(Screen.currentResolution.width, Screen.currentResolution.height, 0));
-            return new Vector2(stageDimension.x + m_widhtOffset, UnityEngine.Random.Range(-3, -(stageDimension.y - m_heightOffset)));
         }
         void WaitTofindChair()
         {
@@ -107,7 +110,7 @@ namespace AdverGame.Customer
             }
             else
             {
-                m_currentState = CustomerState.WALK;
+                CurrentState = CustomerState.WALK;
                 m_countDownIdle = m_variant.WaitChairAvailableTime;
             }
         }
@@ -118,17 +121,19 @@ namespace AdverGame.Customer
                 m_countDownIdle -= Time.deltaTime;
                 if (IsChairAvailable())
                 {
-                    m_currentState = CustomerState.TOCHAIR;
-                    m_targetPos = m_currentChair.transform.position;
+
+                    CurrentState = CustomerState.TOCHAIR;
+                    TargetPos = m_currentChair.transform.position;
                     m_touchCount = 0;
 
                     ChangeSprite(m_variant.RealCustomerImage);
                     m_touchSlider.gameObject.SetActive(false);
+                    OnToChair?.Invoke();
                 }
             }
             else
             {
-                m_currentState = CustomerState.WALK;
+                CurrentState = CustomerState.WALK;
                 m_countDownIdle = m_variant.WaitChairAvailableTime;
                 m_touchSlider.gameObject.SetActive(false);
                 m_touchCount = 3;
@@ -171,28 +176,31 @@ namespace AdverGame.Customer
             }
             else
             {
+
                 OnCancelOrder?.Invoke(m_currentOrder);
-                StartCoroutine(ResetPos());
+                OnResetPos?.Invoke(this);
+
+                ResetOrder();
+
             }
         }
+        bool IsReachDestination()
+        {
+            if (Vector2.Distance(transform.position, TargetPos) == 0) return true;
+            return false;
+        }
+
         public void Pay()
         {
             PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
         }
-        bool IsReachDestination()
+        public void ResetPos()
         {
-            if (Vector2.Distance(transform.position, m_targetPos) == 0) return true;
-            return false;
-        }
-        IEnumerator ResetPos()
-        {
-            Debug.Log("Reset");
-            m_countDownMove = m_variant.SpawnDelay;
-            yield return m_defaultPos = SetRandomPos();
 
-            transform.position = m_defaultPos;
-            m_targetPos = transform.position;
-            m_targetPos.x = -m_targetPos.x;
+            CurrentState = CustomerState.DEFAULT;
+
+            transform.position = DefaultPos;
+     
             m_countDownMove = m_variant.SpawnDelay;
             m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
             m_touchCount = 0;
@@ -200,17 +208,17 @@ namespace AdverGame.Customer
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
 
-            ResetOrder();
+
             m_touchSlider.gameObject.SetActive(false);
 
             ChangeSprite(m_variant.DummylCustomerImage);
-            m_currentState = CustomerState.WALK;
-        }
 
+
+        }
         public void Move()
         {
 
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(m_targetPos.x, m_targetPos.y), m_variant.Speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetPos.x, TargetPos.y), m_variant.Speed * Time.deltaTime);
         }
         public void OnTouch(GameObject obj)
         {
@@ -220,33 +228,36 @@ namespace AdverGame.Customer
 
 
 
-                if (m_touchCount == 0 && m_currentState == CustomerState.WALK)
+                if (m_touchCount == 0 && CurrentState == CustomerState.WALK)
                 {
                     m_touchCount++;
-                    m_currentState = CustomerState.IDLE;
+                    CurrentState = CustomerState.IDLE;
                     m_touchSlider.gameObject.SetActive(true);
 
                 }
-                else if (m_touchCount == 1 && m_currentState == CustomerState.IDLE || m_touchCount == 1 && m_currentState == CustomerState.WALK)
+                else if (m_touchCount == 1 && CurrentState == CustomerState.IDLE || m_touchCount == 1 && CurrentState == CustomerState.WALK)
                 {
                     m_touchSlider.gameObject.SetActive(true);
                     if (IsChairAvailable())
                     {
-                        m_currentState = CustomerState.TOCHAIR;
+
+                        CurrentState = CustomerState.TOCHAIR;
+
 
                         ChangeSprite(m_variant.RealCustomerImage);
-                        m_targetPos = m_currentChair.transform.position;
+                        TargetPos = m_currentChair.transform.position;
                         m_touchSlider.gameObject.SetActive(false);
                         m_touchCount = 0;
+                        OnToChair?.Invoke();
                     }
                     else
                     {
                         m_touchCount++;
-                        m_currentState = CustomerState.WAITCHAIRAVAILABLE;
+                        CurrentState = CustomerState.WAITCHAIRAVAILABLE;
 
                     }
                 }
-                else if (m_currentState == CustomerState.WAITORDER)
+                else if (CurrentState == CustomerState.WAITORDER)
                 {
                     UIManager.s_Instance.ForceHUD(HUDName.ITEM_AVAILABLE);
                 }
@@ -256,14 +267,13 @@ namespace AdverGame.Customer
             }
 
         }
-
         public void ResetOrder()
         {
             if (m_currentOrder == null) return;
             m_currentOrder = null;
             m_orderImage.gameObject.SetActive(false);
 
-            StartCoroutine(ResetPos());
+
         }
     }
 }

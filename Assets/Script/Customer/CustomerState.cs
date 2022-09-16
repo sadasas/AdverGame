@@ -1,6 +1,6 @@
 ﻿namespace AdverGame.Customer
 {
-    enum CustomerState
+    public enum CustomerState
     {
         IDLE,
         WALK,

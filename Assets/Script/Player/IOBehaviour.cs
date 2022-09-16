@@ -1,5 +1,6 @@
 ﻿
 
+using AdverGame.Utility;
 using System.IO;
 using UnityEngine;
 
@@ -23,7 +24,21 @@ namespace AdverGame.Player
                     {
                         using var sWriter = new StreamWriter(m_stream);
 
-                        string json = JsonUtility.ToJson(data);
+                        var pdTemp = new PlayerData();
+                        pdTemp.Coin = data.Coin;
+                        pdTemp.Items = new();
+                        if (data.Items != null && data.Items.Count > 0)
+                        {
+                            foreach (var item in data.Items)
+                            {
+                                var itemTemp = new ItemSerializable();
+                                itemTemp.m_content = item.Content.name;
+                                pdTemp.Items.Add(itemTemp);
+                            }
+                        }
+
+
+                        string json = JsonUtility.ToJson(pdTemp);
 
                         sWriter.Write(json);
                     }
@@ -52,6 +67,12 @@ namespace AdverGame.Player
                             using var rReader = new StreamReader(m_stream);
                             string json = rReader.ReadToEnd();
                             tempPd = JsonUtility.FromJson<PlayerData>(json);
+                            foreach (var item in tempPd.Items)
+                            {
+                                var so = AssetHelpers.GetScriptableItemRegistered(item.m_content);
+                                item.Content = so;
+                                item.m_content = null;
+                            }
                         }
                     }
 

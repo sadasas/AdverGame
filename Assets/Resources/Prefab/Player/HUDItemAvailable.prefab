@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5371667888219808419}
   - component: {fileID: 8394561660052253877}
   m_Layer: 5
-  m_Name: HUDItemAavailable
+  m_Name: HUDItemAvailable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

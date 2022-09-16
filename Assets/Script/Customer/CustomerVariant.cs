@@ -3,10 +3,15 @@
 
 namespace AdverGame.Customer
 {
+    public enum CustomerType
+    {
+        COMMON,
+        RARE
+    }
     [CreateAssetMenu(fileName = "Variant", menuName = "Customer Variant")]
     public class CustomerVariant : ScriptableObject
     {
-        [field:SerializeField]
+        [field: SerializeField]
         public float Speed { get; private set; }
         [field: SerializeField]
         public int SpawnDelay { get; private set; }
@@ -20,6 +25,11 @@ namespace AdverGame.Customer
         public Sprite DummylCustomerImage { get; private set; }
         [field: SerializeField]
         public int Coin { get; private set; }
+
+        [field: SerializeField]
+        public CustomerType Type { get; private set; }
+
+
     }
 }
 

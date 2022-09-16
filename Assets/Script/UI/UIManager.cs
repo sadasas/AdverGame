@@ -16,9 +16,10 @@ namespace AdverGame.UI
     {
         public static UIManager s_Instance;
 
-        GameObject s_CurrentHUDSelected = null;
+        GameObject m_currentHUDSelected = null;
 
         public Dictionary<HUDName, GameObject> HUDRegistered;
+
         private void Awake()
         {
             if (s_Instance) Destroy(s_Instance.gameObject);
@@ -26,7 +27,6 @@ namespace AdverGame.UI
 
             DontDestroyOnLoad(this);
         }
-
         private void Start()
         {
             HUDRegistered = new();
@@ -34,20 +34,20 @@ namespace AdverGame.UI
 
         public void SelectHUD(GameObject hud)
         {
-            if (s_CurrentHUDSelected != null)
+            if (m_currentHUDSelected != null)
             {
-                if (s_CurrentHUDSelected == hud) return;
-                s_CurrentHUDSelected.SetActive(false);
+                if (m_currentHUDSelected == hud) return;
+                m_currentHUDSelected.SetActive(false);
             }
 
-            s_CurrentHUDSelected = hud;
+            m_currentHUDSelected = hud;
         }
 
         public void ForceHUD(HUDName name)
         {
 
             HUDRegistered[name].SetActive(true);
-            if (HUDRegistered[name] != s_CurrentHUDSelected) SelectHUD(HUDRegistered[name]);
+            if (HUDRegistered[name] != m_currentHUDSelected) SelectHUD(HUDRegistered[name]);
         }
     }
 }

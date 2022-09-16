@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdverGame.Utility;
+using System;
 using UnityEngine;
 
 namespace AdverGame.Player
@@ -6,7 +7,9 @@ namespace AdverGame.Player
     [Serializable]
     public class ItemSerializable
     {
-        public ItemContent Content;
+       [HideInInspector] public string m_content = null;
+
+        public ItemContent Content = null;
 
         [field: SerializeField]
         public int Stack { get; private set; } = 1;
@@ -15,12 +18,19 @@ namespace AdverGame.Player
         {
             Content = content;
         }
+        public ItemSerializable()
+        {
+           
+        }
 
         public void UpdateStack(int stack)
         {
             Stack += stack;
         }
 
+    
+
+        
     }
 
 

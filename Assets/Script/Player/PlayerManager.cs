@@ -11,6 +11,7 @@ public class PlayerData
     public int Coin;
     public List<ItemSerializable> Items;
 
+
 }
 namespace AdverGame.Player
 {
