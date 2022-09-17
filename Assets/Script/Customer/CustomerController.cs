@@ -42,12 +42,9 @@ namespace AdverGame.Customer
         private void Start()
         {
             Setup();
-
         }
         private void Update()
         {
-
-
             if (CurrentState == CustomerState.WALK)
             {
                 if (SpawnDelay > 0) SpawnDelay -= Time.deltaTime;
@@ -58,7 +55,6 @@ namespace AdverGame.Customer
                 }
             }
             if (CurrentState == CustomerState.WALK && IsReachDestination()) OnResetPos.Invoke(this);
-
             if (CurrentState == CustomerState.TOCHAIR) Move();
             if (CurrentState == CustomerState.TOCHAIR && IsReachDestination())
             {
@@ -66,7 +62,6 @@ namespace AdverGame.Customer
                 CurrentState = CustomerState.WAITORDER;
             }
             if (CurrentState == CustomerState.WAITORDER) WaitOrder();
-
             if (CurrentState == CustomerState.WAITCHAIRAVAILABLE) WaitChairAvailable();
             if (CurrentState == CustomerState.IDLE) WaitTofindChair();
 
@@ -171,7 +166,6 @@ namespace AdverGame.Customer
 
             if (m_countDownWaitOrder > 0)
             {
-
                 m_countDownWaitOrder -= Time.deltaTime;
             }
             else
@@ -189,7 +183,6 @@ namespace AdverGame.Customer
             if (Vector2.Distance(transform.position, TargetPos) == 0) return true;
             return false;
         }
-
         public void Pay()
         {
             PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
@@ -223,7 +216,7 @@ namespace AdverGame.Customer
         public void OnTouch(GameObject obj)
         {
 
-            if (obj == this.gameObject && !EventSystem.current.IsPointerOverGameObject())
+            if (obj == this.gameObject )
             {
 
 

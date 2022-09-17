@@ -35,15 +35,11 @@ namespace AdverGame.Customer
         [SerializeField] int m_maxCustomerQueued;
 
         public List<Order> CustomerOrders { get; private set; }
-        public List<CustomerController> m_customerRunning;
         public Queue<CustomerController> CustomersQueue;
 
         private void OnValidate()
         {
-
             if (m_maxCustomerQueued < m_maxCustomerRunning) m_maxCustomerQueued = m_maxCustomerRunning;
-
-
         }
         private void Awake()
         {
@@ -62,27 +58,14 @@ namespace AdverGame.Customer
 
         }
 
-
-        public void RetargetCustomersPos(float targetXPos)
-        {
-            foreach (var cus in CustomersQueue)
-            {
-                cus.DefaultPos = new Vector2(cus.transform.position.x + targetXPos, cus.transform.position.y);
-                cus.TargetPos = new Vector2(cus.TargetPos.x + targetXPos, cus.TargetPos.y);
-                cus.transform.position = cus.DefaultPos;
-
-            }
-
-        }
         void SetupCustomers()
         {
-            m_customerSpawnPostStart = GameObject.Find("CustomerPosStart").transform;
-            m_customerSpawnPostEnd = GameObject.Find("CustomerPosEnd").transform;
+            m_customerSpawnPostStart = GameObject.Find("CustomerMinOffset").transform;
+            m_customerSpawnPostEnd = GameObject.Find("CustomerMaxOffset").transform;
             SpawnCustomer();
-            
+
             for (int i = 0; i < m_maxCustomerRunning; i++)
             {
-
                 CommandCustomer();
             }
         }
@@ -98,8 +81,8 @@ namespace AdverGame.Customer
                 var heightOffset = m_customerPrefab[currentVariant - 1].GetComponent<SpriteRenderer>().bounds.size.y / 2;
                 var pos = SetRandomPos(widhtOffset, heightOffset);
                 var newCust = GameObject.Instantiate(m_customerPrefab[currentVariant - 1], pos.start, Quaternion.identity).GetComponent<CustomerController>();
-                newCust.TargetPos = pos.end;
                 CustomersQueue.Enqueue(newCust);
+                newCust.TargetPos = pos.end;
                 m_playerInput.OnLeftClick += newCust.OnTouch;
                 newCust.OnCreateOrder += AddOrder;
                 newCust.OnCancelOrder += RemoveOrder;
@@ -112,7 +95,6 @@ namespace AdverGame.Customer
             }
 
         }
-
         void DecreaseCustomerWalking()
         {
             TotCustomersWalking--;
@@ -121,7 +103,6 @@ namespace AdverGame.Customer
         }
         void OnResetCustomer(CustomerController cust)
         {
-            m_customerRunning.Remove(cust);
 
             if (cust.CurrentState == CustomerState.WALK) TotCustomersWalking--;
 
@@ -136,11 +117,7 @@ namespace AdverGame.Customer
         void CommandCustomer()
         {
 
-            if (TotCustomersWalking >= m_maxCustomerRunning)
-            {
-
-                return;
-            }
+            if (TotCustomersWalking >= m_maxCustomerRunning) return;
 
             TotCustomersWalking++;
 
@@ -148,31 +125,14 @@ namespace AdverGame.Customer
             var cus = CustomersQueue.Dequeue();
             cus.CurrentState = CustomerState.WALK;
 
-            m_customerRunning ??= new();
-            m_customerRunning.Add(cus);
-
-
 
         }
-
-        (Vector2 start,Vector2 end) SetRandomPos(float widhtOffset, float heightOffset)
+        (Vector2 start, Vector2 end) SetRandomPos(float widhtOffset, float heightOffset)
         {
             var rand = Random.Range(0, 2);
             var stageDimension = Camera.main.ScreenToWorldPoint(new Vector3(Screen.currentResolution.width, Screen.currentResolution.height, 0));
             var posStart = new Vector2(m_customerSpawnPostStart.position.x - widhtOffset, UnityEngine.Random.Range(m_customerSpawnPostStart.position.y, -(stageDimension.y - heightOffset)));
             var posEnd = new Vector2(m_customerSpawnPostEnd.position.x + widhtOffset, posStart.y);
-            return (rand == 1 ? (posStart, posEnd) : (posEnd, posStart));
-        }
-
-        (Vector2 start, Vector2 end) SetRandomPosByCamera(float widhtOffset, float heightOffset)
-        {
-
-            var rand = Random.Range(0, 2);
-            var stageDimensionStart = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.currentResolution.height, 0));
-            var stageDimensionEnd = Camera.main.ScreenToWorldPoint(new Vector3(Screen.currentResolution.width, Screen.currentResolution.height, 0));
-
-            var posStart = new Vector2(stageDimensionStart.x, UnityEngine.Random.Range(-3, -(stageDimensionStart.y - heightOffset)));
-            var posEnd = new Vector2(stageDimensionEnd.x, posStart.y);
             return (rand == 1 ? (posStart, posEnd) : (posEnd, posStart));
         }
 
@@ -188,7 +148,6 @@ namespace AdverGame.Customer
             task.GetComponent<Task>().CustomerOrder = cusOrder;
 
         }
-
         void RemoveOrder(ItemSerializable menu)
         {
             if (CheckOrder(menu, out Order order))
@@ -198,7 +157,6 @@ namespace AdverGame.Customer
             }
 
         }
-
         public void GetOrder(Order menu)
         {
             Destroy(m_taskHUD.transform.GetChild(CustomerOrders.IndexOf(menu)).gameObject);
@@ -210,7 +168,6 @@ namespace AdverGame.Customer
 
 
         }
-
         public bool CheckOrder(ItemSerializable menu, out Order order)
         {
             order = new();
@@ -227,7 +184,6 @@ namespace AdverGame.Customer
 
             return false;
         }
-
         #endregion
     }
 }

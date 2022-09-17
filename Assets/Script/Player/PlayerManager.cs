@@ -1,4 +1,5 @@
-﻿using AdverGame.Player;
+﻿using AdverGame.Chair;
+using AdverGame.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ public class PlayerData
 {
     public int Coin;
     public List<ItemSerializable> Items;
-
+    public List<Vector2> Chairs;
+   
 
 }
 namespace AdverGame.Player
@@ -65,6 +67,16 @@ namespace AdverGame.Player
             Data.Items = items;
             SaveDataPlayer();
         }
+
+        public void SaveChair(Vector2 chairPos)
+        {
+            Data.Chairs ??= new();
+            Data.Chairs.Add(chairPos);
+            SaveDataPlayer();
+
+        }
+
+     
 
         public void IncreaseCoin(int coin)
         {

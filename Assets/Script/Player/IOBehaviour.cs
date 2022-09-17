@@ -26,6 +26,8 @@ namespace AdverGame.Player
 
                         var pdTemp = new PlayerData();
                         pdTemp.Coin = data.Coin;
+                        pdTemp.Chairs = data.Chairs;
+                       
                         pdTemp.Items = new();
                         if (data.Items != null && data.Items.Count > 0)
                         {
