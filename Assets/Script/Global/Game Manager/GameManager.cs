@@ -22,9 +22,6 @@ namespace AdverGame.GameManager
         CameraController m_cameraController;
 
         [SerializeField] GameObject m_UIPrefab;
-
-
-
         [SerializeField] GameObject m_playerManagerPrefab;
         [SerializeField] GameObject m_customerManagerPrefab;
         [SerializeField] GameObject m_UIManagerPrefab;
@@ -48,9 +45,11 @@ namespace AdverGame.GameManager
         {
             // setup ui manager
             m_UIManager = Instantiate(m_UIManagerPrefab).GetComponent<UIManager>();
+
             // setup player
             yield return m_playerManager = Instantiate(m_playerManagerPrefab).GetComponent<PlayerManager>();
 
+            // setup customer
             m_customerManager = Instantiate(m_customerManagerPrefab).GetComponent<CustomerManager>();
 
             // setup camera 

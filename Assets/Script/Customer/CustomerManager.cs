@@ -55,7 +55,7 @@ namespace AdverGame.Customer
             SetupCustomers();
 
             m_taskHUD = Instantiate(m_taskHUDPrefab, GameObject.Find("Menu Available Button Pos").transform.position + Vector3.down * 600, Quaternion.identity, GameObject.FindGameObjectWithTag("MainCanvas").transform);
-
+            m_taskHUD.transform.SetAsFirstSibling();
         }
 
         void SetupCustomers()

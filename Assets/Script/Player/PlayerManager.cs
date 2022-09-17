@@ -76,8 +76,7 @@ namespace AdverGame.Player
 
         }
 
-     
-
+  
         public void IncreaseCoin(int coin)
         {
             Data.Coin += coin;

@@ -12,12 +12,13 @@ namespace AdverGame.Player
         [SerializeField] Slider m_slider;
         [SerializeField] Transform m_itemPlace;
         [SerializeField] TextMeshProUGUI m_itemFounded;
+        [SerializeField] GameObject m_adverHUDPrefab;
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
 
-
         public Action OnGetTriggered;
         public Action OnResetTriggered;
+        public Action OnInstantSearchItemTriggered;
 
         public void DisplayItemFounded(ItemSerializable itemfounded)
         {
@@ -37,6 +38,15 @@ namespace AdverGame.Player
 
         }
 
+        public void GetItemInstant()
+        {
+            Instantiate(m_adverHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
+
+            OnInstantSearchItemTriggered?.Invoke();
+            OnGetTriggered?.Invoke();
+            m_itemPlace.parent.gameObject.SetActive(true);
+
+        }
         public void Exit()
         {
             this.gameObject.SetActive(false);

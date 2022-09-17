@@ -18,19 +18,14 @@ namespace AdverGame.Chair
     {
 
         Dictionary<ChairOffset, Vector2> chairOffsetPos;
-        [SerializeField] float m_distanceBetweenChair = 4f;
-        [SerializeField] GameObject m_chairPrefab;
-        [SerializeField] GameObject m_addChairIndicatorPrefab;
-
         List<AddChairIndicator> m_addChairIndicators;
         List<ChairController> Chairs;
         InputBehaviour m_inputPlayer;
 
+        [SerializeField] float m_distanceBetweenChair = 4f;
+        [SerializeField] GameObject m_chairPrefab;
+        [SerializeField] GameObject m_addChairIndicatorPrefab;
 
-        private void Awake()
-        {
-
-        }
         private void Start()
         {
             m_inputPlayer = PlayerManager.s_Instance.Player.InputBehaviour;
@@ -67,12 +62,12 @@ namespace AdverGame.Chair
                 {
                     SpawnChair(PlayerManager.s_Instance.Data.Chairs[i]);
                 }
-                Debug.Log("local");
+
 
             }
             else
             {
-                Debug.Log("default");
+
 
                 foreach (var offset in chairOffsetPos)
                 {
@@ -111,9 +106,6 @@ namespace AdverGame.Chair
             m_inputPlayer.OnLeftClick += newIndicator.OnTouch;
             newIndicator.OnAddChair += AddIndicatorTriggered;
             newIndicator.Offset = offset;
-
-
-
 
         }
 
