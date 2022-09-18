@@ -54,6 +54,7 @@ namespace AdverGame.Player
             while (isSearching && ItemFounded.Count < m_maxItemGetted)
             {
 
+                yield return new WaitForSeconds(m_searchItemTime);
                 //Find item
 
                 ItemFounded.Add(new ItemSerializable(m_allItems[index[count]].Content));
@@ -62,7 +63,6 @@ namespace AdverGame.Player
                 OnFindItem?.Invoke(ItemFounded.Count, m_maxItemGetted);
 
                 count++;
-                yield return new WaitForSeconds(m_searchItemTime);
 
 
             }
@@ -134,6 +134,7 @@ namespace AdverGame.Player
         }
         void ResetItemFounded()
         {
+            
             ItemFounded = new();
             StartFindItem();
         }

@@ -14,12 +14,14 @@ namespace AdverGame.Player
         [SerializeField] TextMeshProUGUI m_itemFounded;
         [SerializeField] GameObject m_adverHUDPrefab;
         [SerializeField] GameObject m_getInstantItemButton;
+        [SerializeField] GameObject m_getItemButton;
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
 
         public Action OnGetTriggered;
         public Action OnResetTriggered;
         public Action OnInstantSearchItemTriggered;
+
 
         public void DisplayItemFounded(ItemSerializable itemfounded)
         {
@@ -39,6 +41,9 @@ namespace AdverGame.Player
 
             if (itemfindedTot == itemMaxFounded) m_getInstantItemButton.SetActive(false);
             else m_getInstantItemButton.SetActive(true);
+
+            if (itemfindedTot == 0) m_getItemButton.SetActive(false);
+            else m_getItemButton.SetActive(true);
 
         }
 
@@ -60,6 +65,7 @@ namespace AdverGame.Player
 
         public void GetItemFinded()
         {
+
             m_itemPlace.parent.gameObject.SetActive(true);
             OnGetTriggered?.Invoke();
         }
@@ -75,7 +81,12 @@ namespace AdverGame.Player
                 Destroy(item);
             }
             m_itemDisplayed = null;
+            m_slider.value = 0;
+            m_itemFounded.text = "0 / 8";
             m_itemPlace.parent.gameObject.SetActive(false);
+            m_getItemButton.SetActive(false);
+            m_getInstantItemButton.SetActive(true);
+            this.gameObject.SetActive(false);
         }
     }
 

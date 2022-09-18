@@ -435,7 +435,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -457,7 +457,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2320852555585504816
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1638,6 +1638,7 @@ MonoBehaviour:
   m_itemFounded: {fileID: 9009431147646461825}
   m_adverHUDPrefab: {fileID: 8380312765035581654, guid: 7e5fe0ae484e22a48b9c88e866bad21c, type: 3}
   m_getInstantItemButton: {fileID: 3802795766688630958}
+  m_getItemButton: {fileID: 2783269492411787842}
   <m_itemDisplayed>k__BackingField: []
 --- !u!1 &6460065076371030793
 GameObject:

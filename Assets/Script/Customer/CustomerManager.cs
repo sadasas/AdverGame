@@ -35,6 +35,7 @@ namespace AdverGame.Customer
         [SerializeField] int m_maxCustomerQueued;
 
         public List<Order> CustomerOrders { get; private set; }
+        List<Task> m_taskOrders;
         public Queue<CustomerController> CustomersQueue;
 
         private void OnValidate()
@@ -144,23 +145,43 @@ namespace AdverGame.Customer
             CustomerOrders ??= new();
             var cusOrder = new Order(order, obj);
             CustomerOrders.Add(cusOrder);
-            var task = Instantiate(m_orderTaskPrefab, m_taskHUD.transform);
+            var task = Instantiate(m_orderTaskPrefab, m_taskHUD.transform).GetComponent<Task>();
             task.GetComponent<Image>().sprite = order.Content.Image;
             task.GetComponent<Task>().CustomerOrder = cusOrder;
+            m_taskOrders ??= new();
+            m_taskOrders.Add(task);
 
         }
         void RemoveOrder(ItemSerializable menu)
         {
             if (CheckOrder(menu, out Order order))
             {
-                Destroy(m_taskHUD.transform.GetChild(CustomerOrders.IndexOf(order)).gameObject);
+                foreach (var task in m_taskOrders)
+                {
+                    if (task.CustomerOrder.Customer == order.Customer)
+                    {
+                        m_taskOrders.Remove(task);
+                        Destroy(task.gameObject);
+                        break;
+                    }
+                }
                 CustomerOrders.Remove(order);
             }
 
         }
         public void GetOrder(Order menu)
         {
-            Destroy(m_taskHUD.transform.GetChild(CustomerOrders.IndexOf(menu)).gameObject);
+
+            foreach (var task in m_taskOrders)
+            {
+                if (task.CustomerOrder.Customer == menu.Customer)
+                {
+                    m_taskOrders.Remove(task);
+                    Destroy(task.gameObject);
+                    break;
+                }
+            }
+
             menu.Customer.ResetOrder();
             menu.Customer.CurrentState = CustomerState.EAT;
 
@@ -168,10 +189,6 @@ namespace AdverGame.Customer
 
         }
 
-        public void ResetOrder()
-        {
-
-        }
         public bool CheckOrder(ItemSerializable menu, out Order order)
         {
             order = new();
