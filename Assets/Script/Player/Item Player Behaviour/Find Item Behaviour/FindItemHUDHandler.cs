@@ -65,7 +65,7 @@ namespace AdverGame.Player
 
         public void GetItemFinded()
         {
-
+            m_getInstantItemButton.SetActive(false);
             m_itemPlace.parent.gameObject.SetActive(true);
             OnGetTriggered?.Invoke();
         }
