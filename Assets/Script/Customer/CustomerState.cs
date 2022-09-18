@@ -8,6 +8,9 @@
         WAITCHAIRAVAILABLE,
         ORDER,
         WAITORDER,
+        EAT,
+        PAY,
+        LEAVE,
         DEFAULT
     }
 }

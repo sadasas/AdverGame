@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -9020103725021081036}
   m_Layer: 3
   m_Name: ChairIndicator
-  m_TagString: Chair
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_price: 50
-  isLeft: 0
+  Offset: 0
 --- !u!1 &7475156657194643026
 GameObject:
   m_ObjectHideFlags: 0

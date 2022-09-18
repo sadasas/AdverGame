@@ -6,7 +6,6 @@ using AdverGame.Utility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace AdverGame.Customer
@@ -20,19 +19,20 @@ namespace AdverGame.Customer
         int m_countDownMove = 0;
         float m_countDownWaitOrder = 0;
         float m_countDownIdle = 0;
+        float m_eatTime = 0;
         List<ItemSerializable> m_itemsRegistered;
 
         [SerializeField] Slider m_touchSlider;
-        [SerializeField] Image m_orderImage;
+        [SerializeField] Image m_noticeImage;
         [SerializeField] CustomerVariant m_variant;
 
         public float widhtOffset { get; private set; }
         public float heightOffset { get; private set; }
 
-        public Vector3 TargetPos;
-        public Vector2 DefaultPos;
-        public float SpawnDelay = 0;
-        public CustomerState CurrentState  = CustomerState.DEFAULT;
+        [HideInInspector] public Vector3 TargetPos;
+        [HideInInspector] public Vector2 DefaultPos;
+        public float SpawnDelay { get; set; } = 0;
+        public CustomerState CurrentState { get; set; } = CustomerState.DEFAULT;
         public Action<CustomerController, ItemSerializable> OnCreateOrder;
         public Action<ItemSerializable> OnCancelOrder;
         public Action<CustomerController> OnResetPos;
@@ -55,6 +55,8 @@ namespace AdverGame.Customer
                 }
             }
             if (CurrentState == CustomerState.WALK && IsReachDestination()) OnResetPos.Invoke(this);
+            if (CurrentState == CustomerState.LEAVE) Move();
+            if (CurrentState == CustomerState.LEAVE && IsReachDestination()) OnResetPos.Invoke(this);
             if (CurrentState == CustomerState.TOCHAIR) Move();
             if (CurrentState == CustomerState.TOCHAIR && IsReachDestination())
             {
@@ -64,11 +66,29 @@ namespace AdverGame.Customer
             if (CurrentState == CustomerState.WAITORDER) WaitOrder();
             if (CurrentState == CustomerState.WAITCHAIRAVAILABLE) WaitChairAvailable();
             if (CurrentState == CustomerState.IDLE) WaitTofindChair();
+            if (CurrentState == CustomerState.EAT) Eating();
+            if (CurrentState == CustomerState.PAY) Pay();
 
             m_touchSlider.value = m_touchCount;
         }
 
 
+        void Eating()
+        {
+            if (m_eatTime > 0)
+            {
+                m_eatTime -= Time.deltaTime;
+                m_noticeImage.sprite = m_variant.EatImage;
+                m_noticeImage.gameObject.SetActive(true);
+
+            }
+            else if (m_eatTime <= 0)
+            {
+                CurrentState = CustomerState.PAY;
+                m_eatTime = 0;
+                m_noticeImage.gameObject.SetActive(false);
+            }
+        }
         void Setup()
         {
             m_sprite = GetComponent<SpriteRenderer>();
@@ -77,11 +97,12 @@ namespace AdverGame.Customer
             widhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
             heightOffset = GetComponent<SpriteRenderer>().bounds.size.y / 2;
 
-            SpawnDelay += m_variant.SpawnDelay;
             DefaultPos = transform.position;
             TargetPos = transform.position;
             TargetPos.x = -TargetPos.x;
 
+            SpawnDelay += m_variant.SpawnDelay;
+            m_eatTime += m_variant.EatTime;
             m_countDownMove = m_variant.SpawnDelay;
             m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
             m_countDownIdle = m_variant.WaitChairAvailableTime;
@@ -128,6 +149,8 @@ namespace AdverGame.Customer
             }
             else
             {
+                m_noticeImage.sprite = m_variant.AngryImage;
+                m_noticeImage.gameObject.SetActive(true);
                 CurrentState = CustomerState.WALK;
                 m_countDownIdle = m_variant.WaitChairAvailableTime;
                 m_touchSlider.gameObject.SetActive(false);
@@ -138,8 +161,8 @@ namespace AdverGame.Customer
         {
             var index = UnityEngine.Random.Range(0, m_itemsRegistered.Count);
             m_currentOrder = m_itemsRegistered[index];
-            m_orderImage.sprite = m_currentOrder.Content.Image;
-            m_orderImage.gameObject.SetActive(true);
+            m_noticeImage.sprite = m_currentOrder.Content.Image;
+            m_noticeImage.gameObject.SetActive(true);
 
             OnCreateOrder?.Invoke(this, m_currentOrder);
 
@@ -172,10 +195,14 @@ namespace AdverGame.Customer
             {
 
                 OnCancelOrder?.Invoke(m_currentOrder);
-                OnResetPos?.Invoke(this);
-
                 ResetOrder();
-
+                m_noticeImage.sprite = m_variant.AngryImage;
+                m_noticeImage.gameObject.SetActive(true);
+                TargetPos = DefaultPos;
+                m_touchCount = 3;
+                CurrentState = CustomerState.LEAVE;
+                if (m_currentChair) m_currentChair.Customer = null;
+                m_currentChair = null;
             }
         }
         bool IsReachDestination()
@@ -185,7 +212,14 @@ namespace AdverGame.Customer
         }
         public void Pay()
         {
+            m_noticeImage.sprite = m_variant.HappyImage;
+            m_noticeImage.gameObject.SetActive(true);
+            TargetPos = DefaultPos;
+            m_touchCount = 3;
+            CurrentState = CustomerState.LEAVE;
             PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
+            if (m_currentChair) m_currentChair.Customer = null;
+            m_currentChair = null;
         }
         public void ResetPos()
         {
@@ -193,15 +227,15 @@ namespace AdverGame.Customer
             CurrentState = CustomerState.DEFAULT;
 
             transform.position = DefaultPos;
-     
+
+            m_eatTime += m_variant.EatTime;
             m_countDownMove = m_variant.SpawnDelay;
             m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
             m_touchCount = 0;
 
-            if (m_currentChair) m_currentChair.Customer = null;
-            m_currentChair = null;
 
 
+            m_noticeImage.gameObject.SetActive(false);
             m_touchSlider.gameObject.SetActive(false);
 
             ChangeSprite(m_variant.DummylCustomerImage);
@@ -216,7 +250,7 @@ namespace AdverGame.Customer
         public void OnTouch(GameObject obj)
         {
 
-            if (obj == this.gameObject )
+            if (obj == this.gameObject)
             {
 
 
@@ -238,6 +272,7 @@ namespace AdverGame.Customer
 
 
                         ChangeSprite(m_variant.RealCustomerImage);
+                        DefaultPos = TargetPos;
                         TargetPos = m_currentChair.transform.position;
                         m_touchSlider.gameObject.SetActive(false);
                         m_touchCount = 0;
@@ -264,7 +299,7 @@ namespace AdverGame.Customer
         {
             if (m_currentOrder == null) return;
             m_currentOrder = null;
-            m_orderImage.gameObject.SetActive(false);
+            m_noticeImage.gameObject.SetActive(false);
 
 
         }

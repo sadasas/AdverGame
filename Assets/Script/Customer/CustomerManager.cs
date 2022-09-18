@@ -23,7 +23,7 @@ namespace AdverGame.Customer
         public static CustomerManager s_Instance;
 
         InputBehaviour m_playerInput;
-        int TotCustomersWalking = 0;
+        [SerializeField] int TotCustomersWalking = 0;
         GameObject m_taskHUD;
         Transform m_customerSpawnPostStart;
         Transform m_customerSpawnPostEnd;
@@ -57,6 +57,7 @@ namespace AdverGame.Customer
             m_taskHUD = Instantiate(m_taskHUDPrefab, GameObject.Find("Menu Available Button Pos").transform.position + Vector3.down * 600, Quaternion.identity, GameObject.FindGameObjectWithTag("MainCanvas").transform);
             m_taskHUD.transform.SetAsFirstSibling();
         }
+
 
         void SetupCustomers()
         {
@@ -161,11 +162,14 @@ namespace AdverGame.Customer
         {
             Destroy(m_taskHUD.transform.GetChild(CustomerOrders.IndexOf(menu)).gameObject);
             menu.Customer.ResetOrder();
-            OnResetCustomer(menu.Customer);
-            menu.Customer.ResetPos();
-            menu.Customer.Pay();
+            menu.Customer.CurrentState = CustomerState.EAT;
+
             CustomerOrders.Remove(menu);
 
+        }
+
+        public void ResetOrder()
+        {
 
         }
         public bool CheckOrder(ItemSerializable menu, out Order order)

@@ -380,12 +380,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_touchSlider: {fileID: 2298864124004987249}
-  m_orderImage: {fileID: 6717371769438443885}
+  m_noticeImage: {fileID: 6717371769438443885}
   m_variant: {fileID: 0}
   TargetPos: {x: 0, y: 0, z: 0}
   DefaultPos: {x: 0, y: 0}
-  SpawnDelay: 0
-  CurrentState: 6
 --- !u!1 &6423536586892284374
 GameObject:
   m_ObjectHideFlags: 0
