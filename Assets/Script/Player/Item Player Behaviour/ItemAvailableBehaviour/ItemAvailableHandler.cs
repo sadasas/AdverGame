@@ -40,7 +40,7 @@ namespace AdverGame.Player
 
             m_menuAvailableButtonHandler = GameObject.Instantiate(m_buttonmenuAvailablePrefab, m_mainCanvas).GetComponent<ItemAvailableButtonHandler>();
             m_menuAvailableButtonHandler.m_itemAvailableHUD = m_menuAvailableHUDHandler;
-
+            m_menuAvailableButtonHandler.transform.SetAsFirstSibling();
 
 
         }

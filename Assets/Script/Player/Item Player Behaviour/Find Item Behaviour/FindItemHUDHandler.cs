@@ -13,6 +13,7 @@ namespace AdverGame.Player
         [SerializeField] Transform m_itemPlace;
         [SerializeField] TextMeshProUGUI m_itemFounded;
         [SerializeField] GameObject m_adverHUDPrefab;
+        [SerializeField] GameObject m_getInstantItemButton;
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
 
@@ -35,6 +36,9 @@ namespace AdverGame.Player
 
             m_slider.value = 1f / (itemMaxFounded / itemfindedTot);
             m_itemFounded.text = itemfindedTot.ToString() + " / " + itemMaxFounded;
+
+            if (itemfindedTot == itemMaxFounded) m_getInstantItemButton.SetActive(false);
+            else m_getInstantItemButton.SetActive(true);
 
         }
 

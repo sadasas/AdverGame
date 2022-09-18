@@ -1441,7 +1441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1637,6 +1637,7 @@ MonoBehaviour:
   m_itemPlace: {fileID: 7833123497308015079}
   m_itemFounded: {fileID: 9009431147646461825}
   m_adverHUDPrefab: {fileID: 8380312765035581654, guid: 7e5fe0ae484e22a48b9c88e866bad21c, type: 3}
+  m_getInstantItemButton: {fileID: 3802795766688630958}
   <m_itemDisplayed>k__BackingField: []
 --- !u!1 &6460065076371030793
 GameObject:
