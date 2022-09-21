@@ -11,7 +11,8 @@
         EAT,
         PAY,
         LEAVE,
-        DEFAULT
+        DEFAULT,
+        PAUSE
     }
 }
 

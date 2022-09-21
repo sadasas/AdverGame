@@ -3,13 +3,20 @@ using AdverGame.Chair;
 using AdverGame.Customer;
 using AdverGame.Player;
 using AdverGame.UI;
+using System;
 using System.Collections;
 using UnityEngine;
 
+public enum GameState
+{
+    PAUSE,
+    RUN,
+}
 namespace AdverGame.GameManager
 {
 
 
+   
     public class GameManager : MonoBehaviour
     {
         public static GameManager s_Instance;
@@ -20,13 +27,16 @@ namespace AdverGame.GameManager
         TestUI m_tes;
         ChairManager m_chairManager;
         CameraController m_cameraController;
-
+        
         [SerializeField] GameObject m_UIPrefab;
         [SerializeField] GameObject m_playerManagerPrefab;
         [SerializeField] GameObject m_customerManagerPrefab;
         [SerializeField] GameObject m_UIManagerPrefab;
         [SerializeField] GameObject m_UTesPrefab;
         [SerializeField] GameObject m_ChairManagerPrefab;
+
+        public Action<GameState> OnGameStateChange;
+        public GameState CurrentState;
         private void Awake()
         {
             if (s_Instance) Destroy(s_Instance.gameObject);
@@ -37,9 +47,12 @@ namespace AdverGame.GameManager
 
         private void Start()
         {
+          
             StartCoroutine(SetupGame());
 
         }
+
+      
 
         IEnumerator SetupGame()
         {

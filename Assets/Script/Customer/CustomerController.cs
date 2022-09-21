@@ -68,7 +68,6 @@ namespace AdverGame.Customer
             if (CurrentState == CustomerState.IDLE) WaitTofindChair();
             if (CurrentState == CustomerState.EAT) Eating();
             if (CurrentState == CustomerState.PAY) Pay();
-
             m_touchSlider.value = m_touchCount;
         }
 
