@@ -101,7 +101,7 @@ namespace AdverGame.Chair
         {
 
             m_addChairIndicators ??= new();
-            var newIndicator = Instantiate(m_addChairIndicatorPrefab, pos, Quaternion.identity).GetComponent<AddChairIndicator>();
+            var newIndicator = Instantiate(m_addChairIndicatorPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<AddChairIndicator>();
             m_addChairIndicators.Add(newIndicator);
             m_inputPlayer.OnLeftClick += newIndicator.OnTouch;
             newIndicator.OnAddChair += AddIndicatorTriggered;
@@ -128,7 +128,7 @@ namespace AdverGame.Chair
 
         void SpawnChair(Vector2 pos)
         {
-            var newChair = Instantiate(m_chairPrefab, pos, Quaternion.identity).GetComponent<ChairController>();
+            var newChair = Instantiate(m_chairPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<ChairController>();
             Chairs ??= new();
             Chairs.Add(newChair);
 

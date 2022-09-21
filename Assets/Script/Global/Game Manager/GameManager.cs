@@ -6,6 +6,7 @@ using AdverGame.UI;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public enum GameState
 {
@@ -16,7 +17,7 @@ namespace AdverGame.GameManager
 {
 
 
-   
+
     public class GameManager : MonoBehaviour
     {
         public static GameManager s_Instance;
@@ -27,13 +28,14 @@ namespace AdverGame.GameManager
         TestUI m_tes;
         ChairManager m_chairManager;
         CameraController m_cameraController;
-        
+
         [SerializeField] GameObject m_UIPrefab;
         [SerializeField] GameObject m_playerManagerPrefab;
         [SerializeField] GameObject m_customerManagerPrefab;
         [SerializeField] GameObject m_UIManagerPrefab;
         [SerializeField] GameObject m_UTesPrefab;
         [SerializeField] GameObject m_ChairManagerPrefab;
+        [SerializeField] GameObject m_PauseMenuManagerPrefab;
 
         public Action<GameState> OnGameStateChange;
         public GameState CurrentState;
@@ -47,13 +49,12 @@ namespace AdverGame.GameManager
 
         private void Start()
         {
-          
+
             StartCoroutine(SetupGame());
 
         }
 
-      
-
+        
         IEnumerator SetupGame()
         {
             // setup ui manager
@@ -76,6 +77,10 @@ namespace AdverGame.GameManager
             var canvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
             m_tes = Instantiate(m_UTesPrefab, canvas).GetComponent<TestUI>();
             m_playerManager.OnIncreaseCoin += m_tes.UpdateCoin;
+            m_tes.transform.SetAsFirstSibling();
+
+            //setup pause menu
+            Instantiate(m_PauseMenuManagerPrefab);
         }
 
     }

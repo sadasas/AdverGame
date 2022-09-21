@@ -10,6 +10,7 @@ namespace AdverGame.UI
     {
         FIND_ITEM,
         ITEM_AVAILABLE,
+        HYPERLINK
 
     }
     public class UIManager : MonoBehaviour
