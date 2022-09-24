@@ -45,7 +45,7 @@ namespace AdverGame.Player
 			m_touch = Input.GetTouch(0);
 
 
-			if (m_touch.phase == TouchPhase.Ended)
+			if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
 			{
 				if(!IsDrag)
                 {
@@ -59,7 +59,7 @@ namespace AdverGame.Player
 				IsDrag = false;
 
 			}
-			else if (m_touch.phase == TouchPhase.Moved && EventSystem.current.IsPointerOverGameObject() == false)
+			else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Moved )
 			{
 				IsDrag = true;
 				OnLeftDrag.Invoke(m_touch.deltaPosition);
