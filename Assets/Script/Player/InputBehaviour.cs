@@ -14,6 +14,7 @@ namespace AdverGame.Player
 		Touch m_touch;
 		LayerMask m_clickablerMask;
 
+		public bool IsDrag;
 		public Action<GameObject> OnLeftClick;
 		public Action<Vector2> OnLeftDrag;
 
@@ -44,18 +45,23 @@ namespace AdverGame.Player
 			m_touch = Input.GetTouch(0);
 
 
-			if (m_touch.phase == TouchPhase.Began)
+			if (m_touch.phase == TouchPhase.Ended)
 			{
-				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
-				if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
-				{
+				if(!IsDrag)
+                {
+					RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
+					if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
+					{
 
-					OnLeftClick?.Invoke(hit.transform.gameObject);
+						OnLeftClick?.Invoke(hit.transform.gameObject);
+					}
 				}
+				IsDrag = false;
 
 			}
 			else if (m_touch.phase == TouchPhase.Moved && EventSystem.current.IsPointerOverGameObject() == false)
 			{
+				IsDrag = true;
 				OnLeftDrag.Invoke(m_touch.deltaPosition);
 			}
 #endif
