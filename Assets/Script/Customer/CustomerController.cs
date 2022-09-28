@@ -5,7 +5,6 @@ using AdverGame.UI;
 using AdverGame.Utility;
 using System;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +22,7 @@ namespace AdverGame.Customer
         float m_eatTime = 0;
         List<ItemSerializable> m_itemsRegistered;
 
-        [SerializeField] Animator anim;
+      
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_noticeImage;
 
@@ -46,7 +45,7 @@ namespace AdverGame.Customer
 
         private void Start()
         {
-           
+
             Setup();
         }
         private void Update()
@@ -109,16 +108,13 @@ namespace AdverGame.Customer
             DefaultPos = transform.position;
             TargetPos = transform.position;
             TargetPos.x = -TargetPos.x;
-            if (transform.position.x < 0) DummyCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x,-180,transform.rotation.z);
+            if (transform.position.x < 0) DummyCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
 
             SpawnDelay += Variant.SpawnDelay;
             m_eatTime += Variant.EatTime;
             m_countDownMove = Variant.SpawnDelay;
             m_countDownWaitOrder = Variant.WaitOrderMaxTime;
             m_countDownIdle = Variant.WaitChairAvailableTime;
-
-
-
 
         }
         void ChangeSprite(Sprite image)
@@ -231,6 +227,7 @@ namespace AdverGame.Customer
             TargetPos = DefaultPos;
             m_touchCount = 3;
             CurrentState = CustomerState.LEAVE;
+            if (transform.position.x < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
             PlayerManager.s_Instance.IncreaseCoin(Variant.Coin);
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
@@ -239,7 +236,8 @@ namespace AdverGame.Customer
         {
             RealCharacter.SetActive(false);
             DummyCharacter.SetActive(true);
-
+            RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+            DummyCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
             m_touchSlider = DummyCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
             m_noticeImage = DummyCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
             CurrentState = CustomerState.DEFAULT;
@@ -251,7 +249,7 @@ namespace AdverGame.Customer
             m_countDownWaitOrder = Variant.WaitOrderMaxTime;
             m_touchCount = 0;
 
-
+            if (transform.position.x < 0) DummyCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
 
             m_noticeImage.gameObject.SetActive(false);
             m_touchSlider.gameObject.SetActive(false);
@@ -286,7 +284,7 @@ namespace AdverGame.Customer
                     {
                         DummyCharacter.SetActive(false);
                         RealCharacter.SetActive(true);
-
+                        if (transform.position.x < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
                         m_touchSlider = RealCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
                         m_noticeImage = RealCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
 
