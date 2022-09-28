@@ -24,10 +24,9 @@ namespace AdverGame.Customer
         [field: SerializeField]
         public float WaitChairAvailableTime { get; private set; }
         [field: SerializeField]
-        public Sprite RealCustomerImage { get; private set; }
+        public GameObject CustomerPrefab { get; private set; }
         [field: SerializeField]
-        public Sprite DummylCustomerImage { get; private set; }
-        [field: SerializeField]
+       
         public Sprite EatImage { get; private set; }
         [field: SerializeField]
         public Sprite HappyImage { get; private set; }

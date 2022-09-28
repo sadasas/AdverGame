@@ -28,7 +28,7 @@ namespace AdverGame.Customer
         Transform m_customerSpawnPostStart;
         Transform m_customerSpawnPostEnd;
 
-        [SerializeField] List<GameObject> m_customerPrefab;
+        [SerializeField] List<GameObject> m_customerVariants;
         [SerializeField] GameObject m_taskHUDPrefab;
         [SerializeField] GameObject m_orderTaskPrefab;
         [SerializeField] int m_maxCustomerRunning;
@@ -75,14 +75,16 @@ namespace AdverGame.Customer
         {
             CustomersQueue ??= new();
 
-            var variantQuota = m_maxCustomerQueued / m_customerPrefab.Count;
+            var variantQuota = m_maxCustomerQueued / m_customerVariants.Count;
             var currentVariant = 1;
             for (int i = 1; i <= m_maxCustomerQueued; i++)
             {
-                var widhtOffset = m_customerPrefab[currentVariant - 1].GetComponent<SpriteRenderer>().bounds.size.x;
-                var heightOffset = m_customerPrefab[currentVariant - 1].GetComponent<SpriteRenderer>().bounds.size.y / 2;
+                var variant = m_customerVariants[currentVariant - 1].GetComponent<CustomerController>();
+                var widhtOffset = variant.DummyCharacter.GetComponent<SpriteRenderer>().bounds.size.x;
+                var heightOffset = variant.DummyCharacter.GetComponent<SpriteRenderer>().bounds.size.y / 2;
                 var pos = SetRandomPos(widhtOffset, heightOffset);
-                var newCust = GameObject.Instantiate(m_customerPrefab[currentVariant - 1], pos.start, Quaternion.identity, GameObject.Find("Customer").transform).GetComponent<CustomerController>();
+                var newCust = GameObject.Instantiate(m_customerVariants[currentVariant - 1], pos.start, Quaternion.identity, GameObject.Find("Customer").transform).GetComponent<CustomerController>();
+             
                 CustomersQueue.Enqueue(newCust);
                 newCust.TargetPos = pos.end;
                 m_playerInput.OnLeftClick += newCust.OnTouch;

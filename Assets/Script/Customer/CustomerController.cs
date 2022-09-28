@@ -5,6 +5,7 @@ using AdverGame.UI;
 using AdverGame.Utility;
 using System;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,9 +23,12 @@ namespace AdverGame.Customer
         float m_eatTime = 0;
         List<ItemSerializable> m_itemsRegistered;
 
+        [SerializeField] Animator anim;
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_noticeImage;
-        [SerializeField] CustomerVariant m_variant;
+
+        public GameObject DummyCharacter;
+        public GameObject RealCharacter;
 
         public float widhtOffset { get; private set; }
         public float heightOffset { get; private set; }
@@ -37,10 +41,12 @@ namespace AdverGame.Customer
         public Action<ItemSerializable> OnCancelOrder;
         public Action<CustomerController> OnResetPos;
         public Action OnToChair;
+        public CustomerVariant Variant;
 
 
         private void Start()
         {
+           
             Setup();
         }
         private void Update()
@@ -77,7 +83,7 @@ namespace AdverGame.Customer
             if (m_eatTime > 0)
             {
                 m_eatTime -= Time.deltaTime;
-                m_noticeImage.sprite = m_variant.EatImage;
+                m_noticeImage.sprite = Variant.EatImage;
                 m_noticeImage.gameObject.SetActive(true);
 
             }
@@ -90,23 +96,28 @@ namespace AdverGame.Customer
         }
         void Setup()
         {
-            m_sprite = GetComponent<SpriteRenderer>();
+            RealCharacter.SetActive(false);
+            DummyCharacter.SetActive(true);
+            m_touchSlider = DummyCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+            m_noticeImage = DummyCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
+            m_sprite = DummyCharacter.GetComponent<SpriteRenderer>();
             m_itemsRegistered = AssetHelpers.GetAllItemRegistered();
 
-            widhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
-            heightOffset = GetComponent<SpriteRenderer>().bounds.size.y / 2;
+            widhtOffset = DummyCharacter.GetComponent<SpriteRenderer>().bounds.size.x;
+            heightOffset = DummyCharacter.GetComponent<SpriteRenderer>().bounds.size.y / 2;
 
             DefaultPos = transform.position;
             TargetPos = transform.position;
             TargetPos.x = -TargetPos.x;
+            if (transform.position.x < 0) DummyCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x,-180,transform.rotation.z);
 
-            SpawnDelay += m_variant.SpawnDelay;
-            m_eatTime += m_variant.EatTime;
-            m_countDownMove = m_variant.SpawnDelay;
-            m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
-            m_countDownIdle = m_variant.WaitChairAvailableTime;
+            SpawnDelay += Variant.SpawnDelay;
+            m_eatTime += Variant.EatTime;
+            m_countDownMove = Variant.SpawnDelay;
+            m_countDownWaitOrder = Variant.WaitOrderMaxTime;
+            m_countDownIdle = Variant.WaitChairAvailableTime;
 
-            ChangeSprite(m_variant.DummylCustomerImage);
+
 
 
         }
@@ -126,7 +137,7 @@ namespace AdverGame.Customer
             else
             {
                 CurrentState = CustomerState.WALK;
-                m_countDownIdle = m_variant.WaitChairAvailableTime;
+                m_countDownIdle = Variant.WaitChairAvailableTime;
             }
         }
         void WaitChairAvailable()
@@ -136,22 +147,26 @@ namespace AdverGame.Customer
                 m_countDownIdle -= Time.deltaTime;
                 if (IsChairAvailable())
                 {
+                    DummyCharacter.SetActive(false);
+                    RealCharacter.SetActive(true);
+                    m_touchSlider = RealCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+                    m_noticeImage = RealCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
 
                     CurrentState = CustomerState.TOCHAIR;
                     TargetPos = m_currentChair.transform.position;
                     m_touchCount = 0;
 
-                    ChangeSprite(m_variant.RealCustomerImage);
+
                     m_touchSlider.gameObject.SetActive(false);
                     OnToChair?.Invoke();
                 }
             }
             else
             {
-                m_noticeImage.sprite = m_variant.AngryImage;
+                m_noticeImage.sprite = Variant.AngryImage;
                 m_noticeImage.gameObject.SetActive(true);
                 CurrentState = CustomerState.WALK;
-                m_countDownIdle = m_variant.WaitChairAvailableTime;
+                m_countDownIdle = Variant.WaitChairAvailableTime;
                 m_touchSlider.gameObject.SetActive(false);
                 m_touchCount = 3;
             }
@@ -195,7 +210,7 @@ namespace AdverGame.Customer
 
                 OnCancelOrder?.Invoke(m_currentOrder);
                 ResetOrder();
-                m_noticeImage.sprite = m_variant.AngryImage;
+                m_noticeImage.sprite = Variant.AngryImage;
                 m_noticeImage.gameObject.SetActive(true);
                 TargetPos = DefaultPos;
                 m_touchCount = 3;
@@ -211,25 +226,29 @@ namespace AdverGame.Customer
         }
         public void Pay()
         {
-            m_noticeImage.sprite = m_variant.HappyImage;
+            m_noticeImage.sprite = Variant.HappyImage;
             m_noticeImage.gameObject.SetActive(true);
             TargetPos = DefaultPos;
             m_touchCount = 3;
             CurrentState = CustomerState.LEAVE;
-            PlayerManager.s_Instance.IncreaseCoin(m_variant.Coin);
+            PlayerManager.s_Instance.IncreaseCoin(Variant.Coin);
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
         }
         public void ResetPos()
         {
+            RealCharacter.SetActive(false);
+            DummyCharacter.SetActive(true);
 
+            m_touchSlider = DummyCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+            m_noticeImage = DummyCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
             CurrentState = CustomerState.DEFAULT;
 
             transform.position = DefaultPos;
 
-            m_eatTime += m_variant.EatTime;
-            m_countDownMove = m_variant.SpawnDelay;
-            m_countDownWaitOrder = m_variant.WaitOrderMaxTime;
+            m_eatTime += Variant.EatTime;
+            m_countDownMove = Variant.SpawnDelay;
+            m_countDownWaitOrder = Variant.WaitOrderMaxTime;
             m_touchCount = 0;
 
 
@@ -237,19 +256,18 @@ namespace AdverGame.Customer
             m_noticeImage.gameObject.SetActive(false);
             m_touchSlider.gameObject.SetActive(false);
 
-            ChangeSprite(m_variant.DummylCustomerImage);
 
 
         }
         public void Move()
         {
 
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetPos.x, TargetPos.y), m_variant.Speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetPos.x, TargetPos.y), Variant.Speed * Time.deltaTime);
         }
         public void OnTouch(GameObject obj)
         {
 
-            if (obj == this.gameObject)
+            if (obj == DummyCharacter || obj == RealCharacter)
             {
 
 
@@ -266,11 +284,16 @@ namespace AdverGame.Customer
                     m_touchSlider.gameObject.SetActive(true);
                     if (IsChairAvailable())
                     {
+                        DummyCharacter.SetActive(false);
+                        RealCharacter.SetActive(true);
+
+                        m_touchSlider = RealCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+                        m_noticeImage = RealCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
 
                         CurrentState = CustomerState.TOCHAIR;
 
 
-                        ChangeSprite(m_variant.RealCustomerImage);
+
                         DefaultPos = TargetPos;
                         TargetPos = m_currentChair.transform.position;
                         m_touchSlider.gameObject.SetActive(false);

@@ -44,11 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2483b7f05e93ece488f1df89e437f5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_customerPrefab:
-  - {fileID: 442047871949785496, guid: bc045cd626286ba4a8e366dccb158059, type: 3}
-  - {fileID: 5343619502897122861, guid: 71c1906af2ae87b49b5c1b93e718cdbb, type: 3}
+  TotCustomersWalking: 0
+  m_customerVariants:
+  - {fileID: 8844429343190365344, guid: 7d518e23da3fd2d4a90c47df05f52bbb, type: 3}
   m_taskHUDPrefab: {fileID: 6670355633020578430, guid: ab6717a3a65b026479ba8999bfea4f13, type: 3}
   m_orderTaskPrefab: {fileID: 3251720979543702477, guid: 1710a0160856a724e81cf90a9a20a3ee, type: 3}
   m_maxCustomerRunning: 20
   m_maxCustomerQueued: 40
-  CustomersRunning: []
