@@ -30,6 +30,10 @@ namespace AdverGame.Customer
         public Sprite EatImage { get; private set; }
         [field: SerializeField]
         public Sprite HappyImage { get; private set; }
+
+        [field: SerializeField]
+        public Sprite ConfusedImage { get; private set; }
+
         [field: SerializeField]
         public Sprite AngryImage { get; private set; }
 

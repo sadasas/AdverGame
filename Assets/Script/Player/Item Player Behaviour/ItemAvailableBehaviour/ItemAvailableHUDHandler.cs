@@ -10,6 +10,8 @@ namespace AdverGame.Player
     /// </summary>
     public class ItemAvailableHUDHandler : MonoBehaviour
     {
+        int m_count = 0;
+
         [SerializeField] Transform m_itemPlace;
 
 
@@ -29,6 +31,13 @@ namespace AdverGame.Player
         }
         public void DisplayItem(ItemSerializable item)
         {
+            m_count++;
+            if (m_count > 4)
+            {
+                m_count = 0;
+                var tempsize = new Vector2(m_itemPlace.GetComponent<RectTransform>().sizeDelta.x, m_itemPlace.GetComponent<RectTransform>().sizeDelta.y + item.Content.ItemPrefab.GetComponent<RectTransform>().sizeDelta.y + 60);
+                m_itemPlace.GetComponent<RectTransform>().sizeDelta = tempsize;
+            }
             ItemsDisplayed ??= new();
             var obj = Instantiate(item.Content.ItemPrefab, m_itemPlace).GetComponent<Item>();
             obj.UpdateItem(item.Content, item.Stack);

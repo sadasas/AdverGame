@@ -21,8 +21,9 @@ namespace AdverGame.Customer
         float m_countDownIdle = 0;
         float m_eatTime = 0;
         List<ItemSerializable> m_itemsRegistered;
+        Animator m_animDummyCharacter;
+        Animator m_animRealCharacter;
 
-      
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_noticeImage;
 
@@ -79,8 +80,10 @@ namespace AdverGame.Customer
 
         void Eating()
         {
+            m_animRealCharacter.speed = 1;
             if (m_eatTime > 0)
             {
+                m_animRealCharacter.SetBool("isEat", true);
                 m_eatTime -= Time.deltaTime;
                 m_noticeImage.sprite = Variant.EatImage;
                 m_noticeImage.gameObject.SetActive(true);
@@ -88,6 +91,7 @@ namespace AdverGame.Customer
             }
             else if (m_eatTime <= 0)
             {
+                m_animRealCharacter.SetBool("isEat", false);
                 CurrentState = CustomerState.PAY;
                 m_eatTime = 0;
                 m_noticeImage.gameObject.SetActive(false);
@@ -95,6 +99,9 @@ namespace AdverGame.Customer
         }
         void Setup()
         {
+            m_animDummyCharacter = DummyCharacter.GetComponent<Animator>();
+            m_animRealCharacter = RealCharacter.GetComponent<Animator>();
+
             RealCharacter.SetActive(false);
             DummyCharacter.SetActive(true);
             m_touchSlider = DummyCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
@@ -117,12 +124,7 @@ namespace AdverGame.Customer
             m_countDownIdle = Variant.WaitChairAvailableTime;
 
         }
-        void ChangeSprite(Sprite image)
-        {
-            m_sprite.sprite = image;
 
-            m_sprite.sortingOrder = 1;
-        }
         void WaitTofindChair()
         {
             if (m_countDownIdle > 0)
@@ -132,6 +134,7 @@ namespace AdverGame.Customer
             }
             else
             {
+                m_animDummyCharacter.speed = 1;
                 CurrentState = CustomerState.WALK;
                 m_countDownIdle = Variant.WaitChairAvailableTime;
             }
@@ -143,6 +146,8 @@ namespace AdverGame.Customer
                 m_countDownIdle -= Time.deltaTime;
                 if (IsChairAvailable())
                 {
+                    m_animDummyCharacter.speed = 1;
+
                     DummyCharacter.SetActive(false);
                     RealCharacter.SetActive(true);
                     m_touchSlider = RealCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
@@ -151,15 +156,21 @@ namespace AdverGame.Customer
                     CurrentState = CustomerState.TOCHAIR;
                     TargetPos = m_currentChair.transform.position;
                     m_touchCount = 0;
+                    var distanceX = transform.position.x - TargetPos.x;
 
+                    if (distanceX < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
 
                     m_touchSlider.gameObject.SetActive(false);
+                    m_noticeImage.gameObject.SetActive(false);
                     OnToChair?.Invoke();
                 }
             }
             else
             {
-                m_noticeImage.sprite = Variant.AngryImage;
+                m_animDummyCharacter.speed = 1;
+                m_noticeImage.sprite = Variant.ConfusedImage;
+                m_noticeImage.preserveAspect = true;
+                m_noticeImage.transform.rotation = Quaternion.identity;
                 m_noticeImage.gameObject.SetActive(true);
                 CurrentState = CustomerState.WALK;
                 m_countDownIdle = Variant.WaitChairAvailableTime;
@@ -169,9 +180,12 @@ namespace AdverGame.Customer
         }
         void Order()
         {
+            m_animRealCharacter.speed = 0;
+
             var index = UnityEngine.Random.Range(0, m_itemsRegistered.Count);
             m_currentOrder = m_itemsRegistered[index];
             m_noticeImage.sprite = m_currentOrder.Content.Image;
+            m_noticeImage.preserveAspect = true;
             m_noticeImage.gameObject.SetActive(true);
 
             OnCreateOrder?.Invoke(this, m_currentOrder);
@@ -204,6 +218,7 @@ namespace AdverGame.Customer
             else
             {
 
+                m_animRealCharacter.speed = 1;
                 OnCancelOrder?.Invoke(m_currentOrder);
                 ResetOrder();
                 m_noticeImage.sprite = Variant.AngryImage;
@@ -213,6 +228,11 @@ namespace AdverGame.Customer
                 CurrentState = CustomerState.LEAVE;
                 if (m_currentChair) m_currentChair.Customer = null;
                 m_currentChair = null;
+
+                var distanceX = transform.position.x - TargetPos.x;
+               
+                if (distanceX < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
+                else RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
             }
         }
         bool IsReachDestination()
@@ -227,7 +247,11 @@ namespace AdverGame.Customer
             TargetPos = DefaultPos;
             m_touchCount = 3;
             CurrentState = CustomerState.LEAVE;
-            if (transform.position.x < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
+
+            var distanceX = transform.position.x - TargetPos.x;
+            if (distanceX < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
+            else RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+
             PlayerManager.s_Instance.IncreaseCoin(Variant.Coin);
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
@@ -276,27 +300,36 @@ namespace AdverGame.Customer
                     CurrentState = CustomerState.IDLE;
                     m_touchSlider.gameObject.SetActive(true);
 
+                    m_animDummyCharacter.speed = 0;
+
                 }
                 else if (m_touchCount == 1 && CurrentState == CustomerState.IDLE || m_touchCount == 1 && CurrentState == CustomerState.WALK)
                 {
                     m_touchSlider.gameObject.SetActive(true);
                     if (IsChairAvailable())
                     {
-                        DummyCharacter.SetActive(false);
-                        RealCharacter.SetActive(true);
-                        if (transform.position.x < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
                         m_touchSlider = RealCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
                         m_noticeImage = RealCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
 
+                        m_animDummyCharacter.speed = 1;
+
                         CurrentState = CustomerState.TOCHAIR;
-
-
 
                         DefaultPos = TargetPos;
                         TargetPos = m_currentChair.transform.position;
-                        m_touchSlider.gameObject.SetActive(false);
                         m_touchCount = 0;
+                        m_noticeImage.gameObject.SetActive(false);
+                        m_touchSlider.gameObject.SetActive(false);
                         OnToChair?.Invoke();
+
+
+                        DummyCharacter.SetActive(false);
+                        RealCharacter.SetActive(true);
+                        var distanceX = transform.position.x - TargetPos.x;
+
+                        if (distanceX < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
+                        else RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
+
                     }
                     else
                     {

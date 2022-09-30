@@ -1,19 +1,13 @@
-﻿using AdverGame.UI;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HyperlinkOisi : MonoBehaviour
 {
-    [SerializeField] GameObject m_hyperlinkHUD;
+
     private void OnEnable()
     {
         transform.SetAsLastSibling();
     }
 
-    public void InitHUD()
-    {
-        m_hyperlinkHUD.SetActive(true);
-        UIManager.s_Instance.SelectHUD(m_hyperlinkHUD);
-    }
     public void LinkIG()
     {
         Application.OpenURL("https://instagram.com/oishi.friedchicken?igshid=YmMyMTA2M2Y=");

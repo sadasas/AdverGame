@@ -1,33 +1,44 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace AdverGame.Player
 {
 
 
-	public class AdverHUDController : MonoBehaviour
-	{
-		[SerializeField] float m_countDown;
-		[SerializeField] TextMeshProUGUI m_countDownText;
+    public class AdverHUDController : MonoBehaviour
+    {
+        Image m_contentPlace;
 
-		private void OnEnable()
-		{
-			Time.timeScale = 0;
-		}
-		private void Update()
-		{
-			m_countDown -= Time.fixedDeltaTime * 0.5F;
-			m_countDownText.text = ((int)m_countDown).ToString();
+        [SerializeField] float m_countDown;
+        [SerializeField] TextMeshProUGUI m_countDownText;
+        [SerializeField] Sprite[] m_contents;
 
-			if (m_countDown <= 0) Destroy(gameObject);
+        private void OnEnable()
+        {
+            m_contentPlace = GetComponent<Image>();
+            var rand = Random.Range(0, m_contents.Length);
+            Time.timeScale = 0;
+            m_contentPlace.sprite = m_contents[rand];
 
-		}
+        }
+        private void Update()
+        {
+            m_countDown -= Time.fixedDeltaTime * 1F;
+            m_countDownText.text = ((int)m_countDown).ToString();
 
-		private void OnDisable()
-		{
-			Time.timeScale = 1;
-		}
+            if (m_countDown <= 0) Destroy(gameObject);
 
-	}
+        }
+
+        private void OnDisable()
+        {
+            Time.timeScale = 1;
+        }
+
+
+
+    }
 
 
 }

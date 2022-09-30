@@ -8,7 +8,7 @@ namespace AdverGame.MainMenu
 {
     public class MainMenu : MonoBehaviour
     {
-        bool m_isMute = true;
+        bool m_isMute = false;
 
         [SerializeField] GameObject m_loadHUD;
         [SerializeField] GameObject m_buttonBGM;

@@ -20,7 +20,7 @@ namespace AdverGame.Player
         ItemContainer m_itemContainer;
         bool isSearching = false;
         bool isInstantSearch = false;
-        Action<int, float> OnFindItem;
+        Action<int, float, float> OnFindItem;
         int[] index;
 
         public List<ItemSerializable> ItemFounded { get; private set; }
@@ -54,15 +54,17 @@ namespace AdverGame.Player
             while (isSearching && ItemFounded.Count < m_maxItemGetted)
             {
 
-                yield return new WaitForSeconds(m_searchItemTime);
-                //Find item
 
+                OnFindItem?.Invoke(count, m_maxItemGetted, m_searchItemTime);
+
+                yield return new WaitForSeconds(m_searchItemTime);
+
+                //Find item
                 ItemFounded.Add(new ItemSerializable(m_allItems[index[count]].Content));
 
-               
-                OnFindItem?.Invoke(ItemFounded.Count, m_maxItemGetted);
 
                 count++;
+                if (ItemFounded.Count == m_maxItemGetted) OnFindItem?.Invoke(m_maxItemGetted, m_maxItemGetted, m_searchItemTime);
 
 
             }
@@ -100,7 +102,7 @@ namespace AdverGame.Player
                         ItemFounded.Add(new ItemSerializable(m_allItems[index[i]].Content));
 
 
-                        OnFindItem?.Invoke(ItemFounded.Count, m_maxItemGetted);
+                        OnFindItem?.Invoke(ItemFounded.Count, m_maxItemGetted, 0);
                     }
 
 
@@ -134,7 +136,7 @@ namespace AdverGame.Player
         }
         void ResetItemFounded()
         {
-            
+
             ItemFounded = new();
             StartFindItem();
         }
