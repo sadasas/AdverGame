@@ -33,7 +33,6 @@ namespace AdverGame.Player
         if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.down, 2f, m_clickablerMask);
-
                 if (hit.collider)
                 {
                     OnLeftClick?.Invoke(hit.transform.gameObject);
