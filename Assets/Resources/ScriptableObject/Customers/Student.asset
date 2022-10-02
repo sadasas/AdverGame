@@ -12,7 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
   m_Name: Student
   m_EditorClassIdentifier: 
-  Speed: 0.5
-  SpawnDelay: 100
-  WaitOrderMaxTime: 8
-  Coin: 2
+  <Coin>k__BackingField: 20
+  <Speed>k__BackingField: 0.5
+  <EatTime>k__BackingField: 5
+  <SpawnDelay>k__BackingField: 0
+  <WaitOrderMaxTime>k__BackingField: 10
+  <WaitChairAvailableTime>k__BackingField: 2
+  <CustomerPrefab>k__BackingField: {fileID: 0}
+  <EatImage>k__BackingField: {fileID: 21300000, guid: ef33a6ebd9abcb24abe04a6e1a47894a, type: 3}
+  <HappyImage>k__BackingField: {fileID: 21300000, guid: 474d460589f31c043a6b918ed491b007, type: 3}
+  <ConfusedImage>k__BackingField: {fileID: 21300000, guid: 5fb69ef9390d613429cb4acb577e196b, type: 3}
+  <AngryImage>k__BackingField: {fileID: 21300000, guid: aa5213c614eb98548abb508e29039d8e, type: 3}
+  <Type>k__BackingField: 0

@@ -6,36 +6,83 @@ using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
+    /// <summary>
+    /// TODO: Refactor
+    /// </summary>
     public class FindItemHUDHandler : MonoBehaviour
     {
-
+        float m_timeSlerp = 0;
+        int m_itemFound = 0;
+        private float m_itemFoundMax;
+        private float m_maxSearchTime = 0;
         [SerializeField] Slider m_slider;
         [SerializeField] Transform m_itemPlace;
         [SerializeField] TextMeshProUGUI m_itemFounded;
+        [SerializeField] GameObject m_adverHUDPrefab;
+        [SerializeField] GameObject m_getInstantItemButton;
+        [SerializeField] GameObject m_getItemButton;
+        [SerializeField] GameObject m_itemFoundedRawPrefab;
+
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
 
-
         public Action OnGetTriggered;
+        public Action OnResetTriggered;
+        public Action OnInstantSearchItemTriggered;
+
+        private void Update()
+        {
+            if (m_timeSlerp < m_maxSearchTime)
+            {
+                var a = 1f / (m_itemFoundMax / m_itemFound);
+                var b = (1f / m_itemFoundMax) * (m_timeSlerp / m_maxSearchTime);
+
+                m_slider.value = a + b;
+                m_timeSlerp += Time.deltaTime;
+
+            }
+
+        }
 
         public void DisplayItemFounded(ItemSerializable itemfounded)
         {
             m_itemDisplayed ??= new();
-            var obj = Instantiate(itemfounded.Content.ItemPrefab, m_itemPlace.transform);
-            obj.transform.localScale = obj.transform.localScale / 2;
+            var obj = Instantiate(m_itemFoundedRawPrefab, m_itemPlace.transform);
+            obj.transform.GetChild(0).GetComponent<Image>().sprite = itemfounded.Content.Image;
+            obj.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
+            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = itemfounded.Content.Name;
+
             m_itemDisplayed.Add(obj);
-            obj.GetComponent<Item>().UpdateItem(itemfounded.Content, 1);
+
 
         }
 
-        public void TrackItemFinded(int itemfindedTot , float itemMaxFounded)
+        public void TrackItemFinded(int itemfindedTot, float itemMaxFounded, float maxSearchTime)
         {
-
-            m_slider.value = 1f / (itemMaxFounded / itemfindedTot);
+            m_timeSlerp = 0f;
+            m_itemFound = itemfindedTot;
+            m_itemFoundMax = itemMaxFounded;
+            m_maxSearchTime = maxSearchTime;
             m_itemFounded.text = itemfindedTot.ToString() + " / " + itemMaxFounded;
 
+
+            if (itemfindedTot == itemMaxFounded) m_getInstantItemButton.SetActive(false);
+            else m_getInstantItemButton.SetActive(true);
+
+            if (itemfindedTot == 0) m_getItemButton.SetActive(false);
+            else m_getItemButton.SetActive(true);
+
         }
 
+        public void GetItemInstant()
+        {
+            Instantiate(m_adverHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
+
+            OnInstantSearchItemTriggered?.Invoke();
+            OnGetTriggered?.Invoke();
+            m_itemPlace.parent.gameObject.SetActive(true);
+
+        }
         public void Exit()
         {
             this.gameObject.SetActive(false);
@@ -43,21 +90,30 @@ namespace AdverGame.Player
 
 
 
-        public void CheckItemFinded()
+        public void GetItemFinded()
         {
+            m_getInstantItemButton.SetActive(false);
             m_itemPlace.parent.gameObject.SetActive(true);
+            OnGetTriggered?.Invoke();
         }
 
         public void ResetItemFinded()
         {
-            OnGetTriggered?.Invoke();
 
+            OnResetTriggered?.Invoke();
+
+            if (m_itemDisplayed == null || m_itemDisplayed.Count == 0) return;
             foreach (var item in m_itemDisplayed)
             {
                 Destroy(item);
             }
             m_itemDisplayed = null;
+            m_slider.value = 0;
+            m_itemFounded.text = "0 / 8";
             m_itemPlace.parent.gameObject.SetActive(false);
+            m_getItemButton.SetActive(false);
+            m_getInstantItemButton.SetActive(true);
+            this.gameObject.SetActive(false);
         }
     }
 

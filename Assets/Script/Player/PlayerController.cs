@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 namespace AdverGame.Player
 {
     public class PlayerController : MonoBehaviour
@@ -7,6 +6,8 @@ namespace AdverGame.Player
         public InputBehaviour InputBehaviour { get; private set; }
         ItemPlayerBehaviour m_itemPlayerBehaviour;
 
+        [SerializeField] GameObject m_randomItemClickable;
+        [SerializeField] GameObject m_chooseItemClickable;
 
         [Header("INPUT BEHAVIOUR SETTING")]
         [SerializeField] LayerMask m_clickableMask;
@@ -18,12 +19,12 @@ namespace AdverGame.Player
         [SerializeField] int m_maxItemGetted;
         [SerializeField] int m_searchItemTime;
 
-        public Action<int> OnIncreaseCoin;
+
 
         private void Start()
         {
             InputBehaviour = new(m_clickableMask);
-            m_itemPlayerBehaviour = new(InputBehaviour, this.transform, m_findItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted);
+            m_itemPlayerBehaviour = new(InputBehaviour, m_randomItemClickable, m_findItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this);
         }
 
         private void Update()
@@ -40,19 +41,13 @@ namespace AdverGame.Player
         {
             m_itemPlayerBehaviour.OnDestroy();
         }
-        public void IncreaseCoin(int coin)
-        {
-            var data = PlayerManager.s_Instance.Data;
-            data.Coin += coin;
-            OnIncreaseCoin?.Invoke(data.Coin);
-            PlayerManager.s_Instance.SaveDataPlayer();
-        }
+
 
 
         public bool IsInstanced()
         {
-            if(InputBehaviour == null) return false;
-            if(m_itemPlayerBehaviour == null) return false;
+            if (InputBehaviour == null) return false;
+            if (m_itemPlayerBehaviour == null) return false;
 
             return true;
         }

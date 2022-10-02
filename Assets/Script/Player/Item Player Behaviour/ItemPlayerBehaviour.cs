@@ -8,20 +8,20 @@ namespace AdverGame.Player
 
 
         InputBehaviour m_input;
-        Transform m_player;
+        GameObject m_randomItemClickable;
         ItemContainer m_itemContainer;
 
 
         FindItemHandler m_findItemHandler;
         ItemAvailableHandler m_itemAvailableHandler;
-        public ItemPlayerBehaviour(InputBehaviour inputBehaviour, Transform player, GameObject findItemHUD, GameObject itemAvailableHUDPrefab, GameObject itemAvailableButtonPrefab, int searchItemTime, int maxItemGetted)
+        public ItemPlayerBehaviour(InputBehaviour inputBehaviour, GameObject randomItemClickable, GameObject findItemHUD, GameObject itemAvailableHUDPrefab, GameObject itemAvailableButtonPrefab, int searchItemTime, int maxItemGetted, MonoBehaviour player)
         {
-            m_itemContainer = new(player.GetComponent<MonoBehaviour>());
+            m_itemContainer = new(player);
             m_input = inputBehaviour;
-            m_player = player;
+            m_randomItemClickable = randomItemClickable;
 
             m_input.OnLeftClick += OnLeftClickCallback;
-            m_findItemHandler = new(player.GetComponent<MonoBehaviour>(), findItemHUD, searchItemTime, maxItemGetted, m_itemContainer);
+            m_findItemHandler = new(player, findItemHUD, searchItemTime, maxItemGetted, m_itemContainer);
             m_itemAvailableHandler = new(itemAvailableHUDPrefab, itemAvailableButtonPrefab, m_itemContainer);
 
 
@@ -38,7 +38,7 @@ namespace AdverGame.Player
         }
         void OnLeftClickCallback(GameObject obj)
         {
-            if (obj == m_player.gameObject)
+            if (obj == m_randomItemClickable)
             {
                 m_findItemHandler.InitFindItemHUD();
             }

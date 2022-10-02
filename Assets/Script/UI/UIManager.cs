@@ -1,14 +1,25 @@
 ﻿
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdverGame.UI
 {
+
+    public enum HUDName
+    {
+        FIND_ITEM,
+        ITEM_AVAILABLE,
+        HYPERLINK
+
+    }
     public class UIManager : MonoBehaviour
     {
         public static UIManager s_Instance;
 
-        GameObject s_CurrentHUDSelected = null;
+        GameObject m_currentHUDSelected = null;
+
+        public Dictionary<HUDName, GameObject> HUDRegistered;
 
         private void Awake()
         {
@@ -17,16 +28,27 @@ namespace AdverGame.UI
 
             DontDestroyOnLoad(this);
         }
+        private void Start()
+        {
+            HUDRegistered = new();
+        }
 
         public void SelectHUD(GameObject hud)
         {
-            if (s_CurrentHUDSelected != null)
+            if (m_currentHUDSelected != null)
             {
-                if (s_CurrentHUDSelected == hud) return;
-                s_CurrentHUDSelected.SetActive(false);
+                if (m_currentHUDSelected == hud) return;
+                m_currentHUDSelected.SetActive(false);
             }
 
-            s_CurrentHUDSelected = hud;
+            m_currentHUDSelected = hud;
+        }
+
+        public void ForceHUD(HUDName name)
+        {
+
+            HUDRegistered[name].SetActive(true);
+            if (HUDRegistered[name] != m_currentHUDSelected) SelectHUD(HUDRegistered[name]);
         }
     }
 }

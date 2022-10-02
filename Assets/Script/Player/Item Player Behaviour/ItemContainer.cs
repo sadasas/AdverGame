@@ -1,5 +1,4 @@
-﻿using AdverGame.Utility;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace AdverGame.Player
         {
             m_player = player;
 
-
+            LoadData();
         }
 
         public void LoadData()
@@ -24,21 +23,10 @@ namespace AdverGame.Player
         }
         IEnumerator LoadItemsData()
         {
-            var data = PlayerManager.s_Instance.Data.Items;
-            if (data != null && data.Count > 0) yield return Items = LoadItemsFromPlayerData();
-            else yield return Items = LoadDefaultItemsSet();
-            SaveItems();
-        }
-        List<ItemSerializable> LoadItemsFromPlayerData()
-        {
-            return PlayerManager.s_Instance.Data.Items;
-        }
 
-        List<ItemSerializable> LoadDefaultItemsSet()
-        {
+            yield return Items = PlayerManager.s_Instance.Data.Items;
 
 
-            return AssetHelpers.GetAllItemRegistered();
         }
 
 
@@ -46,14 +34,38 @@ namespace AdverGame.Player
         {
             Items ??= new();
             Items.Add(newItem);
-            SaveItems();
+            PlayerManager.s_Instance.SaveItem(Items);
         }
 
-
-        void SaveItems()
+        public void IncreaseItem(ItemSerializable item, int stack)
         {
-            PlayerManager.s_Instance.Data.Items = Items;
+            item.UpdateStack(stack);
+            PlayerManager.s_Instance.SaveItem(Items);
         }
+        public void DecreaseItem(ItemSerializable currentItem)
+        {
+            var isAvailable = true;
+            var tempItem = new ItemSerializable(null);
+            foreach (var item in Items)
+            {
+                if (item == currentItem)
+                {
+                    if (item.Stack > 1) item.UpdateStack(-1);
+                    else
+                    {
+                        isAvailable = false;
+                        tempItem = item;
+                    }
+
+                }
+            }
+
+            if (!isAvailable) Items.Remove(tempItem);
+
+            PlayerManager.s_Instance.SaveItem(Items);
+        }
+
+
 
 
     }

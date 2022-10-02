@@ -14,12 +14,15 @@ namespace AdverGame.Player
         int m_searchItemTime = 5;
         FindItemHUDHandler m_HUDHandler;
         GameObject m_findItemHUDPrefab;
-        List<ItemSerializable> m_ItemFoundedND;
+        Coroutine m_findItemCoro;
         MonoBehaviour m_player;
         int m_maxItemGetted = 8;
         ItemContainer m_itemContainer;
         bool isSearching = false;
-        Action<int,float> OnFindItem;
+        bool isInstantSearch = false;
+        Action<int, float, float> OnFindItem;
+        int[] index;
+
         public List<ItemSerializable> ItemFounded { get; private set; }
 
         public FindItemHandler(MonoBehaviour player, GameObject findItemHUDPrefab, int searchItemTime, int maxItemGetted, ItemContainer itemContainer)
@@ -34,55 +37,79 @@ namespace AdverGame.Player
             InitFindItemHUD();
             StartFindItem();
             m_itemContainer = itemContainer;
+
         }
-        void StartFindItem()
-        {
-            if (!isSearching) m_player.StartCoroutine(FindItem());
-        }
+
         IEnumerator FindItem()
         {
-            isSearching = true;
 
+            index = new int[m_maxItemGetted];
+            for (int i = 0; i < index.Length; i++)
+            {
+                index[i] = UnityEngine.Random.Range(0, m_allItems.Count);
+            }
+
+            var count = 0;
             ItemFounded ??= new();
-            while (ItemFounded.Count < m_maxItemGetted)
+            while (isSearching && ItemFounded.Count < m_maxItemGetted)
             {
 
-                //Find item
-                var index = UnityEngine.Random.Range(0, m_allItems.Count);
-                ItemFounded.Add(new ItemSerializable(m_allItems[index].Content));
 
-                OnFindItem?.Invoke(ItemFounded.Count,m_maxItemGetted);
+                OnFindItem?.Invoke(count, m_maxItemGetted, m_searchItemTime);
 
-                //display item
-
-                if (m_HUDHandler != null)
-                {
-                    if (m_HUDHandler.gameObject.activeInHierarchy) m_HUDHandler.DisplayItemFounded(m_allItems[index]);
-                    else
-                    {
-                        m_ItemFoundedND ??= new();
-                        m_ItemFoundedND.Add(m_allItems[index]);
-
-                    }
-                }
-                else
-                {
-                    m_ItemFoundedND ??= new();
-                    m_ItemFoundedND.Add(m_allItems[index]);
-                }
                 yield return new WaitForSeconds(m_searchItemTime);
+
+                //Find item
+                ItemFounded.Add(new ItemSerializable(m_allItems[index[count]].Content));
+
+
+                count++;
+                if (ItemFounded.Count == m_maxItemGetted) OnFindItem?.Invoke(m_maxItemGetted, m_maxItemGetted, m_searchItemTime);
 
 
             }
+        }
+        void StartFindItem()
+        {
 
-            isSearching = false;
+            isSearching = true;
+            m_findItemCoro = m_player.StartCoroutine(FindItem());
+        }
 
+        void DisplayItemFinded()
+        {
+
+
+            foreach (var item in ItemFounded)
+            {
+                m_HUDHandler.DisplayItemFounded(item);
+            }
+            ItemFounded = new();
         }
 
         void PutItemFinded()
         {
+            isSearching = false;
+            m_player.StopCoroutine(m_findItemCoro);
             lock (m_locker)
             {
+
+                if (isInstantSearch)
+                {
+                    for (int i = ItemFounded.Count; i < m_maxItemGetted; i++)
+                    {
+                        //Find item
+                        ItemFounded.Add(new ItemSerializable(m_allItems[index[i]].Content));
+
+
+                        OnFindItem?.Invoke(ItemFounded.Count, m_maxItemGetted, 0);
+                    }
+
+
+                    isInstantSearch = false;
+
+                }
+
                 foreach (var item in ItemFounded)
                 {
                     if (m_itemContainer.Items != null && m_itemContainer.Items.Count > 0)
@@ -92,7 +119,7 @@ namespace AdverGame.Player
                         {
                             if (itempl.Content.Name.Equals(item.Content.Name))
                             {
-                                itempl.IncreaseItem(item.Stack);
+                                m_itemContainer.IncreaseItem(itempl, item.Stack);
                                 isSameItem = true;
                                 break;
                             }
@@ -103,68 +130,40 @@ namespace AdverGame.Player
 
                 }
 
-                ResetItemFounded();
             }
-
-
-
-
-
+            DisplayItemFinded();
 
         }
         void ResetItemFounded()
         {
-            destroyItemTemp();
-            StartFindItem();
-        }
-        void destroyItemTemp()
-        {
-            m_ItemFoundedND = new();
 
             ItemFounded = new();
+            StartFindItem();
+        }
+
+        void InstantSearch()
+        {
+            isInstantSearch = true;
 
         }
+
         public void InitFindItemHUD()
         {
             if (m_HUDHandler == null)
             {
                 m_HUDHandler = GameObject.Instantiate(m_findItemHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform).GetComponent<FindItemHUDHandler>();
                 m_HUDHandler.OnGetTriggered += PutItemFinded;
+                m_HUDHandler.OnResetTriggered += ResetItemFounded;
+                m_HUDHandler.OnInstantSearchItemTriggered += InstantSearch;
                 OnFindItem += m_HUDHandler.TrackItemFinded;
+
                 m_HUDHandler.gameObject.SetActive(false);
+                UIManager.s_Instance.HUDRegistered.Add(HUDName.FIND_ITEM, m_HUDHandler.gameObject);
 
             }
             else
             {
                 m_HUDHandler.gameObject.SetActive(true);
-                if (ItemFounded.Count > 0)
-                {
-                    if (m_HUDHandler.m_itemDisplayed != null && m_HUDHandler.m_itemDisplayed.Count > 0)
-                    {
-                        if (m_HUDHandler.m_itemDisplayed.Count < m_maxItemGetted)
-                        {
-
-                            if (m_ItemFoundedND != null)
-                            {
-                                foreach (var item in m_ItemFoundedND)
-                                {
-                                    m_HUDHandler.DisplayItemFounded(item);
-                                }
-                            }
-
-
-                            m_ItemFoundedND = null;
-                        }
-                    }
-                    else
-                    {
-                        foreach (var item in ItemFounded)
-                        {
-                            m_HUDHandler.DisplayItemFounded(item);
-                        }
-
-                    }
-                }
 
                 UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
 
