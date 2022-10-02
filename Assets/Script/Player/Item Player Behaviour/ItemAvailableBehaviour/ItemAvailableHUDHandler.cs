@@ -13,6 +13,9 @@ namespace AdverGame.Player
         int m_count = 0;
 
         [SerializeField] Transform m_itemPlace;
+        
+        public Action OnEnable;
+
 
 
         public Dictionary<Item, ItemSerializable> ItemsDisplayed { get; private set; }
@@ -29,6 +32,7 @@ namespace AdverGame.Player
         {
             OnItemTouched?.Invoke(ItemsDisplayed[item]);
         }
+        
         public void DisplayItem(ItemSerializable item)
         {
             m_count++;
