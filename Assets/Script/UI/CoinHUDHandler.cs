@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AdverGame.UI
 {
-    public class TestUI : MonoBehaviour
+    public class CoinHUDHandler : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI m_coin;
 

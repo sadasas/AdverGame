@@ -84,7 +84,7 @@ namespace AdverGame.Customer
                 var heightOffset = variant.DummyCharacter.GetComponent<SpriteRenderer>().bounds.size.y / 2;
                 var pos = SetRandomPos(widhtOffset, heightOffset);
                 var newCust = GameObject.Instantiate(m_customerVariants[currentVariant - 1], pos.start, Quaternion.identity, GameObject.Find("Customer").transform).GetComponent<CustomerController>();
-             
+
                 CustomersQueue.Enqueue(newCust);
                 newCust.TargetPos = pos.end;
                 m_playerInput.OnLeftClick += newCust.OnTouch;
@@ -135,7 +135,7 @@ namespace AdverGame.Customer
         {
             var rand = Random.Range(0, 2);
             var stageDimension = Camera.main.ScreenToWorldPoint(new Vector3(Screen.currentResolution.width, Screen.currentResolution.height, 0));
-            var posStart = new Vector2(m_customerSpawnPostStart.position.x - widhtOffset, UnityEngine.Random.Range(m_customerSpawnPostStart.position.y, -(stageDimension.y - heightOffset)));
+            var posStart = new Vector2(m_customerSpawnPostStart.position.x - widhtOffset, UnityEngine.Random.Range(m_customerSpawnPostStart.position.y, -(stageDimension.y - heightOffset * 2)));
             var posEnd = new Vector2(m_customerSpawnPostEnd.position.x + widhtOffset, posStart.y);
             return (rand == 1 ? (posStart, posEnd) : (posEnd, posStart));
         }
@@ -152,7 +152,9 @@ namespace AdverGame.Customer
             panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y + 120);
 
             var task = Instantiate(m_orderTaskPrefab, m_taskHUD.transform.GetChild(0)).GetComponent<Task>();
-            task.GetComponent<Image>().sprite = order.Content.Image;
+            task.transform.GetChild(0).GetComponent<Image>().sprite = order.Content.Image;
+            task.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
+
             task.GetComponent<Task>().CustomerOrder = cusOrder;
             m_taskOrders ??= new();
             m_taskOrders.Add(task);

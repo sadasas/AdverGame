@@ -6,7 +6,7 @@ namespace AdverGame.Player
 {
 
 
-    public class AdverHUDController : MonoBehaviour
+    public class AdverHUDHandler : MonoBehaviour
     {
         Image m_contentPlace;
 

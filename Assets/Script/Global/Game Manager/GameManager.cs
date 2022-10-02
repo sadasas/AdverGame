@@ -6,7 +6,6 @@ using AdverGame.UI;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public enum GameState
 {
@@ -25,7 +24,7 @@ namespace AdverGame.GameManager
         CustomerManager m_customerManager;
         PlayerManager m_playerManager;
         UIManager m_UIManager;
-        TestUI m_tes;
+        CoinHUDHandler m_tes;
         ChairManager m_chairManager;
         CameraController m_cameraController;
 
@@ -54,7 +53,7 @@ namespace AdverGame.GameManager
 
         }
 
-        
+
         IEnumerator SetupGame()
         {
             // setup ui manager
@@ -75,7 +74,7 @@ namespace AdverGame.GameManager
 
             // setup hud display coin
             var canvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
-            m_tes = Instantiate(m_UTesPrefab, canvas).GetComponent<TestUI>();
+            m_tes = Instantiate(m_UTesPrefab, canvas).GetComponent<CoinHUDHandler>();
             m_playerManager.OnIncreaseCoin += m_tes.UpdateCoin;
             m_tes.transform.SetAsFirstSibling();
 
