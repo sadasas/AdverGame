@@ -2,6 +2,7 @@
 
 using AdverGame.Player;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AdverGame.Utility
@@ -19,6 +20,12 @@ namespace AdverGame.Utility
             }
 
             return items;
+        }
+        public static ItemContent GetScriptableItemRegistered(string name)
+        {
+
+            var so = Resources.Load<ItemContent>($"ScriptableObject/Items/{name}");
+            return so;
         }
 
     }
