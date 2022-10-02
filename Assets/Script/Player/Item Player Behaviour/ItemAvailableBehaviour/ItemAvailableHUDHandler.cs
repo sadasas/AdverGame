@@ -14,10 +14,6 @@ namespace AdverGame.Player
 
         [SerializeField] Transform m_itemPlace;
         
-        public Action OnEnable;
-
-
-
         public Dictionary<Item, ItemSerializable> ItemsDisplayed { get; private set; }
 
         public Action<ItemSerializable> OnItemTouched;
