@@ -310,7 +310,7 @@ MonoBehaviour:
   Content:
     m_content: 
     Content: {fileID: 0}
-    <Stack>k__BackingField: 0
+    <Stack>k__BackingField: 1
 --- !u!1 &6849553768191382922
 GameObject:
   m_ObjectHideFlags: 0

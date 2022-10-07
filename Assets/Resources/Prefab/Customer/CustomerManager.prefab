@@ -49,5 +49,5 @@ MonoBehaviour:
   - {fileID: 8844429343190365344, guid: 7d518e23da3fd2d4a90c47df05f52bbb, type: 3}
   m_taskHUDPrefab: {fileID: 6670355633020578430, guid: ab6717a3a65b026479ba8999bfea4f13, type: 3}
   m_orderTaskPrefab: {fileID: 3251720979543702477, guid: 1710a0160856a724e81cf90a9a20a3ee, type: 3}
-  m_maxCustomerRunning: 8
-  m_maxCustomerQueued: 16
+  m_maxCustomerRunning: 5
+  m_maxCustomerQueued: 10

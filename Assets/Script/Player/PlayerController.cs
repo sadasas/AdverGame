@@ -6,25 +6,28 @@ namespace AdverGame.Player
         public InputBehaviour InputBehaviour { get; private set; }
         ItemPlayerBehaviour m_itemPlayerBehaviour;
 
-        [SerializeField] GameObject m_randomItemClickable;
-        [SerializeField] GameObject m_chooseItemClickable;
+      
 
         [Header("INPUT BEHAVIOUR SETTING")]
         [SerializeField] LayerMask m_clickableMask;
 
         [Header("ITEM PLAYER BEHAVIOUR SETTING")]
-        [SerializeField] GameObject m_findItemHUDPrefab;
+        [SerializeField] GameObject m_cookRandomItemHUDPrefab;
+        [SerializeField] GameObject m_cookItemHUDPrefab;
         [SerializeField] GameObject m_itemAvailableHUDPrefab;
         [SerializeField] GameObject m_itemAvailableButtonPrefab;
         [SerializeField] int m_maxItemGetted;
         [SerializeField] int m_searchItemTime;
+        [SerializeField] GameObject m_cookRandomItemClickable;
+        [SerializeField] GameObject m_cookItemClickable;
+        [SerializeField] float m_timeCooking;
 
 
 
         private void Start()
         {
             InputBehaviour = new(m_clickableMask);
-            m_itemPlayerBehaviour = new(InputBehaviour, m_randomItemClickable, m_findItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this);
+            m_itemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking);
         }
 
         private void Update()

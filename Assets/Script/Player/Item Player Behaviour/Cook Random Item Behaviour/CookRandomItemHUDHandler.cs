@@ -9,7 +9,7 @@ namespace AdverGame.Player
     /// <summary>
     /// TODO: Refactor
     /// </summary>
-    public class FindItemHUDHandler : MonoBehaviour
+    public class CookRandomItemHUDHandler : MonoBehaviour
     {
         float m_timeSlerp = 0;
         int m_itemFound = 0;
