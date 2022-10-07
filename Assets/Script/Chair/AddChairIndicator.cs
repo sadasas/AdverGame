@@ -13,6 +13,7 @@ namespace AdverGame.Chair
 
         public void OnTouch(GameObject obj)
         {
+           
             if (obj == this.gameObject)
             {
                 if (PlayerManager.s_Instance.Data.Coin >= m_price)

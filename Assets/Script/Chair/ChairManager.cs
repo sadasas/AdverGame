@@ -2,6 +2,8 @@
 
 using AdverGame.Player;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace AdverGame.Chair
@@ -19,7 +21,8 @@ namespace AdverGame.Chair
 
         Dictionary<ChairOffset, Vector2> chairOffsetPos;
         List<AddChairIndicator> m_addChairIndicators;
-        List<ChairController> Chairs;
+        [SerializeField] List<ChairController> Chairs;
+        [SerializeField] List<Vector2> m_chairParents;
         InputBehaviour m_inputPlayer;
 
         [SerializeField] float m_distanceBetweenChair = 4f;
@@ -69,29 +72,18 @@ namespace AdverGame.Chair
             {
 
 
-                foreach (var offset in chairOffsetPos)
+                foreach (var offset in chairOffsetPos.Values.ToArray())
                 {
 
-                    SpawnChair(offset.Value);
+                    SpawnChair(offset);
                 }
 
-
-                foreach (var chair in Chairs)
+                foreach (var Vector2chairParent in m_chairParents)
                 {
-                    PlayerManager.s_Instance.SaveChair(chair.transform.position);
+                    PlayerManager.s_Instance.SaveChair(Vector2chairParent);
                 }
-
-
-
             }
 
-            foreach (var chair in Chairs)
-            {
-                if (chair.transform.position.x < chairOffsetPos[ChairOffset.TOPLEFT].x && chair.transform.position.y == chairOffsetPos[ChairOffset.TOPLEFT].y) chairOffsetPos[ChairOffset.TOPLEFT] = chair.transform.position;
-                else if (chair.transform.position.x < chairOffsetPos[ChairOffset.BOTTOMLEFT].x && chair.transform.position.y == chairOffsetPos[ChairOffset.BOTTOMLEFT].y) chairOffsetPos[ChairOffset.BOTTOMLEFT] = chair.transform.position;
-                else if (chair.transform.position.x > chairOffsetPos[ChairOffset.TOPRIGHT].x && chair.transform.position.y == chairOffsetPos[ChairOffset.TOPRIGHT].y) chairOffsetPos[ChairOffset.TOPRIGHT] = chair.transform.position;
-                else if (chair.transform.position.x > chairOffsetPos[ChairOffset.BOTTOMRIGHT].x && chair.transform.position.y == chairOffsetPos[ChairOffset.BOTTOMRIGHT].y) chairOffsetPos[ChairOffset.BOTTOMRIGHT] = chair.transform.position;
-            }
 
 
         }
@@ -111,14 +103,14 @@ namespace AdverGame.Chair
 
         void AddIndicatorTriggered(AddChairIndicator indicator)
         {
-
-            SpawnChair(indicator.transform.position);
+            var actualPos = new Vector2(indicator.transform.position.x > 0 ? indicator.transform.position.x + 0.72f : indicator.transform.position.x - 0.72f, indicator.transform.position.y);
+            SpawnChair(actualPos);
             m_addChairIndicators.Remove(indicator);
 
-            PlayerManager.s_Instance.SaveChair(indicator.transform.position);
+            PlayerManager.s_Instance.SaveChair(actualPos);
 
 
-            var pos = new Vector2(indicator.transform.position.x + (indicator.Offset == ChairOffset.TOPLEFT || indicator.Offset == ChairOffset.BOTTOMLEFT ? -m_distanceBetweenChair : m_distanceBetweenChair), indicator.transform.position.y);
+            var pos = new Vector2(actualPos.x + (indicator.Offset == ChairOffset.TOPLEFT || indicator.Offset == ChairOffset.BOTTOMLEFT ? -m_distanceBetweenChair - 0.72f : m_distanceBetweenChair + 0.72f), actualPos.y);
             InitAddChairIndicator(pos, indicator.Offset);
 
 
@@ -128,15 +120,45 @@ namespace AdverGame.Chair
 
         void SpawnChair(Vector2 pos)
         {
-            var newChair = Instantiate(m_chairPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<ChairController>();
+            m_chairParents ??= new();
+            var newChairParent = Instantiate(m_chairPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform);
+            m_chairParents.Add(newChairParent.transform.position);
+
             Chairs ??= new();
-            Chairs.Add(newChair);
+            var chair1 = newChairParent.transform.GetChild(0).GetComponent<ChairController>();
+            var chair2 = newChairParent.transform.GetChild(1).GetComponent<ChairController>();
+            Chairs.Add(chair1);
+            Chairs.Add(chair2);
 
-            if (pos.x < chairOffsetPos[ChairOffset.TOPLEFT].x && pos.y == chairOffsetPos[ChairOffset.TOPLEFT].y) chairOffsetPos[ChairOffset.TOPLEFT] = pos;
-            else if (pos.x < chairOffsetPos[ChairOffset.BOTTOMLEFT].x && pos.y == chairOffsetPos[ChairOffset.BOTTOMLEFT].y) chairOffsetPos[ChairOffset.BOTTOMLEFT] = pos;
-            else if (pos.x > chairOffsetPos[ChairOffset.TOPRIGHT].x && pos.y == chairOffsetPos[ChairOffset.TOPRIGHT].y) chairOffsetPos[ChairOffset.TOPRIGHT] = pos;
-            else if (pos.x > chairOffsetPos[ChairOffset.BOTTOMRIGHT].x && pos.y == chairOffsetPos[ChairOffset.BOTTOMRIGHT].y) chairOffsetPos[ChairOffset.BOTTOMRIGHT] = pos;
+            Vector2[] tempNewChair = { chair1.transform.position, chair2.transform.position };
+            for (int i = 0; i < tempNewChair.Length; i++)
+            {
 
+
+                if (tempNewChair[i].x < chairOffsetPos[ChairOffset.TOPLEFT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.TOPLEFT].y) < 0.5f)
+                {
+
+
+                    chairOffsetPos[ChairOffset.TOPLEFT] = tempNewChair[i];
+                }
+                else if (tempNewChair[i].x < chairOffsetPos[ChairOffset.BOTTOMLEFT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.BOTTOMLEFT].y) < 0.5f)
+                {
+
+                    chairOffsetPos[ChairOffset.BOTTOMLEFT] = tempNewChair[i];
+                }
+                else if (tempNewChair[i].x > chairOffsetPos[ChairOffset.TOPRIGHT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.TOPRIGHT].y) < 0.5f)
+                {
+
+                    chairOffsetPos[ChairOffset.TOPRIGHT] = tempNewChair[i];
+                }
+                else if (tempNewChair[i].x > chairOffsetPos[ChairOffset.BOTTOMRIGHT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.BOTTOMRIGHT].y) < 0.5f)
+                {
+
+                    chairOffsetPos[ChairOffset.BOTTOMRIGHT] = tempNewChair[i];
+                }
+
+
+            }
         }
 
 

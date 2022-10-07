@@ -128,7 +128,7 @@ Transform:
   m_GameObject: {fileID: 3596119681771457335}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.64, y: 2.03, z: 1}
+  m_LocalScale: {x: 4.2124505, y: 3.2279022, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3020263180155576097}
@@ -200,16 +200,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5748d5c84c17652429485d095c8b5b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_randomItemClickable: {fileID: 6176038989422851557}
-  m_chooseItemClickable: {fileID: 3023507832697507826}
   m_clickableMask:
     serializedVersion: 2
     m_Bits: 8
-  m_findItemHUDPrefab: {fileID: 5371667888219808421, guid: 14cdbf69079166a4fb96f34498202204, type: 3}
+  m_cookRandomItemHUDPrefab: {fileID: 5371667888219808421, guid: 14cdbf69079166a4fb96f34498202204, type: 3}
+  m_cookItemHUDPrefab: {fileID: 6410176148523009772, guid: ddf1a8d6cc24b2e4b9eafe2e4083113a, type: 3}
   m_itemAvailableHUDPrefab: {fileID: 5371667888219808421, guid: e05ee9f4335d7434a9e4941b4b501cb1, type: 3}
   m_itemAvailableButtonPrefab: {fileID: 3875473712482379255, guid: b48122aeaea9e74459087863d07a412c, type: 3}
   m_maxItemGetted: 8
   m_searchItemTime: 4
+  m_cookRandomItemClickable: {fileID: 6176038989422851557}
+  m_cookItemClickable: {fileID: 3023507832697507826}
+  m_timeCooking: 10
 --- !u!1 &6176038989422851557
 GameObject:
   m_ObjectHideFlags: 0

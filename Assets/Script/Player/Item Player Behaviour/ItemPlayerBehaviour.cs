@@ -8,20 +8,23 @@ namespace AdverGame.Player
 
 
         InputBehaviour m_input;
-        GameObject m_randomItemClickable;
+        GameObject m_cookTandomItemClickable;
+        GameObject m_cookItemClickable;
         ItemContainer m_itemContainer;
 
-
-        FindItemHandler m_findItemHandler;
+        CookRandomItemHandler m_cookRandomItemHandler;
         ItemAvailableHandler m_itemAvailableHandler;
-        public ItemPlayerBehaviour(InputBehaviour inputBehaviour, GameObject randomItemClickable, GameObject findItemHUD, GameObject itemAvailableHUDPrefab, GameObject itemAvailableButtonPrefab, int searchItemTime, int maxItemGetted, MonoBehaviour player)
+        CookItemHandler m_cookItemHandler;
+        public ItemPlayerBehaviour(InputBehaviour inputBehaviour, GameObject cookRandomItemClickable, GameObject findItemHUD, GameObject itemAvailableHUDPrefab, GameObject itemAvailableButtonPrefab, int searchItemTime, int maxItemGetted, MonoBehaviour player, GameObject cookItemHUDPrefab, GameObject cookItemClickable, float timeCooking)
         {
             m_itemContainer = new(player);
             m_input = inputBehaviour;
-            m_randomItemClickable = randomItemClickable;
+            m_cookTandomItemClickable = cookRandomItemClickable;
+            m_cookItemClickable = cookItemClickable;
 
             m_input.OnLeftClick += OnLeftClickCallback;
-            m_findItemHandler = new(player, findItemHUD, searchItemTime, maxItemGetted, m_itemContainer);
+            m_cookRandomItemHandler = new(player, findItemHUD, searchItemTime, maxItemGetted, m_itemContainer);
+            m_cookItemHandler = new(cookItemHUDPrefab, timeCooking, m_itemContainer, player);
             m_itemAvailableHandler = new(itemAvailableHUDPrefab, itemAvailableButtonPrefab, m_itemContainer);
 
 
@@ -38,9 +41,13 @@ namespace AdverGame.Player
         }
         void OnLeftClickCallback(GameObject obj)
         {
-            if (obj == m_randomItemClickable)
+            if (obj == m_cookTandomItemClickable)
             {
-                m_findItemHandler.InitFindItemHUD();
+                m_cookRandomItemHandler.InitFindItemHUD();
+            }
+            else if (obj == m_cookItemClickable)
+            {
+                m_cookItemHandler.InitCookItemHUD();
             }
         }
 

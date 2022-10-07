@@ -33,14 +33,27 @@ namespace AdverGame.Player
         public void AddItem(ItemSerializable newItem)
         {
             Items ??= new();
-            Items.Add(newItem);
+            bool isSame = false;
+            if (Items.Count > 0)
+            {
+                foreach (var item in Items)
+                {
+                    if (item.Content.Name.Equals(newItem.Content.Name))
+                    {
+                        IncreaseItem(item, newItem.Stack);
+                        isSame = true;
+                        break;
+                    }
+                }
+            }
+            if (!isSame) Items.Add(newItem);
+
             PlayerManager.s_Instance.SaveItem(Items);
         }
 
         public void IncreaseItem(ItemSerializable item, int stack)
         {
             item.UpdateStack(stack);
-            PlayerManager.s_Instance.SaveItem(Items);
         }
         public void DecreaseItem(ItemSerializable currentItem)
         {
