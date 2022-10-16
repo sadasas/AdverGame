@@ -1,4 +1,5 @@
-﻿using AdverGame.Player;
+﻿using AdverGame.PathFinding;
+using AdverGame.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,16 +29,26 @@ namespace AdverGame.Customer
         Transform m_customerSpawnPostStart;
         Transform m_customerSpawnPostEnd;
 
+        NavMeshGenerator m_generator;
+        PathFinder m_pathFinder;
+
+
         [SerializeField] List<GameObject> m_customerVariants;
         [SerializeField] GameObject m_taskHUDPrefab;
         [SerializeField] GameObject m_orderTaskPrefab;
         [SerializeField] int m_maxCustomerRunning;
         [SerializeField] int m_maxCustomerQueued;
 
+        [Header("PathFinding Setting")]
+        [SerializeField] Rect m_rectSize;
+        [SerializeField] LayerMask m_notWalkableLayer;
+        [SerializeField] float m_pointDistributionSize;
+        [SerializeField] bool m_isDrawPath;
         public List<Order> CustomerOrders { get; private set; }
         List<Task> m_taskOrders;
         public Queue<CustomerController> CustomersQueue;
 
+        public Vector2[] m_path;
         private void OnValidate()
         {
             if (m_maxCustomerQueued < m_maxCustomerRunning) m_maxCustomerQueued = m_maxCustomerRunning;
@@ -51,6 +62,9 @@ namespace AdverGame.Customer
         }
         private void Start()
         {
+            m_generator = new(m_rectSize, m_pointDistributionSize, m_notWalkableLayer);
+            m_pathFinder = new(m_generator);
+
             m_playerInput = PlayerManager.s_Instance.Player.InputBehaviour;
 
             SetupCustomers();
@@ -59,6 +73,23 @@ namespace AdverGame.Customer
             m_taskHUD.transform.SetAsFirstSibling();
         }
 
+        private void OnDrawGizmos()
+        {
+            if (!m_isDrawPath) return;
+            m_generator.OnDrawGizmos();
+            Gizmos.color = Color.blue;
+
+            if (m_path != null && m_path.Length > 0)
+            {
+
+                for (int i = 0; i < m_path.Length; i++)
+                {
+                    if (i + 1 < m_path.Length)
+                        Gizmos.DrawLine(m_path[i], m_path[i + 1]);
+                }
+            }
+
+        }
 
         void SetupCustomers()
         {
@@ -92,6 +123,7 @@ namespace AdverGame.Customer
                 newCust.OnCancelOrder += RemoveOrder;
                 newCust.OnResetPos += OnResetCustomer;
                 newCust.OnToChair += DecreaseCustomerWalking;
+                newCust.OnRequestPath += FindPath;
                 newCust.SpawnDelay += i;
 
                 currentVariant = currentVariant - (i / variantQuota) == 0 ? currentVariant + 1 : currentVariant;
@@ -99,8 +131,27 @@ namespace AdverGame.Customer
             }
 
         }
+
+
+        void FindPath(Vector2 position, Vector2 destination, CustomerController cust, CustomerState state)
+        {
+
+            if (state == CustomerState.TOCHAIR)
+            {
+                var path = m_pathFinder.FindPath(position, destination);
+                m_path = path;
+                cust.CurrentCoro = cust.StartCoroutine(cust.ToChair(path));
+            }
+
+            else if (state == CustomerState.LEAVE)
+                cust.CurrentCoro = cust.StartCoroutine(cust.Leaving());
+
+        }
         void DecreaseCustomerWalking()
         {
+
+
+
             TotCustomersWalking--;
 
             CommandCustomer();
@@ -127,7 +178,9 @@ namespace AdverGame.Customer
 
             if (CustomersQueue == null || CustomersQueue.Count == 0) SpawnCustomer();
             var cus = CustomersQueue.Dequeue();
+
             cus.CurrentState = CustomerState.WALK;
+            cus.CurrentCoro = cus.StartCoroutine(cus.walking());
 
 
         }

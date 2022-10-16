@@ -8,6 +8,7 @@ TagManager:
   - MainCanvas
   - Chair
   - Item
+  - NotWalkable
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - Clickable
   - Water
   - UI
-  - 
+  - NotWalkable
   - 
   - 
   - 
