@@ -128,8 +128,8 @@ namespace AdverGame.Customer
             if (CustomersQueue == null || CustomersQueue.Count == 0) SpawnCustomer();
             var cus = CustomersQueue.Dequeue();
             cus.CurrentState = CustomerState.WALK;
-            cus.DummyWalking();
 
+            cus.CurrentCoro = cus.StartCoroutine(cus.Walking(true));
         }
         (Vector2 start, Vector2 end) SetRandomPos(float widhtOffset, float heightOffset)
         {
@@ -195,7 +195,8 @@ namespace AdverGame.Customer
 
             menu.Customer.ResetOrder();
             menu.Customer.CurrentState = CustomerState.EAT;
-
+            menu.Customer.StopCoroutine(menu.Customer.CurrentCoro);
+            menu.Customer.CurrentCoro = menu.Customer.StartCoroutine(menu.Customer.Eating());
             CustomerOrders.Remove(menu);
 
         }

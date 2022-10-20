@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7546983924612405680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7832064598564169669}
+  m_Layer: 0
+  m_Name: AssPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7832064598564169669
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7546983924612405680}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.789, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1190119971588045248}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8246918904233183451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27,6 +58,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Customer1 Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4383814855807841244, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+      propertyPath: m_assPos
+      value: 
+      objectReference: {fileID: 7832064598564169669}
     - target: {fileID: 4383814855807841245, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -71,6 +106,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6234636493232190519, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7131123195693740312, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
       propertyPath: m_Size.x
       value: 1.3358545
@@ -89,3 +128,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+--- !u!4 &1190119971588045248 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7131123195693740315, guid: c51f16ac863ffd74b8f7b651de6f0ed5, type: 3}
+  m_PrefabInstance: {fileID: 8246918904233183451}
+  m_PrefabAsset: {fileID: 0}
