@@ -128,7 +128,7 @@ namespace AdverGame.Customer
             if (CustomersQueue == null || CustomersQueue.Count == 0) SpawnCustomer();
             var cus = CustomersQueue.Dequeue();
             cus.CurrentState = CustomerState.WALK;
-
+            cus.DummyWalking();
 
         }
         (Vector2 start, Vector2 end) SetRandomPos(float widhtOffset, float heightOffset)

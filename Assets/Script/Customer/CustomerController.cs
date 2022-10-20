@@ -14,9 +14,9 @@ namespace AdverGame.Customer
     {
         ItemSerializable m_currentOrder;
         ChairController m_currentChair;
-        SpriteRenderer m_sprite;
+       
         int m_touchCount = 0;
-        int m_countDownMove = 0;
+       
         float m_countDownWaitOrder = 0;
         float m_countDownIdle = 0;
         float m_eatTime = 0;
@@ -83,7 +83,9 @@ namespace AdverGame.Customer
             m_animRealCharacter.speed = 1;
             if (m_eatTime > 0)
             {
-                m_animRealCharacter.SetBool("isEat", true);
+                m_animRealCharacter.SetBool("IsEat", true);
+                m_animRealCharacter.SetBool("IsWait", false);
+                m_animRealCharacter.SetBool("IsWalk", false);
                 m_eatTime -= Time.deltaTime;
                 m_noticeImage.sprite = Variant.EatImage;
                 m_noticeImage.gameObject.SetActive(true);
@@ -91,7 +93,9 @@ namespace AdverGame.Customer
             }
             else if (m_eatTime <= 0)
             {
-                m_animRealCharacter.SetBool("isEat", false);
+                m_animRealCharacter.SetBool("IsEat", false);
+                m_animRealCharacter.SetBool("IsWait", false);
+                m_animRealCharacter.SetBool("IsWalk", false);
                 CurrentState = CustomerState.PAY;
                 m_eatTime = 0;
                 m_noticeImage.gameObject.SetActive(false);
@@ -102,11 +106,15 @@ namespace AdverGame.Customer
             m_animDummyCharacter = DummyCharacter.GetComponent<Animator>();
             m_animRealCharacter = RealCharacter.GetComponent<Animator>();
 
+            m_animRealCharacter.SetBool("IsEat", false);
+            m_animRealCharacter.SetBool("IsWait", false);
+            m_animRealCharacter.SetBool("IsWalk", false);
+         
+
             RealCharacter.SetActive(false);
             DummyCharacter.SetActive(true);
             m_touchSlider = DummyCharacter.transform.GetChild(0).GetChild(0).GetComponent<Slider>();
             m_noticeImage = DummyCharacter.transform.GetChild(0).GetChild(1).GetComponent<Image>();
-            m_sprite = DummyCharacter.GetComponent<SpriteRenderer>();
             m_itemsRegistered = AssetHelpers.GetAllItemRegistered();
 
             widhtOffset = DummyCharacter.GetComponent<SpriteRenderer>().bounds.size.x;
@@ -119,7 +127,6 @@ namespace AdverGame.Customer
 
             SpawnDelay += Variant.SpawnDelay;
             m_eatTime += Variant.EatTime;
-            m_countDownMove = Variant.SpawnDelay;
             m_countDownWaitOrder = Variant.WaitOrderMaxTime;
             m_countDownIdle = Variant.WaitChairAvailableTime;
 
@@ -180,7 +187,9 @@ namespace AdverGame.Customer
         }
         void Order()
         {
-            m_animRealCharacter.speed = 0;
+            m_animRealCharacter.SetBool("IsEat", false);
+            m_animRealCharacter.SetBool("IsWait", true);
+            m_animRealCharacter.SetBool("IsWalk", false);
 
             var index = UnityEngine.Random.Range(0, m_itemsRegistered.Count);
             m_currentOrder = m_itemsRegistered[index];
@@ -218,7 +227,8 @@ namespace AdverGame.Customer
             else
             {
 
-                m_animRealCharacter.speed = 1;
+                m_animRealCharacter.SetBool("IsWait", false);
+                m_animRealCharacter.SetBool("IsWalk", true);
                 OnCancelOrder?.Invoke(m_currentOrder);
                 ResetOrder();
                 m_noticeImage.sprite = Variant.AngryImage;
@@ -230,7 +240,7 @@ namespace AdverGame.Customer
                 m_currentChair = null;
 
                 var distanceX = transform.position.x - TargetPos.x;
-               
+
                 if (distanceX < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
                 else RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
             }
@@ -255,6 +265,9 @@ namespace AdverGame.Customer
             PlayerManager.s_Instance.IncreaseCoin(Variant.Coin);
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
+
+            m_animRealCharacter.SetBool("IsEat", false);
+            m_animRealCharacter.SetBool("IsWalk", true);
         }
         public void ResetPos()
         {
@@ -269,7 +282,6 @@ namespace AdverGame.Customer
             transform.position = DefaultPos;
 
             m_eatTime += Variant.EatTime;
-            m_countDownMove = Variant.SpawnDelay;
             m_countDownWaitOrder = Variant.WaitOrderMaxTime;
             m_touchCount = 0;
 
@@ -278,14 +290,23 @@ namespace AdverGame.Customer
             m_noticeImage.gameObject.SetActive(false);
             m_touchSlider.gameObject.SetActive(false);
 
-
-
+            m_animDummyCharacter.SetBool("IsWalk", false);
+            m_animRealCharacter.SetBool("IsEat", false);
+            m_animRealCharacter.SetBool("IsWait", false);
+            m_animRealCharacter.SetBool("IsWalk", false);
         }
         public void Move()
         {
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetPos.x, TargetPos.y), Variant.Speed * Time.deltaTime);
         }
+        public void DummyWalking()
+        {
+            m_animDummyCharacter ??= DummyCharacter.GetComponent<Animator>();
+            m_animDummyCharacter.SetBool("IsWalk", true);
+        }
+
+
         public void OnTouch(GameObject obj)
         {
 
@@ -326,7 +347,9 @@ namespace AdverGame.Customer
                         DummyCharacter.SetActive(false);
                         RealCharacter.SetActive(true);
                         var distanceX = transform.position.x - TargetPos.x;
-
+                        m_animRealCharacter.SetBool("IsEat", false);
+                        m_animRealCharacter.SetBool("IsWait", false);
+                        m_animRealCharacter.SetBool("IsWalk", true);
                         if (distanceX < 0) RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
                         else RealCharacter.transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 
