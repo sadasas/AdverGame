@@ -334,9 +334,9 @@ namespace AdverGame.Customer
             while (m_countDownWaitOrder > 0)
             {
                 m_countDownWaitOrder -= Time.deltaTime;
+                yield return null;
 
             }
-            yield return null;
             m_animRealCharacter.speed = 1;
             OnCancelOrder?.Invoke(m_currentOrder);
             ResetOrder();
