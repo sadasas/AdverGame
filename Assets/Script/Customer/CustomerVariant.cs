@@ -3,14 +3,17 @@
 
 namespace AdverGame.Customer
 {
-    public enum CustomerType
+    public enum CustomerType : int
     {
-        COMMON,
-        RARE
+        RARE = 5,
+        OJOL = 10,
+        COMMON = 40
     }
     [CreateAssetMenu(fileName = "Variant", menuName = "Customer Variant")]
     public class CustomerVariant : ScriptableObject
     {
+        [field: SerializeField]
+        public int OccurrencePercentage { get; private set; }
         [field: SerializeField]
         public int Coin { get; private set; }
         [field: SerializeField]
@@ -23,6 +26,8 @@ namespace AdverGame.Customer
         public float WaitOrderMaxTime { get; private set; }
         [field: SerializeField]
         public float WaitChairAvailableTime { get; private set; }
+        [field: SerializeField]
+        public float IdleTime { get; private set; }
         [field: SerializeField]
         public GameObject CustomerPrefab { get; private set; }
         [field: SerializeField]

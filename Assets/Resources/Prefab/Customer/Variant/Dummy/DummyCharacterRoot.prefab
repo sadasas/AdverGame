@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 7661626516058139201}
   - component: {fileID: 7661626516058139206}
   - component: {fileID: 8433065831152586688}
+  - component: {fileID: -3847989809822971575}
   m_Layer: 0
   m_Name: DummyCharacterRoot
   m_TagString: Untagged
@@ -375,6 +376,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.45668948, y: 0.5875}
   m_EdgeRadius: 0
+--- !u!114 &-3847989809822971575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661626516058139207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c58a54bf6355b43a0b04b836cd8c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_touchSlider: {fileID: 2746252809896294231}
+  m_noticeImage: {fileID: 2507149652942134584}
+  Variant: {fileID: 0}
+  SpawnDelay: 0
+  TargetPos: {x: 0, y: 0}
 --- !u!1 &8188130148202429878
 GameObject:
   m_ObjectHideFlags: 0

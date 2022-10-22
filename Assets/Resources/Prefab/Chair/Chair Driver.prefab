@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 906286537423894830}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Cushion Pos
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
@@ -43,8 +43,8 @@ GameObject:
   - component: {fileID: 4807193264881995183}
   - component: {fileID: 4807193264881995218}
   - component: {fileID: 4807193264881995169}
-  m_Layer: 3
-  m_Name: Chair
+  m_Layer: 0
+  m_Name: Chair Driver
   m_TagString: Chair
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f007372802e9341a4c41948bfb1247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 1
   CushionPos: {fileID: 906286537423894830}
   Customer: {fileID: 0}
   IsLeft: 0

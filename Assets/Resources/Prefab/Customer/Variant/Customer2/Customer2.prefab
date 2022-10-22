@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2605464597713604204, guid: ddb8d6f8be177674b867d843e079f682, type: 3}
       propertyPath: m_Name
-      value: RealCustomer2 Variant
+      value: Customer2
       objectReference: {fileID: 0}
     - target: {fileID: 2605464597713604209, guid: ddb8d6f8be177674b867d843e079f682, type: 3}
       propertyPath: m_RootOrder
@@ -91,5 +91,9 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 2.7355807
       objectReference: {fileID: 0}
+    - target: {fileID: 5674418416989534850, guid: ddb8d6f8be177674b867d843e079f682, type: 3}
+      propertyPath: Variant
+      value: 
+      objectReference: {fileID: 11400000, guid: d49e6cb932c868941971ad6f6f216214, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddb8d6f8be177674b867d843e079f682, type: 3}

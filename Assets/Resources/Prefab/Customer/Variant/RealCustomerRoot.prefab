@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1409746994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1409746995}
+  m_Layer: 0
+  m_Name: Ass Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1409746995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409746994}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.78, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7888624874240725042}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &65657821709436470
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +398,7 @@ GameObject:
   - component: {fileID: 7888624874240725041}
   - component: {fileID: 7888624874240725040}
   - component: {fileID: 267890421357223609}
+  - component: {fileID: -8652000081301019455}
   m_Layer: 0
   m_Name: RealCustomerRoot
   m_TagString: Untagged
@@ -387,6 +419,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2793689907998328796}
+  - {fileID: 1409746995}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -431,12 +464,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 9797731, guid: 60f22f0ce75e34e4994afdb65beb684d, type: 3}
+  m_Sprite: {fileID: -1526941348, guid: 2de269a02a2731b43a3d3d39fe34a523, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.0699997, y: 8.264197}
+  m_Size: {x: 1.3266667, y: 2.7355807}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -479,8 +512,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.3566667, y: 2.7380373}
-    newSize: {x: 4.0699997, y: 8.264197}
+    oldSize: {x: 1.3266667, y: 2.7355807}
+    newSize: {x: 1.3266667, y: 2.7355807}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -488,6 +521,26 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.0349998, y: 4.107056}
   m_EdgeRadius: 0
+--- !u!114 &-8652000081301019455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888624874240725039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9032285a240306945beb2f8b5c2a6a01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_touchSlider: {fileID: 3922259766075133108}
+  m_noticeImage: {fileID: 1391061635993700841}
+  m_assPos: {fileID: 1409746995}
+  TargetPos: {x: 0, y: 0, z: 0}
+  DefaultPos: {x: 0, y: 0}
+  Variant: {fileID: 0}
+  isValid: 1
+  m_currentChair: {fileID: 0}
 --- !u!1 &8813950669380767602
 GameObject:
   m_ObjectHideFlags: 0

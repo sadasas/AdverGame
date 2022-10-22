@@ -18,17 +18,26 @@ namespace AdverGame.Chair
 
     public class ChairManager : MonoBehaviour
     {
+        public static ChairManager s_Instance;
 
         Dictionary<ChairOffset, Vector2> chairOffsetPos;
         List<AddChairIndicator> m_addChairIndicators;
-        [SerializeField] List<ChairController> Chairs;
+        [SerializeField] List<ChairController> m_customerChairs;
+        public List<ChairController> m_ojolChairs;
         [SerializeField] List<Vector2> m_chairParents;
         InputBehaviour m_inputPlayer;
 
         [SerializeField] float m_distanceBetweenChair = 4f;
-        [SerializeField] GameObject m_chairPrefab;
+        [SerializeField] GameObject m_chairCustomerPrefab;
+        [SerializeField] GameObject m_chairOjolPrefab;
         [SerializeField] GameObject m_addChairIndicatorPrefab;
 
+        private void Awake()
+        {
+            if (s_Instance != null) Destroy(s_Instance.gameObject);
+            s_Instance = this;
+
+        }
         private void Start()
         {
             m_inputPlayer = PlayerManager.s_Instance.Player.InputBehaviour;
@@ -54,6 +63,12 @@ namespace AdverGame.Chair
                 else if (i == 2) chairOffsetPos.Add(ChairOffset.BOTTOMRIGHT, pos.position);
                 else if (i == 3) chairOffsetPos.Add(ChairOffset.BOTTOMLEFT, pos.position);
             }
+
+            var chairOjolOffsetPos = GameObject.Find("ChairOjolPos").transform;
+
+            var chairOjol = Instantiate(m_chairOjolPrefab, chairOjolOffsetPos.position, Quaternion.identity).GetComponent<ChairController>();
+            m_ojolChairs ??= new();
+            m_ojolChairs.Add(chairOjol);
         }
 
         void LoadPlayerChairs()
@@ -121,14 +136,14 @@ namespace AdverGame.Chair
         void SpawnChair(Vector2 pos)
         {
             m_chairParents ??= new();
-            var newChairParent = Instantiate(m_chairPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform);
+            var newChairParent = Instantiate(m_chairCustomerPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform);
             m_chairParents.Add(newChairParent.transform.position);
 
-            Chairs ??= new();
+            m_customerChairs ??= new();
             var chair1 = newChairParent.transform.GetChild(0).GetComponent<ChairController>();
             var chair2 = newChairParent.transform.GetChild(1).GetComponent<ChairController>();
-            Chairs.Add(chair1);
-            Chairs.Add(chair2);
+            m_customerChairs.Add(chair1);
+            m_customerChairs.Add(chair2);
 
             Vector2[] tempNewChair = { chair1.transform.position, chair2.transform.position };
             for (int i = 0; i < tempNewChair.Length; i++)
@@ -159,6 +174,15 @@ namespace AdverGame.Chair
 
 
             }
+        }
+
+        public bool IsOjolChairAvailable()
+        {
+            foreach ( var chair in m_ojolChairs)
+            {
+                if (chair.Customer == null) return true;
+            }
+            return false;
         }
 
 

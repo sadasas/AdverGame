@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 53d68266e8dfa2c4d8ca4dc7aae6989f
+guid: 483852a8551019545b0ea71dab5413f3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -128,13 +128,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: OjolSelesai_0
+      name: Dummy2Walk_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 5565
-        width: 383
-        height: 795
+        y: 5926
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +142,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 719a879f9cab3d84fb2899dafc2917a6
-      internalID: 1531547854
+      spriteID: 57693fe47fd9f744d8589cca59d0083c
+      internalID: -971232654
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OjolSelesai_1
+      name: Dummy2Walk_1
       rect:
         serializedVersion: 2
         x: 0
-        y: 4770
-        width: 383
-        height: 795
+        y: 5076
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,20 +163,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da647fb4165f9a148adb4b7c01352aa7
-      internalID: -108169424
+      spriteID: 52687f4e89942374d938cd34f561b45e
+      internalID: -776582649
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OjolSelesai_2
+      name: Dummy2Walk_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 3975
-        width: 383
-        height: 795
+        y: 4226
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1083d4bee6ef26042b7462229a3669cf
-      internalID: 219506456
+      spriteID: 8a156e34abe37784eb7652a530bf177a
+      internalID: -1540337497
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OjolSelesai_3
+      name: Dummy2Walk_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 3180
-        width: 383
-        height: 795
+        y: 3376
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -205,20 +205,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88ead82bdfb072c4fb4f86f01515aae9
-      internalID: 2002513671
+      spriteID: 21581c83e6a3c22488af8cc2d918bc19
+      internalID: -1478042479
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OjolSelesai_4
+      name: Dummy2Walk_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 2385
-        width: 383
-        height: 795
+        y: 2526
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -226,20 +226,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c163d3838743c78499f86a1dde9558c6
-      internalID: 1191348116
+      spriteID: 138245d0c7653704581d12c45a3dd042
+      internalID: -837772979
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OjolSelesai_5
+      name: Dummy2Walk_5
       rect:
         serializedVersion: 2
         x: 0
-        y: 1590
-        width: 383
-        height: 795
+        y: 1676
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -247,20 +247,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f4043fe750b6f30498aa0adc1863c73d
-      internalID: 1311885978
+      spriteID: 75e71853c231f1146a93c6991dcc5971
+      internalID: 275359816
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OjolSelesai_6
+      name: Dummy2Walk_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 795
-        width: 383
-        height: 795
+        y: 826
+        width: 618
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -268,29 +268,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c96557bb2105c5243b02d826800a4576
-      internalID: -151408679
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OjolSelesai_7
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 383
-        height: 795
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d05fd5fa3e2bb9d4194a0efd622d4766
-      internalID: 1216656657
+      spriteID: 193533d75d4ed9748932fc3641db5be3
+      internalID: -180025052
       vertices: []
       indices: 
       edges: []
@@ -306,14 +285,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      OjolSelesai_4: 1191348116
-      OjolSelesai_0: 1531547854
-      OjolSelesai_6: -151408679
-      OjolSelesai_1: -108169424
-      OjolSelesai_2: 219506456
-      OjolSelesai_7: 1216656657
-      OjolSelesai_5: 1311885978
-      OjolSelesai_3: 2002513671
+      Dummy2Walk_1: -776582649
+      Dummy2Walk_0: -971232654
+      Dummy2Walk_2: -1540337497
+      Dummy2Walk_3: -1478042479
+      Dummy2Walk_5: 275359816
+      Dummy2Walk_4: -837772979
+      Dummy2Walk_6: -180025052
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

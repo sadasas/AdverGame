@@ -7,9 +7,45 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8652000081301019455, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: Variant
+      value: 
+      objectReference: {fileID: 11400000, guid: 890b230e62a60004590e863eb834c301, type: 2}
+    - target: {fileID: 267890421357223609, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1.3333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 267890421357223609, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 2.7313592
+      objectReference: {fileID: 0}
+    - target: {fileID: 267890421357223609, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1.3333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 267890421357223609, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2.7313592
+      objectReference: {fileID: 0}
     - target: {fileID: 7888624874240725039, guid: 4289ccf4415ef894baff25975a409705, type: 3}
       propertyPath: m_Name
-      value: RealCustomer1
+      value: Customer1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888624874240725041, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_Size.x
+      value: 1.3333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888624874240725041, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_Size.y
+      value: 2.7313592
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888624874240725041, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 851353631, guid: 5fdf2d713e57a4c48a4542f511bf7a4c, type: 3}
+    - target: {fileID: 7888624874240725041, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7888624874240725042, guid: 4289ccf4415ef894baff25975a409705, type: 3}
       propertyPath: m_RootOrder
