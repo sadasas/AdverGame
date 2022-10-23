@@ -45,7 +45,7 @@ namespace AdverGame.Customer
         List<Task> m_taskOrders;
         public Queue<CustomerController> RealCustomersQueue;
         public Queue<DummyController> DummyCustomersQueue;
-
+        public Action<CustomerVariant> OnCustomerChoosed;
         private void OnValidate()
         {
             if (m_maxCustomerQueued < m_maxCustomerRunning) m_maxCustomerQueued = m_maxCustomerRunning;
@@ -168,6 +168,7 @@ namespace AdverGame.Customer
                         RealCustomersQueue.Dequeue();
                         tempChair = chair;
                         chair.Customer = cust;
+                        OnCustomerChoosed?.Invoke(cust.Variant);
                         break;
                     }
                 }
@@ -198,6 +199,7 @@ namespace AdverGame.Customer
                 tempChair = chairs[rand];
                 chairs[rand].Customer = cust;
                 RealCustomersQueue.Dequeue();
+                OnCustomerChoosed?.Invoke(cust.Variant);
             }
 
             cust.m_currentChair = tempChair;

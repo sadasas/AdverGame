@@ -1,4 +1,4 @@
-﻿using AdverGame.Chair;
+﻿
 using AdverGame.Player;
 using System;
 using System.Collections;
@@ -12,6 +12,7 @@ public class PlayerData
     public int Coin;
     public List<ItemSerializable> Items;
     public List<Vector2> Chairs;
+    public List<String> CharacterCollection;
    
 
 }

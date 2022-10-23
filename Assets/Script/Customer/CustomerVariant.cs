@@ -13,6 +13,8 @@ namespace AdverGame.Customer
     public class CustomerVariant : ScriptableObject
     {
         [field: SerializeField]
+        public string Name { get; private set; }
+        [field: SerializeField]
         public int OccurrencePercentage { get; private set; }
         [field: SerializeField]
         public int Coin { get; private set; }
@@ -42,6 +44,8 @@ namespace AdverGame.Customer
         [field: SerializeField]
         public Sprite AngryImage { get; private set; }
 
+        [field: SerializeField]
+        public Sprite Image { get; private set; }
 
 
         [field: SerializeField]

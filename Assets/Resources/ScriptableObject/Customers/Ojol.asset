@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
   m_Name: Ojol
   m_EditorClassIdentifier: 
+  <Name>k__BackingField: Ojol
   <OccurrencePercentage>k__BackingField: 50
   <Coin>k__BackingField: 200
   <Speed>k__BackingField: 0.7
@@ -25,4 +26,5 @@ MonoBehaviour:
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 474d460589f31c043a6b918ed491b007, type: 3}
   <ConfusedImage>k__BackingField: {fileID: 21300000, guid: 5fb69ef9390d613429cb4acb577e196b, type: 3}
   <AngryImage>k__BackingField: {fileID: 21300000, guid: aa5213c614eb98548abb508e29039d8e, type: 3}
+  <Image>k__BackingField: {fileID: 1497137373, guid: 55f9683efe524fb4c8ab2fe4fbe541d8, type: 3}
   <Type>k__BackingField: 10

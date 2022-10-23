@@ -1,5 +1,6 @@
 ﻿using AdverGame.CameraGame;
 using AdverGame.Chair;
+using AdverGame.CharacterCollection;
 using AdverGame.Customer;
 using AdverGame.Player;
 using AdverGame.UI;
@@ -27,6 +28,7 @@ namespace AdverGame.GameManager
         CoinHUDHandler m_tes;
         ChairManager m_chairManager;
         CameraController m_cameraController;
+        CharacterCollectionManager m_characterCollectionManager;
 
         [SerializeField] GameObject m_UIPrefab;
         [SerializeField] GameObject m_playerManagerPrefab;
@@ -35,6 +37,7 @@ namespace AdverGame.GameManager
         [SerializeField] GameObject m_UTesPrefab;
         [SerializeField] GameObject m_ChairManagerPrefab;
         [SerializeField] GameObject m_PauseMenuManagerPrefab;
+        [SerializeField] GameObject m_CharacterCollectionPrefab;
 
         public Action<GameState> OnGameStateChange;
         public GameState CurrentState;
@@ -80,6 +83,10 @@ namespace AdverGame.GameManager
 
             //setup pause menu
             Instantiate(m_PauseMenuManagerPrefab);
+
+            //setup character collection
+            m_characterCollectionManager = Instantiate(m_CharacterCollectionPrefab).GetComponent<CharacterCollectionManager>();
+           
         }
 
     }
