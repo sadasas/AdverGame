@@ -35,7 +35,7 @@ namespace AdverGame.Player
                             {
                                 var itemTemp = new ItemSerializable();
                                 itemTemp.m_content = item.Content.name;
-                                itemTemp.UpdateStack(item.Stack - 1);
+                                itemTemp.IncreaseStack(item.Stack - 1);
                                 pdTemp.Items.Add(itemTemp);
                             }
                         }

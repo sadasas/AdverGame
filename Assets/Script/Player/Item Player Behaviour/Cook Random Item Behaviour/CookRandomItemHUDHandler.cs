@@ -21,7 +21,7 @@ namespace AdverGame.Player
         [SerializeField] GameObject m_adverHUDPrefab;
         [SerializeField] GameObject m_getInstantItemButton;
         [SerializeField] GameObject m_getItemButton;
-        [SerializeField] GameObject m_itemFoundedRawPrefab;
+        [SerializeField] GameObject m_itemFoundedPrefab;
 
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
@@ -47,10 +47,11 @@ namespace AdverGame.Player
         public void DisplayItemFounded(ItemSerializable itemfounded)
         {
             m_itemDisplayed ??= new();
-            var obj = Instantiate(m_itemFoundedRawPrefab, m_itemPlace.transform);
+            var obj = Instantiate(m_itemFoundedPrefab, m_itemPlace.transform);
             obj.transform.GetChild(0).GetComponent<Image>().sprite = itemfounded.Content.Image;
             obj.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
-            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = itemfounded.Content.Name;
+            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = itemfounded.Stack.ToString();
+            obj.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = itemfounded.Content.Name;
 
             m_itemDisplayed.Add(obj);
 

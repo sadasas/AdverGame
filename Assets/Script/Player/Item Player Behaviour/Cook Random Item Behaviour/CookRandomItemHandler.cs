@@ -40,7 +40,7 @@ namespace AdverGame.Player
 
         }
 
-        IEnumerator CookFindItem()
+        IEnumerator CookRandomItem()
         {
 
             index = new int[m_maxItemCooked];
@@ -51,7 +51,7 @@ namespace AdverGame.Player
 
             var count = 0;
             ItemFounded ??= new();
-            while (isCooking && ItemFounded.Count < m_maxItemCooked)
+            while (isCooking && count < m_maxItemCooked)
             {
 
 
@@ -59,12 +59,25 @@ namespace AdverGame.Player
 
                 yield return new WaitForSeconds(m_searchItemTime);
 
+                var newItem = new ItemSerializable(m_allItems[index[count]].Content);
                 //Find item
-                ItemFounded.Add(new ItemSerializable(m_allItems[index[count]].Content));
-
+                bool isSame = false;
+                if (ItemFounded.Count > 0)
+                {
+                    foreach (var item in ItemFounded)
+                    {
+                        if (item.Content.Name.Equals(newItem.Content.Name))
+                        {
+                            item.IncreaseStack(newItem.Stack);
+                            isSame = true;
+                            break;
+                        }
+                    }
+                }
+                if (!isSame) ItemFounded.Add(newItem);
 
                 count++;
-                if (ItemFounded.Count == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
+                if (count == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
 
 
             }
@@ -73,7 +86,7 @@ namespace AdverGame.Player
         {
 
             isCooking = true;
-            m_cookRandomItemCoro = m_player.StartCoroutine(CookFindItem());
+            m_cookRandomItemCoro = m_player.StartCoroutine(CookRandomItem());
         }
 
         void DisplayItemCooked()

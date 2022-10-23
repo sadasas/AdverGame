@@ -53,7 +53,7 @@ namespace AdverGame.Player
 
         public void IncreaseItem(ItemSerializable item, int stack)
         {
-            item.UpdateStack(stack);
+            item.IncreaseStack(stack);
         }
         public void DecreaseItem(ItemSerializable currentItem)
         {
@@ -63,7 +63,7 @@ namespace AdverGame.Player
             {
                 if (item == currentItem)
                 {
-                    if (item.Stack > 1) item.UpdateStack(-1);
+                    if (item.Stack > 1) item.IncreaseStack(-1);
                     else
                     {
                         isAvailable = false;
