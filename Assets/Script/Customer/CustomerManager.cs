@@ -311,8 +311,6 @@ namespace AdverGame.Customer
 
         }
 
-
-
         (Vector2 start, Vector2 end) SetRandomPos(float widhtOffset, float heightOffset)
         {
             var rand = UnityEngine.Random.Range(0, 2);
@@ -331,7 +329,7 @@ namespace AdverGame.Customer
             CustomerOrders.Add(cusOrder);
 
             var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
-            panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y + 120);
+            panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y + m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.y);
 
             var task = Instantiate(m_orderTaskPrefab, m_taskHUD.transform.GetChild(0)).GetComponent<Task>();
             task.transform.GetChild(0).GetComponent<Image>().sprite = order.Content.Image;
@@ -352,7 +350,7 @@ namespace AdverGame.Customer
                     {
 
                         var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
-                        panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y - 130);
+                        panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.y);
                         m_taskOrders.Remove(task);
                         Destroy(task.gameObject);
                         break;
@@ -369,6 +367,8 @@ namespace AdverGame.Customer
             {
                 if (task.CustomerOrder.Customer == menu.Customer)
                 {
+                    var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
+                    panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.y);
                     m_taskOrders.Remove(task);
                     Destroy(task.gameObject);
                     break;

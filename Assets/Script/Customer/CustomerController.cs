@@ -115,7 +115,7 @@ namespace AdverGame.Customer
             m_currentChair = null;
 
             StopCoroutine(CurrentCoro);
-            m_animCharacter.SetBool("IsEat", false);
+            if (Variant.Type != CustomerType.OJOL) m_animCharacter.SetBool("IsEat", false);
             m_animCharacter.SetBool("IsWalk", true);
             CurrentCoro = StartCoroutine(Leaving());
         }
