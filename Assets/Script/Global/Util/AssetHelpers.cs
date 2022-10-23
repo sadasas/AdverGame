@@ -1,8 +1,8 @@
 ﻿
 
+using AdverGame.Customer;
 using AdverGame.Player;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace AdverGame.Utility
@@ -28,5 +28,11 @@ namespace AdverGame.Utility
             return so;
         }
 
+        public static CustomerVariant[] GetAllCustomerVariantsRegistered()
+        {
+            var so = Resources.LoadAll<CustomerVariant>("ScriptableObject/Customers");
+
+            return so;
+        }
     }
 }

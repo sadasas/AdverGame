@@ -25,6 +25,6 @@ MonoBehaviour:
   <EatImage>k__BackingField: {fileID: 21300000, guid: ef33a6ebd9abcb24abe04a6e1a47894a, type: 3}
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 474d460589f31c043a6b918ed491b007, type: 3}
   <ConfusedImage>k__BackingField: {fileID: 21300000, guid: 5fb69ef9390d613429cb4acb577e196b, type: 3}
-  <AngryImage>k__BackingField: {fileID: 21300000, guid: 474d460589f31c043a6b918ed491b007, type: 3}
+  <AngryImage>k__BackingField: {fileID: 21300000, guid: aa5213c614eb98548abb508e29039d8e, type: 3}
   <Image>k__BackingField: {fileID: -549466548, guid: 2de269a02a2731b43a3d3d39fe34a523, type: 3}
   <Type>k__BackingField: 5

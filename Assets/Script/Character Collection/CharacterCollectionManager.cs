@@ -1,5 +1,7 @@
 ﻿
 using AdverGame.Customer;
+using AdverGame.Player;
+using AdverGame.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +29,31 @@ namespace AdverGame.CharacterCollection
             InitButton();
             InitHUD();
             m_HUD.gameObject.SetActive(false);
+
+            LoadCharacterCollection();
+        }
+        void LoadCharacterCollection()
+        {
+            var data = PlayerManager.s_Instance.Data.CharacterCollection;
+            if (data == null || data.Count == 0) return;
+            var customerVariantRegistered = AssetHelpers.GetAllCustomerVariantsRegistered();
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                foreach (var variant in customerVariantRegistered)
+                {
+                    if (variant.Name.Equals(data[i]))
+                    {
+                        var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
+
+                        m_items ??= new();
+                        var newItem = m_HUD.DisplayItem(variant, bg);
+                        m_items.Add(newItem);
+                        break;
+                    }
+                }
+            }
+
         }
         void InitButton()
         {
@@ -45,10 +72,11 @@ namespace AdverGame.CharacterCollection
             if (IsNewCharacter(cust.Name))
             {
                 var bg = cust.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
-                InitHUDNewCharacter(bg, cust.Image);
+                InitHUDNewCharacterNotif(bg, cust.Image);
                 m_items ??= new();
                 var newItem = m_HUD.DisplayItem(cust, bg);
                 m_items.Add(newItem);
+                PlayerManager.s_Instance.SaveCharacterCollected(cust.Name);
             }
 
         }
@@ -67,13 +95,13 @@ namespace AdverGame.CharacterCollection
             return true;
         }
 
-        void InitHUDNewCharacter(Sprite bg, Sprite img)
+        void InitHUDNewCharacterNotif(Sprite bg, Sprite img)
         {
             Time.timeScale = 0f;
             if (m_HUDNewCharacterNotif == null) m_HUDNewCharacterNotif = Instantiate(m_HUDNewCharacterNotifPrefab, m_mainCanvas);
             m_HUDNewCharacterNotif.transform.GetChild(2).GetComponent<Image>().sprite = bg;
             m_HUDNewCharacterNotif.transform.GetChild(3).GetComponent<Image>().sprite = img;
-            m_HUDNewCharacterNotif.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() => { Time.timeScale = 1f; });
+            m_HUDNewCharacterNotif.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => { Time.timeScale = 1f; });
 
             m_HUDNewCharacterNotif.SetActive(true);
 

@@ -42,6 +42,7 @@ namespace AdverGame.UI
             }
 
             m_currentHUDSelected = hud;
+            m_currentHUDSelected.transform.SetAsLastSibling();
         }
 
         public void ForceHUD(HUDName name)

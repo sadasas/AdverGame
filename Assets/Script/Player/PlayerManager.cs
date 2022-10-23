@@ -13,7 +13,7 @@ public class PlayerData
     public List<ItemSerializable> Items;
     public List<Vector2> Chairs;
     public List<String> CharacterCollection;
-   
+
 
 }
 namespace AdverGame.Player
@@ -77,13 +77,20 @@ namespace AdverGame.Player
 
         }
 
-  
+
         public void IncreaseCoin(int coin)
         {
             Data.Coin += coin;
             OnIncreaseCoin?.Invoke(Data.Coin);
             SaveDataPlayer();
 
+        }
+
+        public void SaveCharacterCollected(string characterName)
+        {
+            Data.CharacterCollection ??= new List<string>();
+            Data.CharacterCollection.Add(characterName);
+            SaveDataPlayer();
         }
 
     }
