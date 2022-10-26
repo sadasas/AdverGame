@@ -16,6 +16,7 @@ namespace AdverGame.Chair
         public Transform CushionPos;
         public CustomerController Customer = null;
         public bool IsLeft;
+        public ChairAnchor Anchor;
       
     }
 }

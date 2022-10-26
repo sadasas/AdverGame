@@ -1,17 +1,25 @@
 ﻿
+using AdverGame.Chair;
 using AdverGame.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public struct DataChairSerializable
+{
+    public ChairAnchor Anchor;
+    public Vector2 Pos;
+    public int Address;
+}
 
 [Serializable]
 public class PlayerData
 {
     public int Coin;
     public List<ItemSerializable> Items;
-    public List<Vector2> Chairs;
+    public List<DataChairSerializable> DataChairsAreas;
     public List<String> CharacterCollection;
 
 
@@ -69,15 +77,35 @@ namespace AdverGame.Player
             SaveDataPlayer();
         }
 
-        public void SaveChair(Vector2 chairPos)
+
+        public void SaveChair((ChairAnchor, Vector2) chairData, int address)
         {
-            Data.Chairs ??= new();
-            Data.Chairs.Add(chairPos);
+            //weird algoritmh
+            Data.DataChairsAreas ??= new();
+            var newData = new DataChairSerializable { Anchor = chairData.Item1, Pos = chairData.Item2, Address = address };
+
+
+            Data.DataChairsAreas.Add(newData);
+
             SaveDataPlayer();
 
         }
 
+        public List<List<(ChairAnchor anchor, Vector2 pos)>> GetDataChairs()
+        {
+            if (Data.DataChairsAreas == null || Data.DataChairsAreas.Count == 0) return null;
+            var dataChairAreas = new List<List<(ChairAnchor anchor, Vector2 pos)>>();
+            for (int i = 0; i < Data.DataChairsAreas.Count; i++)
+            {
+                if (dataChairAreas.Count - 1 <= Data.DataChairsAreas[i].Address) dataChairAreas.Add(new List<(ChairAnchor anchor, Vector2 pos)>());
+                var chair = (Data.DataChairsAreas[i].Anchor, Data.DataChairsAreas[i].Pos);
+                dataChairAreas[Data.DataChairsAreas[i].Address].Add(chair);
 
+            }
+
+
+            return dataChairAreas;
+        }
         public void IncreaseCoin(int coin)
         {
             Data.Coin += coin;

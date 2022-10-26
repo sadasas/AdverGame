@@ -35,7 +35,7 @@ namespace AdverGame.Player
             if (m_count > 4)
             {
                 m_count = 0;
-                var tempsize = new Vector2(m_itemPlace.GetComponent<RectTransform>().sizeDelta.x, m_itemPlace.GetComponent<RectTransform>().sizeDelta.y + item.Content.ItemPrefab.GetComponent<RectTransform>().sizeDelta.y + 60);
+                var tempsize = new Vector2(m_itemPlace.GetComponent<RectTransform>().sizeDelta.x, m_itemPlace.GetComponent<RectTransform>().sizeDelta.y + item.Content.ItemPrefab.GetComponent<RectTransform>().sizeDelta.y);
                 m_itemPlace.GetComponent<RectTransform>().sizeDelta = tempsize;
             }
             ItemsDisplayed ??= new();

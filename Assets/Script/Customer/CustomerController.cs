@@ -116,6 +116,7 @@ namespace AdverGame.Customer
 
             StopCoroutine(CurrentCoro);
             if (Variant.Type != CustomerType.OJOL) m_animCharacter.SetBool("IsEat", false);
+            else m_animCharacter.SetBool("IsWait", false);
             m_animCharacter.SetBool("IsWalk", true);
             CurrentCoro = StartCoroutine(Leaving());
         }
@@ -127,9 +128,6 @@ namespace AdverGame.Customer
             CurrentState = CustomerState.DEFAULT;
 
             transform.position = DefaultPos;
-
-
-
 
 
 

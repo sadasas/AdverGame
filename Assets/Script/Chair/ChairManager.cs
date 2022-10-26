@@ -1,37 +1,155 @@
 ﻿
 
 using AdverGame.Player;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace AdverGame.Chair
 {
-    public enum ChairOffset
+    public enum ChairAnchor
     {
         TOPLEFT,
         TOPRIGHT,
         BOTTOMLEFT,
-        BOTTOMRIGHT
+        BOTTOMRIGHT,
+        DEFAULT
     }
 
+    public class ChairArea
+    {
+        public ChairArea(float distanceBetweenTable, GameObject chairCustomerPrefab, GameObject addChairIndicatorPrefab, InputBehaviour input, Vector2 defaultPos, int address)
+        {
+            m_distanceBetweenTable = distanceBetweenTable;
+            m_chairCustomerPrefab = chairCustomerPrefab;
+            m_addChairIndicatorPrefab = addChairIndicatorPrefab;
+            m_playerInput = input;
+            m_defaultPos = defaultPos;
+            m_address = address;
+        }
+
+        (ChairAnchor, Vector2) m_lastChairAdded;
+
+        AddChairIndicator m_chairIndicators;
+        List<(ChairAnchor, Vector2)> m_chairParents;
+        List<ChairController> m_customerChairs;
+        InputBehaviour m_playerInput;
+        Vector2 m_defaultPos;
+
+        [SerializeField] float m_distanceBetweenTable = 1.6f;
+        [SerializeField] GameObject m_chairCustomerPrefab;
+        [SerializeField] int m_address;
+        [SerializeField] GameObject m_addChairIndicatorPrefab;
+
+        public Action<(ChairAnchor, Vector2), int> OnChairAdded;
+
+
+
+        (ChairAnchor anchor, Vector2 pos, bool isEmpty) SearchEmptyField()
+        {
+            // in a area max table are 4
+            // try get pos empty in area by search clockwise 
+            var result = (m_lastChairAdded.Item1) switch
+            {
+                ChairAnchor.TOPLEFT => (ChairAnchor.TOPRIGHT, new Vector2(m_lastChairAdded.Item2.x + m_distanceBetweenTable, m_lastChairAdded.Item2.y), true),
+                ChairAnchor.TOPRIGHT => (ChairAnchor.BOTTOMRIGHT, new Vector2(m_lastChairAdded.Item2.x, m_lastChairAdded.Item2.y - 1.7f), true),
+                ChairAnchor.BOTTOMRIGHT => (ChairAnchor.BOTTOMLEFT, new Vector2(m_lastChairAdded.Item2.x - +m_distanceBetweenTable, m_lastChairAdded.Item2.y), true),
+                ChairAnchor.BOTTOMLEFT => (ChairAnchor.DEFAULT, Vector2.zero, false)
+            };
+
+
+            return result;
+        }
+
+        void InitAddChairIndicator(ChairAnchor offset, Vector2 pos)
+        {
+
+            if (m_chairIndicators != null)
+            {
+                m_playerInput.OnLeftClick -= m_chairIndicators.OnTouch;
+                m_chairIndicators.OnAddChair -= AddIndicatorTriggered;
+                GameObject.Destroy(m_chairIndicators.gameObject);
+            }
+            m_chairIndicators = GameObject.Instantiate(m_addChairIndicatorPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<AddChairIndicator>();
+
+            m_playerInput.OnLeftClick += m_chairIndicators.OnTouch;
+            m_chairIndicators.OnAddChair += AddIndicatorTriggered;
+            m_chairIndicators.Offset = offset;
+
+        }
+
+        public void SetupArea(bool isDefaultArea)
+        {
+
+            if (isDefaultArea)
+            {
+                SpawnChair(m_defaultPos, ChairAnchor.TOPLEFT);
+                OnChairAdded?.Invoke(m_lastChairAdded, m_address);
+
+            }
+            else
+            {
+                InitAddChairIndicator(ChairAnchor.TOPLEFT, m_defaultPos);
+            }
+        }
+        void AddIndicatorTriggered(AddChairIndicator indicator)
+        {
+
+
+            SpawnChair(indicator.transform.position, indicator.Offset);
+            OnChairAdded?.Invoke(m_lastChairAdded, m_address);
+
+
+            var newEmptyFieldData = SearchEmptyField();
+            if (m_chairIndicators != null)
+            {
+                m_playerInput.OnLeftClick -= m_chairIndicators.OnTouch;
+                m_chairIndicators.OnAddChair -= AddIndicatorTriggered;
+                GameObject.Destroy(m_chairIndicators.gameObject);
+            }
+            if (!newEmptyFieldData.isEmpty) return;
+            InitAddChairIndicator(newEmptyFieldData.anchor, newEmptyFieldData.pos);
+
+            m_playerInput.OnLeftClick -= indicator.OnTouch;
+
+        }
+
+        public void SpawnChair(Vector2 pos, ChairAnchor anchor)
+        {
+            m_chairParents ??= new();
+            var newChairParent = GameObject.Instantiate(m_chairCustomerPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform);
+            m_chairParents.Add((anchor, newChairParent.transform.position));
+
+            m_customerChairs ??= new();
+            var chair1 = newChairParent.transform.GetChild(0).GetComponent<ChairController>();
+            var chair2 = newChairParent.transform.GetChild(1).GetComponent<ChairController>();
+            m_customerChairs.Add(chair1);
+            m_customerChairs.Add(chair2);
+
+            m_lastChairAdded = (anchor, pos);
+            var newEmptyFieldData = SearchEmptyField();
+            if (!newEmptyFieldData.isEmpty) return;
+            InitAddChairIndicator(newEmptyFieldData.anchor, newEmptyFieldData.pos);
+
+        }
+
+
+    }
     public class ChairManager : MonoBehaviour
     {
         public static ChairManager s_Instance;
 
-        Dictionary<ChairOffset, Vector2> chairOffsetPos;
-        List<AddChairIndicator> m_addChairIndicators;
-        [SerializeField] List<ChairController> m_customerChairs;
-        public List<ChairController> m_ojolChairs;
-        [SerializeField] List<Vector2> m_chairParents;
         InputBehaviour m_inputPlayer;
+        ChairArea[] m_chairAreas;
+        Vector2[] m_defaultPos;
 
-        [SerializeField] float m_distanceBetweenChair = 4f;
+        [SerializeField] float m_distanceBetweenTable = 1.6f;
         [SerializeField] GameObject m_chairCustomerPrefab;
         [SerializeField] GameObject m_chairOjolPrefab;
         [SerializeField] GameObject m_addChairIndicatorPrefab;
 
+
+        public List<ChairController> m_ojolChairs;
         private void Awake()
         {
             if (s_Instance != null) Destroy(s_Instance.gameObject);
@@ -41,30 +159,39 @@ namespace AdverGame.Chair
         private void Start()
         {
             m_inputPlayer = PlayerManager.s_Instance.Player.InputBehaviour;
-            GetDefaultOffsetChair();
+
+            SearchDefaultPos();
+            SpawnAreas();
+
             LoadPlayerChairs();
+            SpawnOjolChairs();
 
-            foreach (var chairOffset in chairOffsetPos)
+
+        }
+        void SearchDefaultPos()
+        {
+            m_defaultPos = new Vector2[3];
+            for (int i = 0; i < 3; i++)
             {
-                var pos = new Vector2(chairOffset.Value.x + (chairOffset.Key == ChairOffset.TOPLEFT || chairOffset.Key == ChairOffset.BOTTOMLEFT ? -m_distanceBetweenChair : m_distanceBetweenChair), chairOffset.Value.y);
-                InitAddChairIndicator(pos, chairOffset.Key);
-
+                m_defaultPos[i] = GameObject.Find("DefaultChairPos" + i).transform.position;
             }
         }
-
-        void GetDefaultOffsetChair()
+        void SpawnAreas()
         {
-            chairOffsetPos ??= new();
-            for (int i = 0; i < 4; i++)
+            m_chairAreas = new ChairArea[3];
+            for (int i = 0; i < 3; i++)
             {
-                var pos = GameObject.Find("ChairPos" + (i + 1)).transform;
-                if (i == 0) chairOffsetPos.Add(ChairOffset.TOPLEFT, pos.position);
-                else if (i == 1) chairOffsetPos.Add(ChairOffset.TOPRIGHT, pos.position);
-                else if (i == 2) chairOffsetPos.Add(ChairOffset.BOTTOMRIGHT, pos.position);
-                else if (i == 3) chairOffsetPos.Add(ChairOffset.BOTTOMLEFT, pos.position);
+                var chairArea = new ChairArea(m_distanceBetweenTable, m_chairCustomerPrefab, m_addChairIndicatorPrefab, m_inputPlayer, m_defaultPos[i], i);
+                chairArea.OnChairAdded += SaveDataChair;
+                m_chairAreas[i] = chairArea;
             }
 
-            var chairOjolOffsetPos = GameObject.Find("ChairOjolPos").transform;
+
+        }
+
+        private void SpawnOjolChairs()
+        {
+            var chairOjolOffsetPos = GameObject.Find("DefaultOjolChairPos").transform;
 
             var chairOjol = Instantiate(m_chairOjolPrefab, chairOjolOffsetPos.position, Quaternion.identity).GetComponent<ChairController>();
             m_ojolChairs ??= new();
@@ -74,111 +201,41 @@ namespace AdverGame.Chair
         void LoadPlayerChairs()
         {
 
-            if (PlayerManager.s_Instance.Data.Chairs != null && PlayerManager.s_Instance.Data.Chairs.Count > 0)
-            {
-                for (int i = 0; i < PlayerManager.s_Instance.Data.Chairs.Count; i++)
-                {
-                    SpawnChair(PlayerManager.s_Instance.Data.Chairs[i]);
-                }
 
+            var dataChairsAreas = PlayerManager.s_Instance.GetDataChairs();
+            if (dataChairsAreas != null && dataChairsAreas.Count > 0)
+            {
+
+                for (int i = 0; i < dataChairsAreas.Count; i++)
+                {
+
+                    foreach (var data in dataChairsAreas[i])
+                    {
+                        m_chairAreas[i].SpawnChair(data.pos, data.anchor);
+                    }
+                }
 
             }
             else
             {
-
-
-                foreach (var offset in chairOffsetPos.Values.ToArray())
-                {
-
-                    SpawnChair(offset);
-                }
-
-                foreach (var Vector2chairParent in m_chairParents)
-                {
-                    PlayerManager.s_Instance.SaveChair(Vector2chairParent);
-                }
-            }
-
-
-
-        }
-
-
-        void InitAddChairIndicator(Vector2 pos, ChairOffset offset)
-        {
-
-            m_addChairIndicators ??= new();
-            var newIndicator = Instantiate(m_addChairIndicatorPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<AddChairIndicator>();
-            m_addChairIndicators.Add(newIndicator);
-            m_inputPlayer.OnLeftClick += newIndicator.OnTouch;
-            newIndicator.OnAddChair += AddIndicatorTriggered;
-            newIndicator.Offset = offset;
-
-        }
-
-        void AddIndicatorTriggered(AddChairIndicator indicator)
-        {
-            var actualPos = new Vector2(indicator.transform.position.x > 0 ? indicator.transform.position.x + 0.72f : indicator.transform.position.x - 0.72f, indicator.transform.position.y);
-            SpawnChair(actualPos);
-            m_addChairIndicators.Remove(indicator);
-
-            PlayerManager.s_Instance.SaveChair(actualPos);
-
-
-            var pos = new Vector2(actualPos.x + (indicator.Offset == ChairOffset.TOPLEFT || indicator.Offset == ChairOffset.BOTTOMLEFT ? -m_distanceBetweenChair - 0.72f : m_distanceBetweenChair + 0.72f), actualPos.y);
-            InitAddChairIndicator(pos, indicator.Offset);
-
-
-            m_inputPlayer.OnLeftClick -= indicator.OnTouch;
-            Destroy(indicator.gameObject);
-        }
-
-        void SpawnChair(Vector2 pos)
-        {
-            m_chairParents ??= new();
-            var newChairParent = Instantiate(m_chairCustomerPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform);
-            m_chairParents.Add(newChairParent.transform.position);
-
-            m_customerChairs ??= new();
-            var chair1 = newChairParent.transform.GetChild(0).GetComponent<ChairController>();
-            var chair2 = newChairParent.transform.GetChild(1).GetComponent<ChairController>();
-            m_customerChairs.Add(chair1);
-            m_customerChairs.Add(chair2);
-
-            Vector2[] tempNewChair = { chair1.transform.position, chair2.transform.position };
-            for (int i = 0; i < tempNewChair.Length; i++)
-            {
-
-
-                if (tempNewChair[i].x < chairOffsetPos[ChairOffset.TOPLEFT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.TOPLEFT].y) < 0.5f)
-                {
-
-
-                    chairOffsetPos[ChairOffset.TOPLEFT] = tempNewChair[i];
-                }
-                else if (tempNewChair[i].x < chairOffsetPos[ChairOffset.BOTTOMLEFT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.BOTTOMLEFT].y) < 0.5f)
-                {
-
-                    chairOffsetPos[ChairOffset.BOTTOMLEFT] = tempNewChair[i];
-                }
-                else if (tempNewChair[i].x > chairOffsetPos[ChairOffset.TOPRIGHT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.TOPRIGHT].y) < 0.5f)
-                {
-
-                    chairOffsetPos[ChairOffset.TOPRIGHT] = tempNewChair[i];
-                }
-                else if (tempNewChair[i].x > chairOffsetPos[ChairOffset.BOTTOMRIGHT].x && math.abs(tempNewChair[i].y - chairOffsetPos[ChairOffset.BOTTOMRIGHT].y) < 0.5f)
-                {
-
-                    chairOffsetPos[ChairOffset.BOTTOMRIGHT] = tempNewChair[i];
-                }
+                m_chairAreas[0].SetupArea(true);
 
 
             }
+
+
+
         }
 
+
+        void SaveDataChair((ChairAnchor, Vector2) chairData, int address)
+        {
+            Debug.Log("save chairs");
+            PlayerManager.s_Instance.SaveChair(chairData, address);
+        }
         public bool IsOjolChairAvailable()
         {
-            foreach ( var chair in m_ojolChairs)
+            foreach (var chair in m_ojolChairs)
             {
                 if (chair.Customer == null) return true;
             }
