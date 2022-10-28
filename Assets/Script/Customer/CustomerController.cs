@@ -12,7 +12,9 @@ using UnityEngine.UI;
 namespace AdverGame.Customer
 {
 
-
+    /// <summary>
+    /// TODO: when  customers each other overlap make customer closest to the camera is in front
+    /// </summary>
     public class CustomerController : MonoBehaviour
     {
         ItemSerializable m_currentOrder;
@@ -111,6 +113,7 @@ namespace AdverGame.Customer
             else transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 
             PlayerManager.s_Instance.IncreaseCoin(Variant.Coin);
+            PlayerManager.s_Instance.IncreaseExp(Variant.Exp);
             if (m_currentChair) m_currentChair.Customer = null;
             m_currentChair = null;
 

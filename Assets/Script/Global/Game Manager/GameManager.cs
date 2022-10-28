@@ -25,8 +25,10 @@ namespace AdverGame.GameManager
         CustomerManager m_customerManager;
         PlayerManager m_playerManager;
         UIManager m_UIManager;
-        CoinHUDHandler m_tes;
+        CoinHUDHandler m_coinHUDHandler;
+        ExpHUDHandler m_expHUDHandler;
         ChairManager m_chairManager;
+        private Transform canvas;
         CameraController m_cameraController;
         CharacterCollectionManager m_characterCollectionManager;
 
@@ -34,7 +36,8 @@ namespace AdverGame.GameManager
         [SerializeField] GameObject m_playerManagerPrefab;
         [SerializeField] GameObject m_customerManagerPrefab;
         [SerializeField] GameObject m_UIManagerPrefab;
-        [SerializeField] GameObject m_UTesPrefab;
+        [SerializeField] GameObject m_HUDCoinPrefab;
+        [SerializeField] GameObject m_HUDExpPrefab;
         [SerializeField] GameObject m_ChairManagerPrefab;
         [SerializeField] GameObject m_PauseMenuManagerPrefab;
         [SerializeField] GameObject m_CharacterCollectionPrefab;
@@ -56,7 +59,10 @@ namespace AdverGame.GameManager
 
         }
 
-
+        /// <summary>
+        /// TODO : Only manage entity manager 
+        /// </summary>
+        /// <returns></returns>
         IEnumerator SetupGame()
         {
             // setup ui manager
@@ -74,19 +80,27 @@ namespace AdverGame.GameManager
 
             //setup chair
             m_chairManager = Instantiate(m_ChairManagerPrefab).GetComponent<ChairManager>();
+            m_playerManager.OnIncreaseLevel += m_chairManager.UnlockArea;
 
             // setup hud display coin
-            var canvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
-            m_tes = Instantiate(m_UTesPrefab, canvas).GetComponent<CoinHUDHandler>();
-            m_playerManager.OnIncreaseCoin += m_tes.UpdateCoin;
-            m_tes.transform.SetAsFirstSibling();
+            canvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
+            m_coinHUDHandler = Instantiate(m_HUDCoinPrefab, canvas).GetComponent<CoinHUDHandler>();
+            m_playerManager.OnIncreaseCoin += m_coinHUDHandler.UpdateCoin;
+            m_coinHUDHandler.transform.SetAsFirstSibling();
+
+            //setuo hud display exp
+            m_expHUDHandler = Instantiate(m_HUDExpPrefab, canvas).GetComponent<ExpHUDHandler>();
+            m_playerManager.OnIncreaseExp += m_expHUDHandler.IncreaseXP;
+            m_playerManager.OnIncreaseLevel += m_expHUDHandler.IncreaseLevel;
+           
+            m_expHUDHandler.transform.SetAsFirstSibling();
 
             //setup pause menu
             Instantiate(m_PauseMenuManagerPrefab);
 
             //setup character collection
             m_characterCollectionManager = Instantiate(m_CharacterCollectionPrefab).GetComponent<CharacterCollectionManager>();
-           
+
         }
 
     }

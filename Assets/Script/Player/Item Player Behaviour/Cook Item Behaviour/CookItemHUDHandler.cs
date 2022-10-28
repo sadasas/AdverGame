@@ -16,13 +16,13 @@ namespace AdverGame.Player
         [SerializeField] Transform m_platePlace;
         [SerializeField] Transform m_itemSelectionsPlace;
         [SerializeField] TextMeshProUGUI m_proggres;
-        public int platesCount;
+      
         
         public Action<ItemPlate,ItemSerializable> OnItemChoosed;
 
         private void Start()
         {
-            SpawnPlate(platesCount);
+           
             UpdateItemCooked(0);
         }
 
@@ -32,7 +32,7 @@ namespace AdverGame.Player
         {
             m_plates ??= new();
 
-            for (int i = 0; i < platesCount; i++)
+            for (int i = 0; i < tot; i++)
             {
                 var newPlate = Instantiate(m_platePrefab, m_platePlace).GetComponent<ItemPlate>();
                 m_plates.Add(newPlate);
@@ -61,6 +61,7 @@ namespace AdverGame.Player
                 if (plate.IsEmpty)
                 {
                     OnItemChoosed?.Invoke(plate,item);
+                    break;
                     
                 }
             }

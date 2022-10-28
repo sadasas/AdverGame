@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace AdverGame.Utility
 {
+    /// <summary>
+    /// TODO: make generic function for similiar function get item from asset
+    /// </summary>
     public class AssetHelpers
     {
         public static List<ItemSerializable> GetAllItemRegistered()
@@ -31,6 +34,13 @@ namespace AdverGame.Utility
         public static CustomerVariant[] GetAllCustomerVariantsRegistered()
         {
             var so = Resources.LoadAll<CustomerVariant>("ScriptableObject/Customers");
+
+            return so;
+        }
+
+        public static Level[] GetAllLevelVariantRegistered()
+        {
+            var so = Resources.LoadAll<Level>("ScriptableObject/Levels");
 
             return so;
         }

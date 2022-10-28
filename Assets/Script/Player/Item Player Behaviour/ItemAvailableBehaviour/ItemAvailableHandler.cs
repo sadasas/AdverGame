@@ -6,7 +6,7 @@ using UnityEngine;
 namespace AdverGame.Player
 {
     /// <summary>
-    /// TODO: Refactor displayupdteitem method
+    /// TODO: Refactor display update item method
     /// </summary>
     public class ItemAvailableHandler
     {

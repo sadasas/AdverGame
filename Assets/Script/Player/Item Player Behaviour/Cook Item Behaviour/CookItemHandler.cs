@@ -14,7 +14,7 @@ namespace AdverGame.Player
         float m_timeCooking;
         ItemContainer m_itemContainer;
         MonoBehaviour m_playerMono;
-
+        int m_plates = 1;
         public CookItemHandler(GameObject cookItemHUDPrefab, float timeCooking, ItemContainer itemContainer, MonoBehaviour playerMono)
         {
             m_cookItemHUDPrefab = cookItemHUDPrefab;
@@ -23,15 +23,32 @@ namespace AdverGame.Player
             m_playerMono = playerMono;
 
             m_allItems = AssetHelpers.GetAllItemRegistered();
+            InitCookItemHUD();
+            m_HUDHandler.gameObject.SetActive(false);
+            PlayerManager.s_Instance.OnDataLoaded += LoadStovePlayer;
+            PlayerManager.s_Instance.OnIncreaseLevel += UpdatePlate;
 
         }
 
+        public void LoadStovePlayer(PlayerData Data)
+        {
+            UpdatePlate(Data.Level.CurrentLevel);
+
+        }
+
+        public void UpdatePlate(Level level)
+        {
+
+            var newPlate = level.MaxStove - m_plates;
+            m_plates = level.MaxStove;
+            m_HUDHandler.SpawnPlate(newPlate);
+        }
         public void InitCookItemHUD()
         {
             if (m_HUDHandler == null)
             {
                 m_HUDHandler = GameObject.Instantiate(m_cookItemHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform).GetComponent<CookItemHUDHandler>();
-                m_HUDHandler.platesCount = 1;
+                m_HUDHandler.SpawnPlate(m_plates);
                 m_HUDHandler.OnItemChoosed += (itemPlate, item) => m_playerMono.StartCoroutine(Cooking(itemPlate, item));
 
                 foreach (var item in m_allItems)

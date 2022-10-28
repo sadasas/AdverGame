@@ -15,6 +15,7 @@ MonoBehaviour:
   <Name>k__BackingField: Student
   <OccurrencePercentage>k__BackingField: 50
   <Coin>k__BackingField: 20
+  <Exp>k__BackingField: 10
   <Speed>k__BackingField: 0.5
   <EatTime>k__BackingField: 5
   <SpawnDelay>k__BackingField: 0

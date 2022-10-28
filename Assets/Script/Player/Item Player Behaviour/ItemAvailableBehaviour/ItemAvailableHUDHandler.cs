@@ -6,7 +6,7 @@ namespace AdverGame.Player
 {
 
     /// <summary>
-    /// TODO: Refactor updateitem method
+    /// TODO: Refactor update item method
     /// </summary>
     public class ItemAvailableHUDHandler : MonoBehaviour
     {
@@ -34,7 +34,7 @@ namespace AdverGame.Player
             m_count++;
             if (m_count > 4)
             {
-                m_count = 0;
+                m_count = 1;
                 var tempsize = new Vector2(m_itemPlace.GetComponent<RectTransform>().sizeDelta.x, m_itemPlace.GetComponent<RectTransform>().sizeDelta.y + item.Content.ItemPrefab.GetComponent<RectTransform>().sizeDelta.y);
                 m_itemPlace.GetComponent<RectTransform>().sizeDelta = tempsize;
             }

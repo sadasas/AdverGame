@@ -64,7 +64,8 @@ namespace AdverGame.Customer
             {
                 CustomerType.COMMON => ChairType.CUSTOMERS,
                 CustomerType.OJOL => ChairType.DRIVERS,
-                CustomerType.RARE => ChairType.CUSTOMERS
+                CustomerType.RARE => ChairType.CUSTOMERS,
+                _ => ChairType.CUSTOMERS
 
 
             };
@@ -86,9 +87,12 @@ namespace AdverGame.Customer
 
         public void Setup()
         {
+            m_touchCount = 0;
             m_animDummyCharacter ??= GetComponent<Animator>();
             transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
             m_animDummyCharacter.SetBool("IsWalk", false);
+            m_touchSlider.gameObject.SetActive(false);
+            m_noticeImage.gameObject.SetActive(false);
             if (transform.position.x < 0) transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
 
         }
@@ -110,22 +114,20 @@ namespace AdverGame.Customer
             }
             else if (m_touchCount == 1)
             {
+
                 if (CurrentCoro != null) StopCoroutine(CurrentCoro);
                 m_animDummyCharacter.SetBool("IsWalk", false);
                 m_touchSlider.gameObject.SetActive(true);
                 var isChairAvailData = IsChairAvailable();
-                if (isChairAvailData.isTrue)
-                {
 
 
-                    m_touchCount = 0;
-                    m_noticeImage.gameObject.SetActive(false);
-                    m_touchSlider.gameObject.SetActive(false);
+                m_touchCount = 0;
+                m_noticeImage.gameObject.SetActive(false);
+                m_touchSlider.gameObject.SetActive(false);
 
-                    OnToChair?.Invoke(isChairAvailData.chairs, this, TargetPos);
+                OnToChair?.Invoke(isChairAvailData.chairs, this, TargetPos);
 
 
-                }
 
             }
 

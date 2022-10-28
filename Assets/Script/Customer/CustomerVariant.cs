@@ -19,6 +19,8 @@ namespace AdverGame.Customer
         [field: SerializeField]
         public int Coin { get; private set; }
         [field: SerializeField]
+        public int Exp { get; private set; }
+        [field: SerializeField]
         public float Speed { get; private set; }
         [field: SerializeField]
         public float EatTime { get; private set; }

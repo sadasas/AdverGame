@@ -26,9 +26,20 @@ namespace AdverGame.Player
 
                         var pdTemp = new PlayerData();
                         pdTemp.Coin = data.Coin;
-                        pdTemp.DataChairsAreas = data.DataChairsAreas;
                         pdTemp.CharacterCollection = data.CharacterCollection;
                         pdTemp.Items = new();
+                        pdTemp.DataChairsAreas = data.DataChairsAreas;
+
+
+                        pdTemp.Level = new DataLevel();
+                        pdTemp.Level.CurrentLevel = data.Level.CurrentLevel;
+                        pdTemp.Level.CurrentExp = data.Level.CurrentExp;
+                        if (pdTemp.Level != null && pdTemp.Level.CurrentLevel != null)
+                        {
+                            pdTemp.Level.m_currentLevel = pdTemp.Level.CurrentLevel.Sequence;
+                            pdTemp.Level.CurrentLevel = null;
+                        }
+
                         if (data.Items != null && data.Items.Count > 0)
                         {
                             foreach (var item in data.Items)
@@ -76,6 +87,18 @@ namespace AdverGame.Player
                                 item.Content = so;
                                 item.m_content = null;
                             }
+                            var soLevel = AssetHelpers.GetAllLevelVariantRegistered();
+                            foreach (var so in soLevel)
+                            {
+                                if (so.Sequence == tempPd.Level.m_currentLevel)
+                                {
+                                    tempPd.Level.CurrentLevel = so;
+
+                                    break;
+                                }
+                            }
+                            tempPd.Level.m_currentLevel = 0;
+
                         }
                     }
 
