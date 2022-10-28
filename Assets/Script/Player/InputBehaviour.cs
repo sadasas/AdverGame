@@ -4,28 +4,29 @@ using UnityEngine.EventSystems;
 
 namespace AdverGame.Player
 {
-	public class InputBehaviour
-	{
-		public InputBehaviour(LayerMask customerMask)
-		{
-			m_clickablerMask = customerMask;
-		}
+    public class InputBehaviour
+    {
+        public InputBehaviour(LayerMask customerMask)
+        {
+            m_clickablerMask = customerMask;
+        }
 
-		Touch m_touch;
-		LayerMask m_clickablerMask;
+        Touch m_touch;
+        LayerMask m_clickablerMask;
 
-		public bool IsDrag;
-		public Action<GameObject> OnLeftClick;
-		public Action<Vector2> OnLeftDrag;
+        public bool IsDrag;
+        public Action<GameObject> OnLeftClick;
+        public Action<Vector2> OnLeftDrag;
+        public Action<Vector2> OnLeftEndDrag;
+        Vector2 m_currentDir;
 
 
-
-		public void Update()
-		{
-			DetecTouchTriggered();
-		}
-		private void DetecTouchTriggered()
-		{
+        public void Update()
+        {
+            DetecTouchTriggered();
+        }
+        private void DetecTouchTriggered()
+        {
 
 #if UNITY_STANDALONE_WIN
 
@@ -39,34 +40,39 @@ namespace AdverGame.Player
                 }
             }
 #elif UNITY_ANDROID
-			if (Input.touchCount <= 0) return;
+            if (Input.touchCount <= 0) return;
 
-			m_touch = Input.GetTouch(0);
+            m_touch = Input.GetTouch(0);
 
 
-			if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
-			{
-				if(!IsDrag)
+            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
+            {
+                if (!IsDrag)
                 {
-					RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
-					if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
-					{
+                    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
+                    if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
+                    {
+                        OnLeftClick?.Invoke(hit.transform.gameObject);
 
-						OnLeftClick?.Invoke(hit.transform.gameObject);
-					}
-				}
-				IsDrag = false;
+                    }
+                }
+                else
+                {
+                    OnLeftEndDrag?.Invoke(m_currentDir);
+                }
+                IsDrag = false;
 
-			}
-			else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Moved )
-			{
-				IsDrag = true;
-				OnLeftDrag.Invoke(m_touch.deltaPosition);
-			}
+            }
+            else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Moved)
+            {
+                IsDrag = true;
+                m_currentDir = m_touch.deltaPosition;
+            }
+
 #endif
 
-		}
-	}
+        }
+    }
 }
 
 

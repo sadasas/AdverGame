@@ -1,72 +1,65 @@
 ﻿
 
 using AdverGame.Player;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace AdverGame.CameraGame
 {
-	public class CameraController : MonoBehaviour
-	{
-		public static CameraController s_Instance;
+    public class CameraController : MonoBehaviour
+    {
+        public static CameraController s_Instance;
 
-		Camera camera;
-		InputBehaviour m_inputPlayer;
-		Transform m_minOffset;
-		Transform m_maxOffset;
-		[Range(0, 0.01f)]
-		[SerializeField] float m_smoothTransformPos;
-		private Vector3 actualPos;
+        Camera camera;
+        int m_currentView = 2;
+        InputBehaviour m_inputPlayer;
+        Transform[] m_cameraViews;
 
-		private void Awake()
-		{
-			if (s_Instance != null) Destroy(s_Instance.gameObject);
-			s_Instance = this;
-		}
-		private void Start()
-		{
-			camera = GetComponent<Camera>();
-			m_minOffset = GameObject.Find("CameraMinOffset").transform;
-			m_maxOffset = GameObject.Find("CameraMaxOffset").transform;
+        [Range(0, 0.01f)]
+        [SerializeField] float m_smoothTransformPos;
 
-
-
-		}
-
-		private void FixedUpdate()
-		{
-			var stageDimensionEnd = camera.ScreenToWorldPoint(new Vector3(Screen.currentResolution.width, Screen.currentResolution.height, 0));
-			var stageDimensionStart = camera.ScreenToWorldPoint(new Vector3(0, Screen.currentResolution.height, 0));
-			if (stageDimensionStart.x <= m_minOffset.position.x)
-			{
-				var distance = math.abs(m_minOffset.position.x - stageDimensionStart.x);
-				var rePos = new Vector3(camera.transform.position.x + distance, camera.transform.position.y, camera.transform.position.z);
-				camera.transform.position = rePos;
-			}
-			if (stageDimensionEnd.x >= m_maxOffset.position.x)
-			{
-				var distance = math.abs(stageDimensionEnd.x - m_maxOffset.position.x);
-				var rePos = new Vector3(camera.transform.position.x - distance, camera.transform.position.y, camera.transform.position.z);
-				camera.transform.position = rePos;
-			}
-
-			
-
-		}
-		public void SetupCamera(InputBehaviour inputPlayer)
-		{
-			m_inputPlayer = inputPlayer;
-			m_inputPlayer.OnLeftDrag += TrackTouch;
-		}
-		void TrackTouch(Vector2 pos)
-		{
-
-			actualPos = new Vector3(camera.transform.position.x + ((-1 * pos.x) * m_smoothTransformPos), camera.transform.position.y, camera.transform.position.z);
-		
-			camera.transform.position = Vector3.Lerp(camera.transform.position, actualPos, 0.5f);
+        private void Awake()
+        {
+            if (s_Instance != null) Destroy(s_Instance.gameObject);
+            s_Instance = this;
+        }
+        private void Start()
+        {
+            camera = GetComponent<Camera>();
+            m_cameraViews = new Transform[3];
+            for (int i = 1; i <= 3; i++)
+            {
+                m_cameraViews[i - 1] = GameObject.Find("CameraView" + i).transform;
+            }
 
 
-		}
+        }
 
-	}
+
+        public void SetupCamera(InputBehaviour inputPlayer)
+        {
+            m_inputPlayer = inputPlayer;
+            m_inputPlayer.OnLeftEndDrag += TrackTouch;
+        }
+        void TrackTouch(Vector2 pos)
+        {
+            var dir = pos.normalized.x;
+
+            if (dir >= 0 && m_currentView - 1 >= 0)
+            {
+                camera.transform.position = m_cameraViews[m_currentView - 1].position;
+                m_currentView--;
+            }
+            else if (dir < 0 && m_currentView + 1 < m_cameraViews.Length)
+            {
+                camera.transform.position = m_cameraViews[m_currentView + 1].position;
+                m_currentView++;
+            }
+
+
+
+
+
+        }
+
+    }
 }
