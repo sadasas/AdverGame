@@ -3,6 +3,7 @@ using AdverGame.Chair;
 using AdverGame.CharacterCollection;
 using AdverGame.Customer;
 using AdverGame.Player;
+using AdverGame.Sound;
 using AdverGame.UI;
 using System;
 using System.Collections;
@@ -28,6 +29,7 @@ namespace AdverGame.GameManager
         CoinHUDHandler m_coinHUDHandler;
         ExpHUDHandler m_expHUDHandler;
         ChairManager m_chairManager;
+        SoundManager m_soundManager;
         private Transform canvas;
         CameraController m_cameraController;
         CharacterCollectionManager m_characterCollectionManager;
@@ -41,6 +43,7 @@ namespace AdverGame.GameManager
         [SerializeField] GameObject m_ChairManagerPrefab;
         [SerializeField] GameObject m_PauseMenuManagerPrefab;
         [SerializeField] GameObject m_CharacterCollectionPrefab;
+        [SerializeField] GameObject m_SoundManagerPrefab;
 
         public Action<GameState> OnGameStateChange;
         public GameState CurrentState;
@@ -92,7 +95,7 @@ namespace AdverGame.GameManager
             m_expHUDHandler = Instantiate(m_HUDExpPrefab, canvas).GetComponent<ExpHUDHandler>();
             m_playerManager.OnIncreaseExp += m_expHUDHandler.IncreaseXP;
             m_playerManager.OnIncreaseLevel += m_expHUDHandler.IncreaseLevel;
-           
+
             m_expHUDHandler.transform.SetAsFirstSibling();
 
             //setup pause menu
@@ -100,6 +103,8 @@ namespace AdverGame.GameManager
 
             //setup character collection
             m_characterCollectionManager = Instantiate(m_CharacterCollectionPrefab).GetComponent<CharacterCollectionManager>();
+
+            m_soundManager = Instantiate(m_SoundManagerPrefab).GetComponent<SoundManager>();
 
         }
 

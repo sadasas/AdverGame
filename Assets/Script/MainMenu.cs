@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AdverGame.Sound;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,11 @@ namespace AdverGame.MainMenu
         [SerializeField] Sprite m_bgmOn;
 
 
+        private void Start()
+        {
+            m_isMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;
+            SetupBGM(m_isMute);
+        }
         public void LoadScene()
         {
             StartCoroutine(ProcessLoadScene());
@@ -43,11 +49,34 @@ namespace AdverGame.MainMenu
         {
             if (m_isMute)
             {
+                PlayerPrefs.SetInt("BGM", 0);
                 m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
+
             }
-            else m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+            else
+            {
+                PlayerPrefs.SetInt("BGM", 1);
+                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+            }
 
             m_isMute = !m_isMute;
+        }
+        public void SetupBGM(bool ismute)
+        {
+            if (!m_isMute)
+            {
+                PlayerPrefs.SetInt("BGM", 0);
+                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
+               
+            }
+            else
+            {
+                PlayerPrefs.SetInt("BGM", 1);
+                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+              
+            }
+
+
         }
     }
 }
