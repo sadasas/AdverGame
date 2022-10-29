@@ -252,10 +252,10 @@ namespace AdverGame.Chair
             var dataChairsAreas = PlayerManager.s_Instance.GetDataChairs();
             if (dataChairsAreas != null && dataChairsAreas.Count > 0)
             {
-                Debug.Log(dataChairsAreas.Count);
+
                 for (int i = 0; i < dataChairsAreas.Count; i++)
                 {
-                    
+
                     foreach (var data in dataChairsAreas[i])
                     {
 

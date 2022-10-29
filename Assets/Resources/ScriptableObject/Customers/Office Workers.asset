@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Office Workers
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Officer
+  <Description>k__BackingField: Pekerja nganggur
   <OccurrencePercentage>k__BackingField: 50
   <Coin>k__BackingField: 200
   <Exp>k__BackingField: 10

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Ojol
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Ojol
+  <Description>k__BackingField: Ojol gaming
   <OccurrencePercentage>k__BackingField: 50
   <Coin>k__BackingField: 200
   <Exp>k__BackingField: 10

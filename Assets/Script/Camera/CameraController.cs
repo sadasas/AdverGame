@@ -42,8 +42,8 @@ namespace AdverGame.CameraGame
         }
         void TrackTouch(Vector2 pos)
         {
-            var dir = pos.normalized.x;
-
+            var dir = pos.x;
+            
             if (dir >= 0 && m_currentView - 1 >= 0)
             {
                 camera.transform.position = m_cameraViews[m_currentView - 1].position;

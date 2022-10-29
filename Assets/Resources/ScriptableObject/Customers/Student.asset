@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Student
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Student
+  <Description>k__BackingField: pelajar gabut
   <OccurrencePercentage>k__BackingField: 50
   <Coin>k__BackingField: 20
   <Exp>k__BackingField: 10

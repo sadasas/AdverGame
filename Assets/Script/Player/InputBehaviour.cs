@@ -18,7 +18,7 @@ namespace AdverGame.Player
         public Action<GameObject> OnLeftClick;
         public Action<Vector2> OnLeftDrag;
         public Action<Vector2> OnLeftEndDrag;
-        Vector2 m_currentDir;
+        [SerializeField] Vector2 m_currentDir;
 
 
         public void Update()
