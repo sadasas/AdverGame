@@ -28,6 +28,7 @@ namespace AdverGame.Sound
             LoadPlayerSetting();
 
             m_BGMAudio.clip = m_defaultBGM;
+            if (!m_isBGMMute) PlayBGM();
         }
 
         void LoadPlayerSetting()

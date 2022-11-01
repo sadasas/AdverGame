@@ -57,8 +57,6 @@ namespace AdverGame.CameraGame
 
 
 
-
-
         }
 
     }

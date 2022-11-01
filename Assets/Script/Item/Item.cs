@@ -27,6 +27,8 @@ namespace AdverGame.Player
 
         public void OnPointerDown(PointerEventData eventData)
         {
+           
+            if (Int32.Parse(m_stack.text) == 0) return;
             OnTouch?.Invoke(this);
         }
     }

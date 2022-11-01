@@ -3,6 +3,7 @@ using AdverGame.Customer;
 using AdverGame.Player;
 using AdverGame.Utility;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,23 +36,34 @@ namespace AdverGame.CharacterCollection
         void LoadCharacterCollection()
         {
             var data = PlayerManager.s_Instance.Data.CharacterCollection;
-            if (data == null || data.Count == 0) return;
-            var customerVariantRegistered = AssetHelpers.GetAllCustomerVariantsRegistered();
-
-            for (int i = 0; i < data.Count; i++)
+            var customerVariantRegistered = AssetHelpers.GetAllCustomerVariantsRegistered().ToList();
+            if (data != null && data.Count != 0)
             {
-                foreach (var variant in customerVariantRegistered)
+                for (int i = 0; i < data.Count; i++)
                 {
-                    if (variant.Name.Equals(data[i]))
+                    foreach (var variant in customerVariantRegistered.ToArray())
                     {
-                        var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
+                        if (variant.Name.Equals(data[i]))
+                        {
+                            var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
 
-                        m_items ??= new();
-                        var newItem = m_HUD.DisplayItem(variant, bg);
-                        m_items.Add(newItem);
-                        break;
+                            m_items ??= new();
+                            var newItem = m_HUD.DisplayItem(variant, bg);
+                            m_items.Add(newItem);
+                            customerVariantRegistered.Remove(variant);
+                            break;
+                        }
                     }
                 }
+            }
+
+
+
+            foreach (var variant in customerVariantRegistered)
+            {
+                var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
+                var black = new Color32(0, 0, 0, 255);
+                var newItem = m_HUD.DisplayItem(variant, bg, black);
             }
 
         }

@@ -8,7 +8,7 @@ namespace AdverGame.CharacterCollection
     {
         string m_description = null;
 
-        [SerializeField] Image m_image;
+        public Image m_image;
         [SerializeField] Image m_BG;
         [SerializeField] GameObject m_HUDItemCollectionDetailPrefab;
         public static GameObject m_HUDItemCollectionDetail;
@@ -26,6 +26,11 @@ namespace AdverGame.CharacterCollection
             Name.text = name;
         }
 
+        public void SetColor(Color32 color)
+        {
+            m_image.color = color;
+            m_BG.color = color;
+        }
         public void Onclick()
         {
             m_HUDItemCollectionDetail ??= Instantiate(m_HUDItemCollectionDetailPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
