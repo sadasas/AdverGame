@@ -1,5 +1,6 @@
 ﻿using AdverGame.Chair;
 using AdverGame.Player;
+using AdverGame.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace AdverGame.Customer
         GameObject m_taskHUD;
         Transform m_customerSpawnPostStart;
         Transform m_customerSpawnPostEnd;
+        Task m_selectedTask;
+        List<Task> m_taskOrders;
 
         [SerializeField] List<CustomerController> m_customerVariantsPrefabs;
         [SerializeField] List<DummyController> m_dummyVariantsPrefabs;
@@ -30,8 +33,7 @@ namespace AdverGame.Customer
         [SerializeField] int m_maxCustomerRunning;
         [SerializeField] int m_maxCustomerQueued;
 
-        public List<Order> CustomerOrders { get; private set; }
-        List<Task> m_taskOrders;
+
         public Queue<CustomerController> RealCustomersQueue;
         public Queue<DummyController> DummyCustomersQueue;
         public Action<CustomerVariant> OnCustomerChoosed;
@@ -239,6 +241,7 @@ namespace AdverGame.Customer
                     m_playerInput.OnLeftClick += newCust.OnTouch;
                     newCust.OnCreateOrder += AddOrder;
                     newCust.OnCancelOrder += RemoveOrder;
+                    newCust.OnSeeOrder += SeeOrder;
 
 
 
@@ -311,11 +314,26 @@ namespace AdverGame.Customer
 
 
         #region Order
+
+        public void SeeOrder(ItemSerializable item, CustomerController cus)
+        {
+            UIManager.s_Instance.ForceHUD(HUDName.ITEM_AVAILABLE);
+            PlayerManager.s_Instance.Player.ItemPlayerBehaviour.ItemAvailableHandler.SelectItemInHUD(item);
+            foreach (var task in m_taskOrders)
+            {
+                if (task.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name) && task.CustomerOrder.Customer == cus)
+                {
+                    m_selectedTask = task;
+                    return;
+                }
+
+            }
+        }
         void AddOrder(CustomerController obj, ItemSerializable order)
         {
-            CustomerOrders ??= new();
+
             var cusOrder = new Order(order, obj);
-            CustomerOrders.Add(cusOrder);
+
 
             var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
             panel.sizeDelta = new Vector2(panel.sizeDelta.x, panel.sizeDelta.y + m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.y);
@@ -329,8 +347,12 @@ namespace AdverGame.Customer
             m_taskOrders.Add(task);
 
         }
-        void RemoveOrder(ItemSerializable menu)
+        void RemoveOrder(ItemSerializable menu, CustomerController cus)
         {
+            if (m_selectedTask != null)
+            {
+                if (m_selectedTask.CustomerOrder.Customer == cus) m_selectedTask = null;
+            }
             if (CheckOrder(menu, out Order order))
             {
                 foreach (var task in m_taskOrders)
@@ -345,7 +367,7 @@ namespace AdverGame.Customer
                         break;
                     }
                 }
-                CustomerOrders.Remove(order);
+
             }
 
         }
@@ -366,7 +388,7 @@ namespace AdverGame.Customer
 
             menu.Customer.ResetOrder();
             menu.Customer.StopCoroutine(menu.Customer.CurrentCoro);
-            CustomerOrders.Remove(menu);
+
             if (menu.Customer.Variant.Type != CustomerType.OJOL)
             {
                 menu.Customer.CurrentState = CustomerState.EAT;
@@ -384,12 +406,23 @@ namespace AdverGame.Customer
         public bool CheckOrder(ItemSerializable menu, out Order order)
         {
             order = new();
-            if (CustomerOrders == null) return false;
-            foreach (var item in CustomerOrders)
+            if (m_selectedTask != null)
             {
-                if (item.ItemOrder.Content.name.Equals(menu.Content.name))
+                if (m_selectedTask.CustomerOrder.ItemOrder.Content.Name.Equals(menu.Content.Name))
                 {
-                    order = item;
+
+                    order = m_selectedTask.CustomerOrder;
+                    m_selectedTask = null;
+                    return true;
+                }
+            }
+
+            if (m_taskOrders == null) return false;
+            foreach (var task in m_taskOrders)
+            {
+                if (task.CustomerOrder.ItemOrder.Content.name.Equals(menu.Content.name))
+                {
+                    order = task.CustomerOrder;
                     return true;
                 }
 

@@ -16,9 +16,9 @@ namespace AdverGame.Player
 
         public bool IsDrag;
         public Action<GameObject> OnLeftClick;
-        public Action<Vector2> OnLeftDrag;
-        public Action<Vector2> OnLeftEndDrag;
-        [SerializeField] Vector2 m_currentDir;
+
+        public Action<float> OnLeftEndDrag;
+        [SerializeField] Vector2 m_startPos;
 
 
         public void Update()
@@ -44,8 +44,11 @@ namespace AdverGame.Player
 
             m_touch = Input.GetTouch(0);
 
-
-            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
+            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Began)
+            {
+                m_startPos = m_touch.position;
+            }
+            else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
             {
                 if (!IsDrag)
                 {
@@ -58,7 +61,13 @@ namespace AdverGame.Player
                 }
                 else
                 {
-                    OnLeftEndDrag?.Invoke(m_currentDir);
+
+                    var distance = m_touch.position.x - m_startPos.x;
+
+
+                    OnLeftEndDrag?.Invoke(distance);
+
+
                 }
                 IsDrag = false;
 
@@ -66,7 +75,7 @@ namespace AdverGame.Player
             else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Moved)
             {
                 IsDrag = true;
-                m_currentDir = m_touch.deltaPosition;
+
             }
 
 #endif

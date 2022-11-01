@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
   m_Name: Studen3
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Anak Sma
+  <Name>k__BackingField: Anak Sma 1
   <Description>k__BackingField: hijaber
   <OccurrencePercentage>k__BackingField: 20
   <Coin>k__BackingField: 40

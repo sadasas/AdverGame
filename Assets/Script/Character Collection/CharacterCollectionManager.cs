@@ -9,12 +9,16 @@ using UnityEngine.UI;
 
 namespace AdverGame.CharacterCollection
 {
+    /// <summary>
+    /// TODO: Determine collection saved in manager or hud
+    /// </summary>
     public class CharacterCollectionManager : MonoBehaviour
     {
         CharacterCollectionHUDHandler m_HUD;
         Transform m_mainCanvas;
         Button m_buttonCharacterCollection;
         [SerializeField] List<ItemCollection> m_items;
+       
         GameObject m_HUDNewCharacterNotif;
 
         [SerializeField] GameObject m_buttonCharacterCollectionPrefab;
@@ -57,13 +61,14 @@ namespace AdverGame.CharacterCollection
                 }
             }
 
-
+           
 
             foreach (var variant in customerVariantRegistered)
             {
                 var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
                 var black = new Color32(0, 0, 0, 255);
                 var newItem = m_HUD.DisplayItem(variant, bg, black);
+                
             }
 
         }
@@ -86,7 +91,7 @@ namespace AdverGame.CharacterCollection
                 var bg = cust.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
                 InitHUDNewCharacterNotif(bg, cust.Image);
                 m_items ??= new();
-                var newItem = m_HUD.DisplayItem(cust, bg);
+                var newItem = m_HUD.UnlockItem(cust);
                 m_items.Add(newItem);
                 PlayerManager.s_Instance.SaveCharacterCollected(cust.Name);
             }

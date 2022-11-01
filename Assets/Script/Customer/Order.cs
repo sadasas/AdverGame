@@ -1,9 +1,12 @@
 ﻿using AdverGame.Player;
+using System;
 
 namespace AdverGame.Customer
 {
+   
     public struct Order
     {
+       
         public ItemSerializable ItemOrder { get; private set; }
         public CustomerController Customer { get; private set; }
 

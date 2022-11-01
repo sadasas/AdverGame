@@ -61,9 +61,9 @@ namespace AdverGame.Player
             var tempItem = new ItemSerializable(null);
             foreach (var item in Items)
             {
-                if (item == currentItem)
+                if (item.Content.Name.Equals(currentItem.Content.Name))
                 {
-                    if (item.Stack > 1) item.IncreaseStack(-1);
+                    if (item.Stack > 0) item.IncreaseStack(-1);
                     else
                     {
                         isAvailable = false;

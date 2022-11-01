@@ -4,7 +4,7 @@ namespace AdverGame.Player
     public class PlayerController : MonoBehaviour
     {
         public InputBehaviour InputBehaviour { get; private set; }
-        ItemPlayerBehaviour m_itemPlayerBehaviour;
+        public ItemPlayerBehaviour ItemPlayerBehaviour;
 
       
 
@@ -27,7 +27,7 @@ namespace AdverGame.Player
         private void Start()
         {
             InputBehaviour = new(m_clickableMask);
-            m_itemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking);
+            ItemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking);
         }
 
         private void Update()
@@ -37,12 +37,12 @@ namespace AdverGame.Player
 
         private void OnDisable()
         {
-            m_itemPlayerBehaviour.OnDisable();
+            ItemPlayerBehaviour.OnDisable();
         }
 
         private void OnDestroy()
         {
-            m_itemPlayerBehaviour.OnDestroy();
+            ItemPlayerBehaviour.OnDestroy();
         }
 
 
@@ -50,7 +50,7 @@ namespace AdverGame.Player
         public bool IsInstanced()
         {
             if (InputBehaviour == null) return false;
-            if (m_itemPlayerBehaviour == null) return false;
+            if (ItemPlayerBehaviour == null) return false;
 
             return true;
         }

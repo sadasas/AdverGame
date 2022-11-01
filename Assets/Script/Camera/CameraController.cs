@@ -14,8 +14,8 @@ namespace AdverGame.CameraGame
         InputBehaviour m_inputPlayer;
         Transform[] m_cameraViews;
 
-        [Range(0, 0.01f)]
-        [SerializeField] float m_smoothTransformPos;
+
+        [SerializeField] float m_minLengthSwipe;
 
         private void Awake()
         {
@@ -40,16 +40,18 @@ namespace AdverGame.CameraGame
             m_inputPlayer = inputPlayer;
             m_inputPlayer.OnLeftEndDrag += TrackTouch;
         }
-        void TrackTouch(Vector2 pos)
+        void TrackTouch(float length)
         {
-            var dir = pos.x;
-            
-            if (dir >= 0 && m_currentView - 1 >= 0)
+           
+            if (Mathf.Abs(length) < m_minLengthSwipe) return;
+
+
+            if (length >= 0 && m_currentView - 1 >= 0)
             {
                 camera.transform.position = m_cameraViews[m_currentView - 1].position;
                 m_currentView--;
             }
-            else if (dir < 0 && m_currentView + 1 < m_cameraViews.Length)
+            else if (length < 0 && m_currentView + 1 < m_cameraViews.Length)
             {
                 camera.transform.position = m_cameraViews[m_currentView + 1].position;
                 m_currentView++;

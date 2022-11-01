@@ -11,7 +11,7 @@ namespace AdverGame.Player
     public class ItemAvailableHUDHandler : MonoBehaviour
     {
         int m_count = 0;
-
+        Item m_selectedItem;
         [SerializeField] Transform m_itemPlace;
 
         public Dictionary<Item, ItemSerializable> ItemsDisplayed { get; private set; }
@@ -19,14 +19,29 @@ namespace AdverGame.Player
         public Action<ItemSerializable> OnItemTouched;
         public Action OnActive;
 
+
         private void OnEnable()
         {
             OnActive?.Invoke();
         }
 
+        public void SelectItem(ItemSerializable item)
+        {
+            if (m_selectedItem != null) m_selectedItem.UnSelected();
+
+            foreach (var itemDisplayed in ItemsDisplayed)
+            {
+                if (itemDisplayed.Value.Content.Name.Equals(item.Content.Name))
+                {
+                    m_selectedItem = itemDisplayed.Key;
+                    itemDisplayed.Key.Selected();
+                    return;
+                }
+            }
+        }
         void ItemTouched(Item item)
         {
-          
+
             OnItemTouched?.Invoke(ItemsDisplayed[item]);
         }
 

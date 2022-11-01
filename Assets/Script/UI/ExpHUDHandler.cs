@@ -1,5 +1,6 @@
 ﻿using AdverGame.Player;
 using System.Collections;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -18,25 +19,30 @@ namespace AdverGame.UI
         {
             Setup();
         }
-         void Setup()
+        void Setup()
         {
             var dataPlayer = PlayerManager.s_Instance.Data.Level;
             m_currentLevel = dataPlayer.CurrentLevel;
-            m_exp.text = dataPlayer.CurrentExp.ToString();
+            m_exp.text = "Current exp :\n" + dataPlayer.CurrentExp.ToString() + " / " + m_currentLevel.MaxExp;
             m_level.text = dataPlayer.CurrentLevel.Sequence.ToString();
         }
         public void IncreaseXP(int xp, int increment)
         {
-            m_exp.text = xp.ToString();
+            m_exp.text = "Current exp : " + xp.ToString() + " / " + m_currentLevel.MaxExp;
 
             StartCoroutine(IncrementNotif(increment));
         }
         public void IncreaseLevel(Level newLevel)
         {
-            m_currentLevel = newLevel;
+            StringBuilder newFeature = new();
+
             m_level.text = newLevel.Sequence.ToString();
-            m_newLevelNotif.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = newLevel.ToString();
+            if (newLevel.MaxStove - m_currentLevel.MaxStove != 0) newFeature.Append("Kompor + " + (newLevel.MaxStove - m_currentLevel.MaxStove).ToString());
+            if (newLevel.MaxArea - m_currentLevel.MaxArea != 0) newFeature.Append("Area Terbuka + " + (newLevel.MaxArea - m_currentLevel.MaxArea).ToString());
+            m_newLevelNotif.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level " + newLevel.Sequence.ToString();
+            m_newLevelNotif.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = newFeature.ToString();
             m_newLevelNotif.SetActive(true);
+            m_currentLevel = newLevel;
             Time.timeScale = 0;
 
         }
@@ -50,10 +56,7 @@ namespace AdverGame.UI
         {
             var isActiveNext = !m_currentLevelDetail.activeInHierarchy;
             m_currentLevelDetail.SetActive(isActiveNext);
-            if (isActiveNext)
-            {
-                m_currentLevelDetail.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = m_currentLevel.ToString();
-            }
+
         }
         IEnumerator IncrementNotif(int increment)
         {

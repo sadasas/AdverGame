@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
   m_Name: Student
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Student
+  <Name>k__BackingField: Anak sma 2
   <Description>k__BackingField: pelajar gabut
   <OccurrencePercentage>k__BackingField: 50
   <Coin>k__BackingField: 20
@@ -20,7 +20,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 0.5
   <EatTime>k__BackingField: 5
   <SpawnDelay>k__BackingField: 0
-  <WaitOrderMaxTime>k__BackingField: 12
+  <WaitOrderMaxTime>k__BackingField: 40
   <WaitChairAvailableTime>k__BackingField: 2
   <IdleTime>k__BackingField: 2
   <CustomerPrefab>k__BackingField: {fileID: 0}

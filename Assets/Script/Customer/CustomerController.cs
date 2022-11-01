@@ -1,7 +1,6 @@
 
 using AdverGame.Chair;
 using AdverGame.Player;
-using AdverGame.UI;
 using AdverGame.Utility;
 using System;
 using System.Collections;
@@ -37,7 +36,8 @@ namespace AdverGame.Customer
         [HideInInspector] public Vector2 DefaultPos;
         public CustomerState CurrentState { get; set; } = CustomerState.DEFAULT;
         public Action<CustomerController, ItemSerializable> OnCreateOrder;
-        public Action<ItemSerializable> OnCancelOrder;
+        public Action<ItemSerializable, CustomerController> OnCancelOrder;
+        public Action<ItemSerializable,CustomerController> OnSeeOrder;
 
 
         public CustomerVariant Variant;
@@ -154,7 +154,8 @@ namespace AdverGame.Customer
             {
                 if (CurrentState == CustomerState.WAITORDER)
                 {
-                    UIManager.s_Instance.ForceHUD(HUDName.ITEM_AVAILABLE);
+
+                    OnSeeOrder.Invoke(m_currentOrder,this);
                 }
 
             }
@@ -204,7 +205,7 @@ namespace AdverGame.Customer
             m_animCharacter.SetBool("IsWait", false);
             m_animCharacter.SetBool("IsWalk", true);
 
-            OnCancelOrder?.Invoke(m_currentOrder);
+            OnCancelOrder?.Invoke(m_currentOrder, this);
             ResetOrder();
             m_noticeImage.sprite = Variant.AngryImage;
             m_noticeImage.gameObject.SetActive(true);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f84ae355e302046b9c2e497b3e849d, type: 3}
   m_Name: Student2
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Anak SMA
+  <Name>k__BackingField: Anak SMA 3
   <Description>k__BackingField: bandel
   <OccurrencePercentage>k__BackingField: 20
   <Coin>k__BackingField: 30

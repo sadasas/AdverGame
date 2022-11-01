@@ -20,7 +20,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 0.5
   <EatTime>k__BackingField: 7
   <SpawnDelay>k__BackingField: 0
-  <WaitOrderMaxTime>k__BackingField: 10
+  <WaitOrderMaxTime>k__BackingField: 40
   <WaitChairAvailableTime>k__BackingField: 2
   <IdleTime>k__BackingField: 2
   <CustomerPrefab>k__BackingField: {fileID: 0}

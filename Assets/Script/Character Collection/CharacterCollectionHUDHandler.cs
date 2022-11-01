@@ -1,5 +1,6 @@
 ﻿
 using AdverGame.Customer;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdverGame.CharacterCollection
@@ -8,18 +9,18 @@ namespace AdverGame.CharacterCollection
     {
         int m_rareItems;
         int m_CommonItems;
-
+        RectTransform m_RareItemPlaceRect;
+        RectTransform m_commonItemPlaceRect;
+        List<ItemCollection> itemsDisplayed;
 
         [SerializeField] Transform m_commonItemPlace;
         [SerializeField] Transform m_RareItemPlace;
         [SerializeField] GameObject m_itemCollectionPrefab;
-        RectTransform m_RareItemPlaceRect;
-        RectTransform m_commonItemPlaceRect;
 
 
         public ItemCollection DisplayItem(CustomerVariant cust, Sprite bg)
         {
-
+            itemsDisplayed ??= new();
             m_RareItemPlaceRect ??= m_RareItemPlace.GetComponent<RectTransform>();
             m_commonItemPlaceRect ??= m_commonItemPlace.GetComponent<RectTransform>();
             if (cust.Type == CustomerType.RARE)
@@ -28,6 +29,7 @@ namespace AdverGame.CharacterCollection
                 CheckNewRow(ref m_rareItems, ref m_RareItemPlaceRect);
                 var newItem = Instantiate(m_itemCollectionPrefab, m_RareItemPlace).GetComponent<ItemCollection>();
                 newItem.Setup(cust.Image, cust.Name, bg, cust.Description);
+                itemsDisplayed.Add(newItem);
                 return newItem;
             }
             else
@@ -36,6 +38,7 @@ namespace AdverGame.CharacterCollection
                 CheckNewRow(ref m_CommonItems, ref m_commonItemPlaceRect);
                 var newItem = Instantiate(m_itemCollectionPrefab, m_commonItemPlace).GetComponent<ItemCollection>();
                 newItem.Setup(cust.Image, cust.Name, bg, cust.Description);
+                itemsDisplayed.Add(newItem);
                 return newItem;
             }
 
@@ -43,7 +46,7 @@ namespace AdverGame.CharacterCollection
 
         public ItemCollection DisplayItem(CustomerVariant cust, Sprite bg, Color32 color)
         {
-
+            itemsDisplayed ??= new();
             m_RareItemPlaceRect ??= m_RareItemPlace.GetComponent<RectTransform>();
             m_commonItemPlaceRect ??= m_commonItemPlace.GetComponent<RectTransform>();
             if (cust.Type == CustomerType.RARE)
@@ -53,6 +56,7 @@ namespace AdverGame.CharacterCollection
                 var newItem = Instantiate(m_itemCollectionPrefab, m_RareItemPlace).GetComponent<ItemCollection>();
                 newItem.Setup(cust.Image, cust.Name, bg, cust.Description);
                 newItem.SetColor(color);
+                itemsDisplayed.Add(newItem);
                 return newItem;
             }
             else
@@ -62,9 +66,25 @@ namespace AdverGame.CharacterCollection
                 var newItem = Instantiate(m_itemCollectionPrefab, m_commonItemPlace).GetComponent<ItemCollection>();
                 newItem.Setup(cust.Image, cust.Name, bg, cust.Description);
                 newItem.SetColor(color);
+                itemsDisplayed.Add(newItem);
                 return newItem;
             }
 
+        }
+
+        public ItemCollection UnlockItem(CustomerVariant cust)
+        {
+            foreach (var itemDisplayed in itemsDisplayed)
+            {
+                if (itemDisplayed.Name.text.Equals(cust.Name))
+                {
+                    var whiteColor = new Color32(255, 255, 255, 255);
+                    itemDisplayed.SetColor(whiteColor);
+                    return itemDisplayed;
+
+                }
+            }
+            return null;
         }
         void CheckNewRow(ref int item, ref RectTransform place)
         {
