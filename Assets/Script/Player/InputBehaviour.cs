@@ -16,6 +16,7 @@ namespace AdverGame.Player
 
         public bool IsDrag;
         public Action<GameObject> OnLeftClick;
+        
 
         public Action<float> OnLeftEndDrag;
         [SerializeField] Vector2 m_startPos;
@@ -57,6 +58,10 @@ namespace AdverGame.Player
                     {
                         OnLeftClick?.Invoke(hit.transform.gameObject);
 
+                    }
+                    else
+                    {
+                        OnLeftClick?.Invoke(null);
                     }
                 }
                 else

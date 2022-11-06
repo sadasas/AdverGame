@@ -175,7 +175,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1440, y: 2960}
-  m_ScreenMatchMode: 2
+  m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -1580,6 +1580,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_minLengthSwipe: 200
+  CurrentView: 2
+  LastDir: 0
 --- !u!1 &586814312
 GameObject:
   m_ObjectHideFlags: 0
@@ -3258,7 +3260,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1313189296}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.13, y: -1.75, z: -0.057050765}
+  m_LocalPosition: {x: -7.78, y: -1.75, z: -0.057050765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3753,6 +3755,7 @@ MonoBehaviour:
   m_PauseMenuManagerPrefab: {fileID: 6172658554405333846, guid: 779759454339656488f03825184850cc, type: 3}
   m_CharacterCollectionPrefab: {fileID: 4809480186866059113, guid: d80aa0a37f925704aad8ef7d9b816b31, type: 3}
   m_SoundManagerPrefab: {fileID: 6169820847546889578, guid: a275c69c70fe64d49a8f2136c9927993, type: 3}
+  m_tutorialHandlerPrefab: {fileID: 2802357499825777754, guid: 3dc6255a84417ef4db04c7305178d31b, type: 3}
   CurrentState: 0
 --- !u!1 &1534947454
 GameObject:
@@ -3778,7 +3781,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1534947454}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.26, y: -1.75, z: -0.057050765}
+  m_LocalPosition: {x: 7.17, y: -1.75, z: -0.057050765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5685,7 +5688,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2097725114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.32, y: 1.43, z: 0}
+  m_LocalPosition: {x: -3.32, y: 1.64, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

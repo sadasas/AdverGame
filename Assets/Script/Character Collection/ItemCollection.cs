@@ -15,7 +15,7 @@ namespace AdverGame.CharacterCollection
 
         public TextMeshProUGUI Name;
 
-
+        public bool IsLocked;
 
         public void Setup(Sprite image, string name, Sprite bg, string desk)
         {
@@ -33,6 +33,7 @@ namespace AdverGame.CharacterCollection
         }
         public void Onclick()
         {
+            if (IsLocked) return;
             m_HUDItemCollectionDetail ??= Instantiate(m_HUDItemCollectionDetailPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
             m_HUDItemCollectionDetail.transform.GetChild(0).GetComponent<Image>().sprite = m_image.sprite;
             m_HUDItemCollectionDetail.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;

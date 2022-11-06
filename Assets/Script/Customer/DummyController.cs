@@ -8,6 +8,12 @@ using UnityEngine.UI;
 
 namespace AdverGame.Customer
 {
+    public enum DummyState
+    {
+        WALK,
+        IDLE,
+        DEFAULT
+    }
     public class DummyController : MonoBehaviour
     {
         private int m_touchCount;
@@ -16,6 +22,7 @@ namespace AdverGame.Customer
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_noticeImage;
 
+        public DummyState CurrentState;
         public DummyVariant Variant;
         public Coroutine CurrentCoro;
         public float SpawnDelay;
@@ -94,19 +101,20 @@ namespace AdverGame.Customer
             m_touchSlider.gameObject.SetActive(false);
             m_noticeImage.gameObject.SetActive(false);
             if (transform.position.x < 0) transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
-
+            CurrentState = DummyState.DEFAULT;
         }
         public void OnTouch(GameObject obj)
         {
             if (obj != this.gameObject) return;
             if (m_touchCount == 0)
             {
+
                 if (CurrentCoro != null) StopCoroutine(CurrentCoro);
                 m_touchCount++;
                 m_animDummyCharacter.SetBool("IsWalk", false);
                 m_touchSlider.gameObject.SetActive(true);
 
-
+                CurrentState = DummyState.IDLE;
 
                 CurrentCoro = StartCoroutine(WaitDoubleClick());
 
@@ -124,7 +132,7 @@ namespace AdverGame.Customer
                 m_touchCount = 0;
                 m_noticeImage.gameObject.SetActive(false);
                 m_touchSlider.gameObject.SetActive(false);
-
+                CurrentState = DummyState.DEFAULT;
                 OnToChair?.Invoke(isChairAvailData.chairs, this, TargetPos);
 
 
@@ -142,7 +150,7 @@ namespace AdverGame.Customer
 
         public IEnumerator Walking()
         {
-
+            CurrentState = DummyState.WALK;
             m_animDummyCharacter ??= GetComponent<Animator>();
             m_animDummyCharacter.SetBool("IsWalk", true);
 

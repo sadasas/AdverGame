@@ -37,14 +37,15 @@ namespace AdverGame.Customer
         public CustomerState CurrentState { get; set; } = CustomerState.DEFAULT;
         public Action<CustomerController, ItemSerializable> OnCreateOrder;
         public Action<ItemSerializable, CustomerController> OnCancelOrder;
-        public Action<ItemSerializable,CustomerController> OnSeeOrder;
+        public Action<ItemSerializable, CustomerController> OnSeeOrder;
+        public Action<CustomerController> OnReset;
 
 
         public CustomerVariant Variant;
         public bool isValid = true;
         public Coroutine CurrentCoro;
         public ChairController m_currentChair;
-
+        public float CountDownWaitOrder;
         private void Start()
         {
 
@@ -132,7 +133,7 @@ namespace AdverGame.Customer
 
             transform.position = DefaultPos;
 
-
+            OnReset?.Invoke(this);
 
             m_noticeImage.gameObject.SetActive(false);
 
@@ -155,7 +156,7 @@ namespace AdverGame.Customer
                 if (CurrentState == CustomerState.WAITORDER)
                 {
 
-                    OnSeeOrder.Invoke(m_currentOrder,this);
+                    OnSeeOrder.Invoke(m_currentOrder, this);
                 }
 
             }
@@ -195,10 +196,10 @@ namespace AdverGame.Customer
 
         public IEnumerator WaitOrder()
         {
-            var m_countDownWaitOrder = Variant.WaitOrderMaxTime;
-            while (m_countDownWaitOrder > 0)
+            CountDownWaitOrder += Variant.WaitOrderMaxTime;
+            while (CountDownWaitOrder > 0)
             {
-                m_countDownWaitOrder -= Time.deltaTime;
+                CountDownWaitOrder -= Time.deltaTime;
 
                 yield return null;
             }

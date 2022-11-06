@@ -17,7 +17,6 @@ namespace AdverGame.Customer
 
         ChairManager m_chairManager;
         InputBehaviour m_playerInput;
-        [SerializeField] int TotDummyWalking = 0;
         GameObject m_taskHUD;
         Transform m_customerSpawnPostStart;
         Transform m_customerSpawnPostEnd;
@@ -34,6 +33,8 @@ namespace AdverGame.Customer
         [SerializeField] int m_maxCustomerQueued;
 
 
+        public List<DummyController> DummyRunning;
+        public List<CustomerController> CustomersRunning;
         public Queue<CustomerController> RealCustomersQueue;
         public Queue<DummyController> DummyCustomersQueue;
         public Action<CustomerVariant> OnCustomerChoosed;
@@ -67,7 +68,7 @@ namespace AdverGame.Customer
 
             for (int i = 0; i < m_maxCustomerRunning; i++)
             {
-                CommandCustomer();
+                CommandDummy();
             }
         }
         void SpawnCustomers()
@@ -145,7 +146,7 @@ namespace AdverGame.Customer
 
         void SelectRealCustomer(List<ChairController> chairs, DummyController dummy, Vector2 defaultPos)
         {
-
+            CustomersRunning ??= new();
             if (RealCustomersQueue.Count == 0) SpawnRealCustomers();
             var cust = RealCustomersQueue.Peek();
             ChairController tempChair = null;
@@ -159,6 +160,7 @@ namespace AdverGame.Customer
                         RealCustomersQueue.Dequeue();
                         tempChair = chair;
                         chair.Customer = cust;
+                        CustomersRunning.Add(cust);
                         OnCustomerChoosed?.Invoke(cust.Variant);
                         break;
                     }
@@ -191,6 +193,7 @@ namespace AdverGame.Customer
                 chairs[rand].Customer = cust;
                 RealCustomersQueue.Dequeue();
                 OnCustomerChoosed?.Invoke(cust.Variant);
+                CustomersRunning.Add(cust);
             }
 
             cust.m_currentChair = tempChair;
@@ -242,6 +245,7 @@ namespace AdverGame.Customer
                     newCust.OnCreateOrder += AddOrder;
                     newCust.OnCancelOrder += RemoveOrder;
                     newCust.OnSeeOrder += SeeOrder;
+                    newCust.OnReset += OnResetCustomer;
 
 
 
@@ -269,10 +273,13 @@ namespace AdverGame.Customer
 
 
         }
-
+        void OnResetCustomer(CustomerController cust)
+        {
+            CustomersRunning.Remove(cust);
+        }
         void OnResetDummy(DummyController dummy)
         {
-            TotDummyWalking--;
+            DummyRunning.Remove(dummy);
 
             var widhtOffset = dummy.GetComponent<SpriteRenderer>().bounds.size.x;
             var heightOffset = dummy.GetComponent<SpriteRenderer>().bounds.size.y / 2;
@@ -283,21 +290,21 @@ namespace AdverGame.Customer
             dummy.Setup();
 
             DummyCustomersQueue.Enqueue(dummy);
-            CommandCustomer();
+            CommandDummy();
         }
-        void CommandCustomer()
+        void CommandDummy()
         {
 
-            if (TotDummyWalking >= m_maxCustomerRunning) return;
+            if (DummyRunning.Count >= m_maxCustomerRunning) return;
 
-            TotDummyWalking++;
+
 
             if (DummyCustomersQueue == null || DummyCustomersQueue.Count == 0) SpawnCustomers();
 
 
 
             var cus = DummyCustomersQueue.Dequeue();
-
+            DummyRunning.Add(cus);
 
             cus.CurrentCoro = cus.StartCoroutine(cus.Walking());
 

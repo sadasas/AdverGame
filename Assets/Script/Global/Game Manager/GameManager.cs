@@ -4,6 +4,7 @@ using AdverGame.CharacterCollection;
 using AdverGame.Customer;
 using AdverGame.Player;
 using AdverGame.Sound;
+using AdverGame.Tutorial;
 using AdverGame.UI;
 using System;
 using System.Collections;
@@ -33,6 +34,7 @@ namespace AdverGame.GameManager
         private Transform canvas;
         CameraController m_cameraController;
         CharacterCollectionManager m_characterCollectionManager;
+        TutorialHandler m_tutorialHandler;
 
         [SerializeField] GameObject m_UIPrefab;
         [SerializeField] GameObject m_playerManagerPrefab;
@@ -44,6 +46,7 @@ namespace AdverGame.GameManager
         [SerializeField] GameObject m_PauseMenuManagerPrefab;
         [SerializeField] GameObject m_CharacterCollectionPrefab;
         [SerializeField] GameObject m_SoundManagerPrefab;
+        [SerializeField] GameObject m_tutorialHandlerPrefab;
 
         public Action<GameState> OnGameStateChange;
         public GameState CurrentState;
@@ -105,6 +108,8 @@ namespace AdverGame.GameManager
             m_characterCollectionManager = Instantiate(m_CharacterCollectionPrefab).GetComponent<CharacterCollectionManager>();
 
             m_soundManager = Instantiate(m_SoundManagerPrefab).GetComponent<SoundManager>();
+
+           // m_tutorialHandler = Instantiate(m_tutorialHandlerPrefab).GetComponent<TutorialHandler>();
 
         }
 

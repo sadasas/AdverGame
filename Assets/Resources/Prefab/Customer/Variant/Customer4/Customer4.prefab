@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8652000081301019455, guid: 4289ccf4415ef894baff25975a409705, type: 3}
+      propertyPath: Variant
+      value: 
+      objectReference: {fileID: 11400000, guid: fe71f55417d21d14b9e64b23b9cd6528, type: 2}
     - target: {fileID: 267890421357223609, guid: 4289ccf4415ef894baff25975a409705, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 1.220625

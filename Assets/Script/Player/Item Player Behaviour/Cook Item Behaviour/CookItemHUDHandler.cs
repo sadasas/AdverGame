@@ -16,17 +16,17 @@ namespace AdverGame.Player
         [SerializeField] Transform m_platePlace;
         [SerializeField] Transform m_itemSelectionsPlace;
         [SerializeField] TextMeshProUGUI m_proggres;
-      
-        
-        public Action<ItemPlate,ItemSerializable> OnItemChoosed;
+
+
+        public Action<ItemPlate, ItemSerializable> OnItemChoosed;
 
         private void Start()
         {
-           
+
             UpdateItemCooked(0);
         }
 
-      
+
 
         public void SpawnPlate(int tot)
         {
@@ -42,7 +42,9 @@ namespace AdverGame.Player
         public void SpawnItem(ItemSerializable item)
         {
             var currentSizeDeltaPar = m_itemSelectionsPlace.GetComponent<RectTransform>().sizeDelta;
-            var newSizeDeltaPar = new Vector2(m_itemSelectionsPlace.GetComponent<RectTransform>().sizeDelta.x + 250, m_itemSelectionsPlace.GetComponent<RectTransform>().sizeDelta.y);
+            var itemSelRect = m_itemSelectionPrefab.GetComponent<RectTransform>();
+
+            var newSizeDeltaPar = new Vector2(m_itemSelectionsPlace.GetComponent<RectTransform>().sizeDelta.x + itemSelRect.sizeDelta.x + 50, m_itemSelectionsPlace.GetComponent<RectTransform>().sizeDelta.y);
             m_itemSelectionsPlace.GetComponent<RectTransform>().sizeDelta = newSizeDeltaPar;
 
             var newSelection = Instantiate(m_itemSelectionPrefab, m_itemSelectionsPlace).GetComponent<ItemCookSelection>();
@@ -60,9 +62,9 @@ namespace AdverGame.Player
 
                 if (plate.IsEmpty)
                 {
-                    OnItemChoosed?.Invoke(plate,item);
+                    OnItemChoosed?.Invoke(plate, item);
                     break;
-                    
+
                 }
             }
 

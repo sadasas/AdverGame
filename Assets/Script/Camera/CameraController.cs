@@ -5,17 +5,25 @@ using UnityEngine;
 
 namespace AdverGame.CameraGame
 {
+    public enum CameraMoveDir
+    {
+        DEFAULT,
+        LEFT,
+        RIGTH
+    }
     public class CameraController : MonoBehaviour
     {
         public static CameraController s_Instance;
 
         Camera camera;
-        int m_currentView = 2;
         InputBehaviour m_inputPlayer;
         Transform[] m_cameraViews;
 
 
         [SerializeField] float m_minLengthSwipe;
+
+        public int CurrentView = 2;
+        public CameraMoveDir LastDir = CameraMoveDir.DEFAULT;
 
         private void Awake()
         {
@@ -34,6 +42,12 @@ namespace AdverGame.CameraGame
 
         }
 
+        public void MoveCamera(int index)
+        {
+
+            camera.transform.position = m_cameraViews[index - 1].position;
+            CurrentView = index == 0 ? CurrentView - 1 : CurrentView + 1;
+        }
 
         public void SetupCamera(InputBehaviour inputPlayer)
         {
@@ -42,19 +56,21 @@ namespace AdverGame.CameraGame
         }
         void TrackTouch(float length)
         {
-           
+
             if (Mathf.Abs(length) < m_minLengthSwipe) return;
 
 
-            if (length >= 0 && m_currentView - 1 >= 0)
+            if (length >= 0 && CurrentView - 1 >= 0)
             {
-                camera.transform.position = m_cameraViews[m_currentView - 1].position;
-                m_currentView--;
+                camera.transform.position = m_cameraViews[CurrentView - 1].position;
+                CurrentView--;
+                LastDir = CameraMoveDir.LEFT;
             }
-            else if (length < 0 && m_currentView + 1 < m_cameraViews.Length)
+            else if (length < 0 && CurrentView + 1 < m_cameraViews.Length)
             {
-                camera.transform.position = m_cameraViews[m_currentView + 1].position;
-                m_currentView++;
+                camera.transform.position = m_cameraViews[CurrentView + 1].position;
+                CurrentView++;
+                LastDir = CameraMoveDir.RIGTH;
             }
 
 

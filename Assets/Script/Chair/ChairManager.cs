@@ -19,7 +19,7 @@ namespace AdverGame.Chair
     [Serializable]
     public class ChairArea
     {
-        public ChairArea(float distanceBetweenTable, GameObject chairCustomerPrefab, GameObject addChairIndicatorPrefab, InputBehaviour input, Vector2 defaultPos, int address, Vector2 centerPos, GameObject areaPrefab)
+        public ChairArea(float distanceBetweenTable, GameObject chairCustomerPrefab, GameObject addChairIndicatorPrefab, InputBehaviour input, Vector2 defaultPos, int address, Vector2 centerPos, GameObject areaPrefab, int chairCost)
         {
             m_distanceBetweenTable = distanceBetweenTable;
             m_chairCustomerPrefab = chairCustomerPrefab;
@@ -29,7 +29,7 @@ namespace AdverGame.Chair
             m_address = address;
             m_areaLockPrefab = areaPrefab;
             m_centerPos = centerPos;
-
+            m_chairCost = chairCost;
             LokArea();
         }
 
@@ -43,13 +43,14 @@ namespace AdverGame.Chair
         Vector2 m_centerPos;
         GameObject m_areaLockPrefab;
         GameObject m_areaLock;
-
+        int m_chairCost;
 
         [SerializeField] float m_distanceBetweenTable = 1.6f;
         [SerializeField] GameObject m_chairCustomerPrefab;
         [SerializeField] int m_address;
         [SerializeField] GameObject m_addChairIndicatorPrefab;
 
+        public int CurrentChairCost { get; private set; }
         public Action<(ChairAnchor, Vector2), int> OnChairAdded;
 
 
@@ -78,13 +79,14 @@ namespace AdverGame.Chair
 
             if (m_chairIndicators != null)
             {
-                m_playerInput.OnLeftClick -= m_chairIndicators.OnTouch;
+
                 m_chairIndicators.OnAddChair -= AddIndicatorTriggered;
                 GameObject.Destroy(m_chairIndicators.gameObject);
             }
             m_chairIndicators = GameObject.Instantiate(m_addChairIndicatorPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<AddChairIndicator>();
 
-            m_playerInput.OnLeftClick += m_chairIndicators.OnTouch;
+            CurrentChairCost += m_chairCost;
+            m_chairIndicators.Price = CurrentChairCost;
             m_chairIndicators.OnAddChair += AddIndicatorTriggered;
             m_chairIndicators.Offset = offset;
 
@@ -100,19 +102,17 @@ namespace AdverGame.Chair
             GameObject.Destroy(m_areaLock);
             m_areaLock = null;
         }
-        public void SetupArea(bool isDefaultArea)
+        public void SetupArea(int currentChairCost)
         {
 
-            if (isDefaultArea)
-            {
-                SpawnChair(m_defaultPos, ChairAnchor.TOPLEFT);
-                OnChairAdded?.Invoke(m_lastChairAdded, m_address);
+            CurrentChairCost = currentChairCost;
+            InitAddChairIndicator(ChairAnchor.TOPLEFT, m_defaultPos);
+        }
+        public void SetupArea()
+        {
 
-            }
-            else
-            {
-                InitAddChairIndicator(ChairAnchor.TOPLEFT, m_defaultPos);
-            }
+            SpawnChair(m_defaultPos, ChairAnchor.TOPLEFT);
+            OnChairAdded?.Invoke(m_lastChairAdded, m_address);
         }
         void AddIndicatorTriggered(AddChairIndicator indicator)
         {
@@ -125,14 +125,13 @@ namespace AdverGame.Chair
             var newEmptyFieldData = SearchEmptyField();
             if (m_chairIndicators != null)
             {
-                m_playerInput.OnLeftClick -= m_chairIndicators.OnTouch;
                 m_chairIndicators.OnAddChair -= AddIndicatorTriggered;
                 GameObject.Destroy(m_chairIndicators.gameObject);
             }
             if (!newEmptyFieldData.isEmpty) return;
             InitAddChairIndicator(newEmptyFieldData.anchor, newEmptyFieldData.pos);
 
-            m_playerInput.OnLeftClick -= indicator.OnTouch;
+
 
         }
 
@@ -151,7 +150,7 @@ namespace AdverGame.Chair
             m_lastChairAdded = (anchor, pos);
             if (m_chairIndicators != null)
             {
-                m_playerInput.OnLeftClick -= m_chairIndicators.OnTouch;
+
                 m_chairIndicators.OnAddChair -= AddIndicatorTriggered;
                 GameObject.Destroy(m_chairIndicators.gameObject);
             }
@@ -168,11 +167,13 @@ namespace AdverGame.Chair
         public static ChairManager s_Instance;
 
         InputBehaviour m_inputPlayer;
-        [SerializeField] List<ChairArea> m_chairAreas;
+        List<ChairArea> m_chairAreas;
         Vector2[] m_defaultPos;
         Vector2[] m_centerAreaPos;
-        [SerializeField] int m_areaUnlocked = 0;
+        int m_areaUnlocked = 0;
 
+
+        [SerializeField] int m_chairCost;
         [SerializeField] float m_distanceBetweenTable = 1.6f;
         [SerializeField] GameObject m_chairCustomerPrefab;
         [SerializeField] GameObject m_chairOjolPrefab;
@@ -228,7 +229,7 @@ namespace AdverGame.Chair
 
             m_chairAreas ??= new List<ChairArea>();
 
-            var chairArea = new ChairArea(m_distanceBetweenTable, m_chairCustomerPrefab, m_addChairIndicatorPrefab, m_inputPlayer, m_defaultPos[m_chairAreas.Count], m_chairAreas.Count, m_centerAreaPos[m_chairAreas.Count], m_areaPrefab);
+            var chairArea = new ChairArea(m_distanceBetweenTable, m_chairCustomerPrefab, m_addChairIndicatorPrefab, m_inputPlayer, m_defaultPos[m_chairAreas.Count], m_chairAreas.Count, m_centerAreaPos[m_chairAreas.Count], m_areaPrefab, m_chairCost);
             chairArea.OnChairAdded += SaveDataChair;
             m_chairAreas.Add(chairArea);
 
@@ -269,7 +270,7 @@ namespace AdverGame.Chair
             else
             {
 
-                m_chairAreas[0].SetupArea(true);
+                m_chairAreas[0].SetupArea();
                 m_chairAreas[0].UnlockArea();
                 m_areaUnlocked++;
 
@@ -299,7 +300,7 @@ namespace AdverGame.Chair
             if (newLevel.MaxArea <= m_areaUnlocked) return;
             m_areaUnlocked++;
             m_chairAreas[newLevel.MaxArea - 1].UnlockArea();
-            m_chairAreas[newLevel.MaxArea - 1].SetupArea(false);
+            m_chairAreas[newLevel.MaxArea - 1].SetupArea(m_chairAreas[newLevel.MaxArea - 2].CurrentChairCost);
 
         }
     }

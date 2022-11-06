@@ -1,6 +1,7 @@
 ﻿
 
 using AdverGame.Sound;
+using AdverGame.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,13 @@ namespace AdverGame
         [SerializeField] Sprite m_bgmOff;
         [SerializeField] Sprite m_bgmOn;
 
+        private void OnEnable()
+        {
+
+            transform.SetAsLastSibling();
+            if (!UIManager.s_Instance.HUDRegistered.ContainsKey(HUDName.SETTING)) UIManager.s_Instance.HUDRegistered.Add(HUDName.SETTING, this.gameObject);
+            UIManager.s_Instance.SelectHUD(gameObject);
+        }
         private void Start()
         {
             m_isMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;

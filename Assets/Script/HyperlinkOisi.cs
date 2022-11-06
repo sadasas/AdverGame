@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using AdverGame.UI;
+using UnityEngine;
 
 public class HyperlinkOisi : MonoBehaviour
 {
@@ -6,6 +7,8 @@ public class HyperlinkOisi : MonoBehaviour
     private void OnEnable()
     {
         transform.SetAsLastSibling();
+        if (!UIManager.s_Instance.HUDRegistered.ContainsKey(HUDName.HYPERLINK)) UIManager.s_Instance.HUDRegistered.Add(HUDName.HYPERLINK, this.gameObject);
+        UIManager.s_Instance.SelectHUD(gameObject);
     }
 
     public void LinkIG()

@@ -34,10 +34,7 @@ namespace AdverGame.Customer
         public float WaitOrderMaxTime { get; private set; }
         [field: SerializeField]
         public float WaitChairAvailableTime { get; private set; }
-        [field: SerializeField]
-        public float IdleTime { get; private set; }
-        [field: SerializeField]
-        public GameObject CustomerPrefab { get; private set; }
+       
         [field: SerializeField]
        
         public Sprite EatImage { get; private set; }

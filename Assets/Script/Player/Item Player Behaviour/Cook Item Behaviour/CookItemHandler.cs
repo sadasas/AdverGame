@@ -1,4 +1,5 @@
-﻿using AdverGame.Utility;
+﻿using AdverGame.UI;
+using AdverGame.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,9 @@ namespace AdverGame.Player
         ItemContainer m_itemContainer;
         MonoBehaviour m_playerMono;
         int m_plates = 1;
+
+        public int ItemBeingCook = 0;
+        public int ItemCooked = 0;
         public CookItemHandler(GameObject cookItemHUDPrefab, float timeCooking, ItemContainer itemContainer, MonoBehaviour playerMono)
         {
             m_cookItemHUDPrefab = cookItemHUDPrefab;
@@ -55,9 +59,12 @@ namespace AdverGame.Player
                 {
                     m_HUDHandler.SpawnItem(item);
                 }
+
+                UIManager.s_Instance.HUDRegistered.Add(HUDName.COOK_ITEM, m_HUDHandler.gameObject);
             }
             else
             {
+                UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
                 m_HUDHandler.gameObject.SetActive(true);
             }
 
@@ -66,6 +73,7 @@ namespace AdverGame.Player
 
         void PutItemCooked(ItemSerializable item, ItemPlate itemPlate)
         {
+            ItemCooked--;
             var newItem = new ItemSerializable(item.Content);
 
             m_itemContainer.AddItem(newItem);
@@ -76,6 +84,7 @@ namespace AdverGame.Player
 
         IEnumerator Cooking(ItemPlate itemPlate, ItemSerializable item)
         {
+            ItemBeingCook++;
             itemPlate.TimeCooking = m_timeCooking;
             itemPlate.OnPutItem += PutItemCooked;
 
@@ -91,6 +100,8 @@ namespace AdverGame.Player
 
             itemPlate.Item = item;
             m_HUDHandler.UpdateItemCooked(1);
+            ItemBeingCook--;
+            ItemCooked++;
 
         }
     }

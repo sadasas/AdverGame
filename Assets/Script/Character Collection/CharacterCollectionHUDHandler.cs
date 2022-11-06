@@ -80,6 +80,7 @@ namespace AdverGame.CharacterCollection
                 {
                     var whiteColor = new Color32(255, 255, 255, 255);
                     itemDisplayed.SetColor(whiteColor);
+                    itemDisplayed.IsLocked = false;
                     return itemDisplayed;
 
                 }

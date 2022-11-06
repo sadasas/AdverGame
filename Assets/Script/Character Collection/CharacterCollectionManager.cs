@@ -1,6 +1,7 @@
 ﻿
 using AdverGame.Customer;
 using AdverGame.Player;
+using AdverGame.UI;
 using AdverGame.Utility;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,11 @@ namespace AdverGame.CharacterCollection
     /// </summary>
     public class CharacterCollectionManager : MonoBehaviour
     {
-        CharacterCollectionHUDHandler m_HUD;
+        public static CharacterCollectionManager s_Instance;
         Transform m_mainCanvas;
         Button m_buttonCharacterCollection;
         [SerializeField] List<ItemCollection> m_items;
-       
+
         GameObject m_HUDNewCharacterNotif;
 
         [SerializeField] GameObject m_buttonCharacterCollectionPrefab;
@@ -27,6 +28,14 @@ namespace AdverGame.CharacterCollection
         [SerializeField] Sprite m_rareBG;
         [SerializeField] Sprite m_commonBG;
 
+        public CharacterCollectionHUDHandler m_HUD;
+
+
+        private void Awake()
+        {
+            if (s_Instance != null) Destroy(s_Instance.gameObject);
+            s_Instance = this;
+        }
         private void Start()
         {
             m_mainCanvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
@@ -53,6 +62,7 @@ namespace AdverGame.CharacterCollection
 
                             m_items ??= new();
                             var newItem = m_HUD.DisplayItem(variant, bg);
+                            newItem.IsLocked = false;
                             m_items.Add(newItem);
                             customerVariantRegistered.Remove(variant);
                             break;
@@ -61,14 +71,14 @@ namespace AdverGame.CharacterCollection
                 }
             }
 
-           
+
 
             foreach (var variant in customerVariantRegistered)
             {
                 var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
                 var black = new Color32(0, 0, 0, 255);
                 var newItem = m_HUD.DisplayItem(variant, bg, black);
-                
+                newItem.IsLocked = true;
             }
 
         }
@@ -115,7 +125,11 @@ namespace AdverGame.CharacterCollection
         void InitHUDNewCharacterNotif(Sprite bg, Sprite img)
         {
             Time.timeScale = 0f;
-            if (m_HUDNewCharacterNotif == null) m_HUDNewCharacterNotif = Instantiate(m_HUDNewCharacterNotifPrefab, m_mainCanvas);
+            if (m_HUDNewCharacterNotif == null)
+            {
+                m_HUDNewCharacterNotif = Instantiate(m_HUDNewCharacterNotifPrefab, m_mainCanvas);
+                UIManager.s_Instance.HUDRegistered.Add(HUDName.NEWCHARACTERNOTIF, m_HUDNewCharacterNotif);
+            }
             m_HUDNewCharacterNotif.transform.GetChild(2).GetComponent<Image>().sprite = bg;
             m_HUDNewCharacterNotif.transform.GetChild(3).GetComponent<Image>().sprite = img;
             m_HUDNewCharacterNotif.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => { Time.timeScale = 1f; });

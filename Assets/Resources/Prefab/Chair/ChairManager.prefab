@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9bfedc0676b51440ae8ebf3bfd8bdfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_chairAreas: []
+  m_chairCost: 100
   m_distanceBetweenTable: 2.5
   m_chairCustomerPrefab: {fileID: 3301962414563891539, guid: 336a5ab31a9dc1f4e8af67d513e08986, type: 3}
   m_chairOjolPrefab: {fileID: 4807193264881995182, guid: 9f53864bf4604f04d94bf3d57323ac6a, type: 3}
   m_areaPrefab: {fileID: 2412561411710483249, guid: ff7f6d4d08501964d9aaddb58c8fcf09, type: 3}
-  m_addChairIndicatorPrefab: {fileID: 2669371866265001801, guid: c268fa27dfa005f419dafe16e9197681, type: 3}
+  m_addChairIndicatorPrefab: {fileID: 3301962414563891539, guid: 684959158dfaac841acbd3b1e894ab45, type: 3}
   m_ojolChairs: []

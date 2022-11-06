@@ -38,7 +38,7 @@ namespace AdverGame.UI
 
             m_level.text = newLevel.Sequence.ToString();
             if (newLevel.MaxStove - m_currentLevel.MaxStove != 0) newFeature.Append("Kompor + " + (newLevel.MaxStove - m_currentLevel.MaxStove).ToString());
-            if (newLevel.MaxArea - m_currentLevel.MaxArea != 0) newFeature.Append("Area Terbuka + " + (newLevel.MaxArea - m_currentLevel.MaxArea).ToString());
+            if (newLevel.MaxArea - m_currentLevel.MaxArea != 0) newFeature.Append("\n Area Terbuka + " + (newLevel.MaxArea - m_currentLevel.MaxArea).ToString());
             m_newLevelNotif.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level " + newLevel.Sequence.ToString();
             m_newLevelNotif.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = newFeature.ToString();
             m_newLevelNotif.SetActive(true);

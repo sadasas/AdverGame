@@ -12,8 +12,8 @@ namespace AdverGame.Player
         GameObject m_cookItemClickable;
         ItemContainer m_itemContainer;
         CookRandomItemHandler m_cookRandomItemHandler;
-        CookItemHandler m_cookItemHandler;
 
+        public CookItemHandler CookItemHandler;
         public ItemAvailableHandler ItemAvailableHandler;
         public ItemPlayerBehaviour(InputBehaviour inputBehaviour, GameObject cookRandomItemClickable, GameObject findItemHUD, GameObject itemAvailableHUDPrefab, GameObject itemAvailableButtonPrefab, int searchItemTime, int maxItemGetted, MonoBehaviour player, GameObject cookItemHUDPrefab, GameObject cookItemClickable, float timeCooking)
         {
@@ -24,7 +24,7 @@ namespace AdverGame.Player
 
             m_input.OnLeftClick += OnLeftClickCallback;
             m_cookRandomItemHandler = new(player, findItemHUD, searchItemTime, maxItemGetted, m_itemContainer);
-            m_cookItemHandler = new(cookItemHUDPrefab, timeCooking, m_itemContainer, player);
+            CookItemHandler = new(cookItemHUDPrefab, timeCooking, m_itemContainer, player);
             ItemAvailableHandler = new(itemAvailableHUDPrefab, itemAvailableButtonPrefab, m_itemContainer);
 
 
@@ -47,7 +47,7 @@ namespace AdverGame.Player
             }
             else if (obj == m_cookItemClickable)
             {
-                m_cookItemHandler.InitCookItemHUD();
+                CookItemHandler.InitCookItemHUD();
             }
         }
 
