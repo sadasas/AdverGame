@@ -34,12 +34,17 @@ namespace AdverGame.CharacterCollection
         public void Onclick()
         {
             if (IsLocked) return;
-            m_HUDItemCollectionDetail ??= Instantiate(m_HUDItemCollectionDetailPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
+            if (m_HUDItemCollectionDetail == null)
+            {
+                m_HUDItemCollectionDetail = Instantiate(m_HUDItemCollectionDetailPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
+
+            }
+            m_HUDItemCollectionDetail.SetActive(true);
             m_HUDItemCollectionDetail.transform.GetChild(0).GetComponent<Image>().sprite = m_image.sprite;
             m_HUDItemCollectionDetail.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
             m_HUDItemCollectionDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Name.text;
             m_HUDItemCollectionDetail.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = m_description;
-            m_HUDItemCollectionDetail.SetActive(true);
+
         }
     }
 }

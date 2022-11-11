@@ -162,13 +162,15 @@ namespace AdverGame.Player
             }
             else
             {
-                m_HUDHandler.gameObject.SetActive(true);
+              
 
                 UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
 
             }
 
         }
+
+      
     }
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdverGame.UI;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -82,6 +83,9 @@ namespace AdverGame.Player
             m_plates.Add(newPlate);
         }
 
-
+        public void Close()
+        {
+            UIManager.s_Instance.CloseHUD(gameObject);
+        }
     }
 }

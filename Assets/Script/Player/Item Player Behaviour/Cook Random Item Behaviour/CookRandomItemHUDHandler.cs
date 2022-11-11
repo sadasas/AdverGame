@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdverGame.UI;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -84,9 +85,9 @@ namespace AdverGame.Player
             m_itemPlace.parent.gameObject.SetActive(true);
 
         }
-        public void Exit()
+        public void Close()
         {
-            this.gameObject.SetActive(false);
+            UIManager.s_Instance.CloseHUD(gameObject);
         }
 
 

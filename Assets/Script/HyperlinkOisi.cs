@@ -4,7 +4,7 @@ using UnityEngine;
 public class HyperlinkOisi : MonoBehaviour
 {
 
-    private void OnEnable()
+    public void Open()
     {
         transform.SetAsLastSibling();
         if (!UIManager.s_Instance.HUDRegistered.ContainsKey(HUDName.HYPERLINK)) UIManager.s_Instance.HUDRegistered.Add(HUDName.HYPERLINK, this.gameObject);
@@ -23,4 +23,12 @@ public class HyperlinkOisi : MonoBehaviour
     {
         Application.OpenURL("https://gofood.co.id/semarang/restaurant/oishi-fried-chicken-jl-raya-muntal-gunungpati-7b93d121-1be2-44bc-bf94-fc549bfd5fa7");
     }
+
+    public void Close()
+    {
+
+
+        UIManager.s_Instance.CloseHUD(gameObject);
+    }
+
 }

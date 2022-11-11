@@ -65,7 +65,7 @@ namespace AdverGame.Player
             else
             {
                 UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
-                m_HUDHandler.gameObject.SetActive(true);
+
             }
 
 
@@ -104,5 +104,7 @@ namespace AdverGame.Player
             ItemCooked++;
 
         }
+
+        
     }
 }

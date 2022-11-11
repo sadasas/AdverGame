@@ -15,7 +15,7 @@ namespace AdverGame
         [SerializeField] Sprite m_bgmOff;
         [SerializeField] Sprite m_bgmOn;
 
-        private void OnEnable()
+        public void Open()
         {
 
             transform.SetAsLastSibling();
@@ -62,6 +62,14 @@ namespace AdverGame
 
 
         }
+
+        public void Close()
+        {
+
+
+            UIManager.s_Instance.CloseHUD(gameObject);
+        }
+
     }
 
 }

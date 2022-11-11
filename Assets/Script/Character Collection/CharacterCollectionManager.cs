@@ -91,8 +91,13 @@ namespace AdverGame.CharacterCollection
 
         void InitHUD()
         {
-            if (m_HUD == null) m_HUD = Instantiate(m_HUDCharacterCollectionPrefab, m_mainCanvas).GetComponent<CharacterCollectionHUDHandler>();
-            m_HUD.gameObject.SetActive(true);
+            if (m_HUD == null)
+            {
+                m_HUD = Instantiate(m_HUDCharacterCollectionPrefab, m_mainCanvas).GetComponent<CharacterCollectionHUDHandler>();
+                UIManager.s_Instance.HUDRegistered.Add(HUDName.CHARACTERCOLLECTION, m_HUD.gameObject);
+            }
+           
+            UIManager.s_Instance.SelectHUD(m_HUD.gameObject);
         }
         public void TrackNewCharacter(CustomerVariant cust)
         {

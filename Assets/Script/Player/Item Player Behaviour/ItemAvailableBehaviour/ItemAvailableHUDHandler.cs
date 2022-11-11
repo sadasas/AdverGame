@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdverGame.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,6 +76,12 @@ namespace AdverGame.Player
         public void RemoveItem()
         {
             ItemsDisplayed.Clear();
+
+        }
+
+        public void Close()
+        {
+            UIManager.s_Instance.CloseHUD(gameObject);
 
         }
     }

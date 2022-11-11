@@ -1,5 +1,6 @@
 ﻿
 using AdverGame.Customer;
+using AdverGame.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -98,5 +99,13 @@ namespace AdverGame.CharacterCollection
                 place.sizeDelta = newRect;
             }
         }
+
+        public void Close()
+        {
+
+
+            UIManager.s_Instance.CloseHUD(gameObject);
+        }
+
     }
 }
