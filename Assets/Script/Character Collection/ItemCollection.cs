@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using AdverGame.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,11 +40,17 @@ namespace AdverGame.CharacterCollection
                 m_HUDItemCollectionDetail = Instantiate(m_HUDItemCollectionDetailPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
 
             }
-            m_HUDItemCollectionDetail.SetActive(true);
+            UIManager.s_Instance.OverlapHUD(m_HUDItemCollectionDetail);
             m_HUDItemCollectionDetail.transform.GetChild(0).GetComponent<Image>().sprite = m_image.sprite;
             m_HUDItemCollectionDetail.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
             m_HUDItemCollectionDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Name.text;
             m_HUDItemCollectionDetail.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = m_description;
+            m_HUDItemCollectionDetail.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                UIManager.s_Instance.CloseHUD(m_HUDItemCollectionDetail);
+            });
+            
+
 
         }
     }

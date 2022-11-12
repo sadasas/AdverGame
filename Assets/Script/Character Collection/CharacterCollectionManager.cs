@@ -96,7 +96,7 @@ namespace AdverGame.CharacterCollection
                 m_HUD = Instantiate(m_HUDCharacterCollectionPrefab, m_mainCanvas).GetComponent<CharacterCollectionHUDHandler>();
                 UIManager.s_Instance.HUDRegistered.Add(HUDName.CHARACTERCOLLECTION, m_HUD.gameObject);
             }
-           
+
             UIManager.s_Instance.SelectHUD(m_HUD.gameObject);
         }
         public void TrackNewCharacter(CustomerVariant cust)
@@ -129,17 +129,30 @@ namespace AdverGame.CharacterCollection
 
         void InitHUDNewCharacterNotif(Sprite bg, Sprite img)
         {
-            Time.timeScale = 0f;
             if (m_HUDNewCharacterNotif == null)
             {
                 m_HUDNewCharacterNotif = Instantiate(m_HUDNewCharacterNotifPrefab, m_mainCanvas);
                 UIManager.s_Instance.HUDRegistered.Add(HUDName.NEWCHARACTERNOTIF, m_HUDNewCharacterNotif);
+
             }
+
+            var uiManager = UIManager.s_Instance;
+            LeanTween.scale(m_HUDNewCharacterNotif, Vector3.one, uiManager.AnimTime).setEase(uiManager.AnimCurve)
+            .setOnComplete(() =>
+            {
+                m_HUDNewCharacterNotif.transform.SetAsLastSibling();
+                Time.timeScale = 0;
+
+            });
+
             m_HUDNewCharacterNotif.transform.GetChild(2).GetComponent<Image>().sprite = bg;
             m_HUDNewCharacterNotif.transform.GetChild(3).GetComponent<Image>().sprite = img;
-            m_HUDNewCharacterNotif.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => { Time.timeScale = 1f; });
+            m_HUDNewCharacterNotif.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Time.timeScale = 1f;
+                UIManager.s_Instance.CloseHUD(m_HUDNewCharacterNotif);
+            });
 
-            m_HUDNewCharacterNotif.SetActive(true);
 
 
         }

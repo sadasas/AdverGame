@@ -42,14 +42,21 @@ namespace AdverGame.UI
             m_newLevelNotif.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Level " + newLevel.Sequence.ToString();
             m_newLevelNotif.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = newFeature.ToString();
             m_newLevelNotif.SetActive(true);
-            m_currentLevel = newLevel;
-            Time.timeScale = 0;
+            var uiManager = UIManager.s_Instance;
+            LeanTween.scale(m_newLevelNotif, Vector3.one, uiManager.AnimTime).setEase(uiManager.AnimCurve)
+            .setOnComplete(() =>
+            {
+                m_newLevelNotif.transform.SetAsLastSibling();
+                Time.timeScale = 0;
+                m_currentLevel = newLevel;
+            });
 
         }
 
         public void ExitNewLevelNotif()
         {
             Time.timeScale = 1;
+            UIManager.s_Instance.CloseHUD(m_newLevelNotif);
         }
 
         public void OnClick()

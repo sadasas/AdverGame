@@ -15,7 +15,8 @@ namespace AdverGame.UI
         NEWCHARACTERNOTIF,
         SETTING,
         CHARACTERCOLLECTION,
-        CHARACTERCOLLECTIONDETAIL
+        CHARACTERCOLLECTIONDETAIL,
+        NEWLEVEL
 
 
     }
@@ -24,8 +25,9 @@ namespace AdverGame.UI
         public static UIManager s_Instance;
 
         [SerializeField] GameObject m_currentHUDSelected = null;
-        [SerializeField] AnimationCurve m_animationCurve;
-        [SerializeField] float m_animTime;
+
+        public AnimationCurve AnimCurve;
+        public float AnimTime;
 
         public Dictionary<HUDName, GameObject> HUDRegistered;
 
@@ -53,7 +55,7 @@ namespace AdverGame.UI
             }
             hud.SetActive(true);
 
-            LeanTween.scale(hud, Vector3.one, m_animTime).setEase(m_animationCurve)
+            LeanTween.scale(hud, Vector3.one, AnimTime).setEase(AnimCurve)
             .setOnComplete(() =>
             {
                 m_currentHUDSelected = hud;
@@ -62,9 +64,20 @@ namespace AdverGame.UI
 
         }
 
+        public void OverlapHUD(GameObject hud)
+        {
+            hud.SetActive(true);
+
+            LeanTween.scale(hud, Vector3.one, AnimTime).setEase(AnimCurve)
+            .setOnComplete(() =>
+            {
+                m_currentHUDSelected = hud;
+                m_currentHUDSelected.transform.SetAsLastSibling();
+            });
+        }
         public void CloseHUD(GameObject hud)
         {
-            LeanTween.scale(hud, Vector3.zero, m_animTime).setEase(m_animationCurve).setOnComplete(() => { m_currentHUDSelected.SetActive(false); });
+            LeanTween.scale(hud, Vector3.zero, AnimTime).setEase(AnimCurve).setOnComplete(() => { m_currentHUDSelected.SetActive(false); });
 
         }
         public void ForceHUD(HUDName name)

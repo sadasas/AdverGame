@@ -44,28 +44,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7e653dadff94d44bdd7d41bab2854f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_animationCurve:
+  m_currentHUDSelected: {fileID: 0}
+  AnimCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
+      inSlope: 0.98237956
+      outSlope: 0.98237956
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2.02044
-      outSlope: 2.02044
+      time: 1.0083333
+      value: 0.990566
+      inSlope: 0.5713032
+      outSlope: 0.5713032
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.3
+      inWeight: 0.88842976
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_animTime: 0.1
+  AnimTime: 0.1
