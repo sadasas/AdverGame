@@ -68,6 +68,13 @@ namespace AdverGame.Customer
             {
                 m_customerVariants.Add(variant);
             }
+
+            foreach (var variant in newLevel.VariantCust)
+            {
+                SpawnRealCustomers(variant);
+
+            }
+
         }
         void SetupCustomers()
         {
@@ -232,6 +239,77 @@ namespace AdverGame.Customer
 
 
         }
+        void SpawnRealCustomers(CustomerController variant)
+        {
+
+            // spawn cust by their variant presentage spawned 
+            // quota =  maxCustQueued % custRate
+
+            var posVariant = 0;
+            var persmax = 0;
+
+            for (int i = 0; i < m_customerVariants.Count; i++)
+            {
+
+                persmax += m_customerVariants[i].Variant.OccurrencePercentage;
+            }
+
+            posVariant = (int)Math.Round(((float)variant.Variant.OccurrencePercentage / persmax) * 100, MidpointRounding.AwayFromZero);
+
+
+            var tempCustomers = new List<CustomerController>();
+
+            var quota = (int)Math.Round((float)posVariant / 100 * (RealCustomersQueue.Count + CustomersRunning.Count), MidpointRounding.AwayFromZero);
+            for (int j = 0; j < quota; j++)
+            {
+
+                var widhtOffset = variant.GetComponent<SpriteRenderer>().bounds.size.x;
+                var heightOffset = variant.GetComponent<SpriteRenderer>().bounds.size.y / 2;
+                var pos = SetRandomPos(widhtOffset, heightOffset);
+                if (variant.Variant.Type == CustomerType.OJOL)
+                {
+
+                    if (CustomersRunning != null && CustomersRunning.Count>1)
+                    {
+                        break;
+                    }
+
+
+                }
+                var newCust = GameObject.Instantiate(variant, pos.start, Quaternion.identity, GameObject.Find("Customer").transform);
+
+                m_playerInput.OnLeftClick += newCust.OnTouch;
+                newCust.OnCreateOrder += AddOrder;
+                newCust.OnCancelOrder += RemoveOrder;
+                newCust.OnSeeOrder += SeeOrder;
+                newCust.OnReset += OnResetCustomer;
+
+
+
+
+                tempCustomers.Add(newCust);
+            }
+
+
+
+            RealCustomersQueue ??= new();
+
+
+
+            // randomize dummy queue
+            var custCount = tempCustomers.Count;
+            while (custCount > 0)
+            {
+                var rand = UnityEngine.Random.Range(0, custCount);
+                var newCust = tempCustomers[rand];
+                RealCustomersQueue.Enqueue(newCust);
+                custCount--;
+                tempCustomers.Remove(newCust);
+
+            }
+
+
+        }
         void SpawnRealCustomers()
         {
 
@@ -263,29 +341,15 @@ namespace AdverGame.Customer
                     var widhtOffset = variant.GetComponent<SpriteRenderer>().bounds.size.x;
                     var heightOffset = variant.GetComponent<SpriteRenderer>().bounds.size.y / 2;
                     var pos = SetRandomPos(widhtOffset, heightOffset);
-                    if (CustomersRunning != null && m_customerVariants[i].Variant.Type == CustomerType.OJOL)
+                    if (m_customerVariants[i].Variant.Type == CustomerType.OJOL)
                     {
-                        var isSameOjol = false;
-                        foreach (var varrunning in CustomersRunning)
-                        {
-                            if (varrunning.Variant.Type == CustomerType.OJOL)
-                            {
-                                isSameOjol = true;
-                            }
-                        }
-                        if (isSameOjol) break;
 
-                        if (RealCustomersQueue != null)
+                        if (CustomersRunning != null && CustomersRunning.Count > 1)
                         {
-                            foreach (var varqueued in RealCustomersQueue)
-                            {
-                                if (varqueued.Variant.Type == CustomerType.OJOL)
-                                {
-                                    isSameOjol = true;
-                                }
-                            }
+                            break;
                         }
-                        if (isSameOjol) break;
+
+
                     }
                     var newCust = GameObject.Instantiate(m_customerVariants[i], pos.start, Quaternion.identity, GameObject.Find("Customer").transform);
 
@@ -324,6 +388,7 @@ namespace AdverGame.Customer
         void OnResetCustomer(CustomerController cust)
         {
             CustomersRunning.Remove(cust);
+            RealCustomersQueue.Enqueue(cust);
         }
         void OnResetDummy(DummyController dummy)
         {
