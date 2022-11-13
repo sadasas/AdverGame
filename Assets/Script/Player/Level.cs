@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdverGame.Customer;
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Variant", menuName = "Level Variant")]
@@ -9,6 +10,7 @@ public class Level : ScriptableObject
     public int MaxStove;
     public int MaxExp;
     public int Sequence;
+    public CustomerController[] VariantCust;
 
     public override String ToString()
     {

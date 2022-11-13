@@ -1,6 +1,7 @@
 ﻿using AdverGame.Chair;
 using AdverGame.Player;
 using AdverGame.UI;
+using AdverGame.Utility;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace AdverGame.Customer
         Task m_selectedTask;
         List<Task> m_taskOrders;
 
-        [SerializeField] List<CustomerController> m_customerVariantsPrefabs;
+        [SerializeField] List<CustomerController> m_customerVariants;
         [SerializeField] List<DummyController> m_dummyVariantsPrefabs;
 
 
@@ -57,13 +58,36 @@ namespace AdverGame.Customer
 
             m_taskHUD = Instantiate(m_taskHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
             m_taskHUD.transform.SetAsFirstSibling();
+
+            PlayerManager.s_Instance.OnIncreaseLevel += UpdateLevel;
         }
 
-
+        void UpdateLevel(Level newLevel)
+        {
+            foreach (var variant in newLevel.VariantCust)
+            {
+                m_customerVariants.Add(variant);
+            }
+        }
         void SetupCustomers()
         {
             m_customerSpawnPostStart = GameObject.Find("CustomerMinOffset").transform;
             m_customerSpawnPostEnd = GameObject.Find("CustomerMaxOffset").transform;
+            var level = AssetHelpers.GetAllLevelVariantRegistered();
+            var currentLevel = PlayerManager.s_Instance.GetCurrentLevel();
+
+            for (int i = 0; i < level.Length; i++)
+            {
+                if (level[i].Sequence <= currentLevel.Sequence)
+                {
+                    if (level[i].VariantCust == null) break;
+                    m_customerVariants ??= new();
+                    foreach (var variant in level[i].VariantCust)
+                    {
+                        m_customerVariants.Add(variant);
+                    }
+                }
+            }
             SpawnCustomers();
 
             for (int i = 0; i < m_maxCustomerRunning; i++)
@@ -214,19 +238,19 @@ namespace AdverGame.Customer
             // spawn cust by their variant presentage spawned 
             // quota =  maxCustQueued % custRate
 
-            var posVariant = new int[m_customerVariantsPrefabs.Count];
+            var posVariant = new int[m_customerVariants.Count];
             var persmax = 0;
 
-            for (int i = 0; i < m_customerVariantsPrefabs.Count; i++)
+            for (int i = 0; i < m_customerVariants.Count; i++)
             {
 
-                persmax += m_customerVariantsPrefabs[i].Variant.OccurrencePercentage;
+                persmax += m_customerVariants[i].Variant.OccurrencePercentage;
             }
 
-            for (int i = 0; i < m_customerVariantsPrefabs.Count; i++)
+            for (int i = 0; i < m_customerVariants.Count; i++)
             {
 
-                posVariant[i] = (int)Math.Round(((float)m_customerVariantsPrefabs[i].Variant.OccurrencePercentage / persmax) * 100, MidpointRounding.AwayFromZero);
+                posVariant[i] = (int)Math.Round(((float)m_customerVariants[i].Variant.OccurrencePercentage / persmax) * 100, MidpointRounding.AwayFromZero);
             }
 
             var tempCustomers = new List<CustomerController>();
@@ -235,11 +259,35 @@ namespace AdverGame.Customer
                 var quota = (int)Math.Round((float)posVariant[i] / 100 * m_maxCustomerQueued, MidpointRounding.AwayFromZero);
                 for (int j = 0; j < quota; j++)
                 {
-                    var variant = m_customerVariantsPrefabs[i].GetComponent<CustomerController>();
+                    var variant = m_customerVariants[i].GetComponent<CustomerController>();
                     var widhtOffset = variant.GetComponent<SpriteRenderer>().bounds.size.x;
                     var heightOffset = variant.GetComponent<SpriteRenderer>().bounds.size.y / 2;
                     var pos = SetRandomPos(widhtOffset, heightOffset);
-                    var newCust = GameObject.Instantiate(m_customerVariantsPrefabs[i], pos.start, Quaternion.identity, GameObject.Find("Customer").transform);
+                    if (CustomersRunning != null && m_customerVariants[i].Variant.Type == CustomerType.OJOL)
+                    {
+                        var isSameOjol = false;
+                        foreach (var varrunning in CustomersRunning)
+                        {
+                            if (varrunning.Variant.Type == CustomerType.OJOL)
+                            {
+                                isSameOjol = true;
+                            }
+                        }
+                        if (isSameOjol) break;
+
+                        if (RealCustomersQueue != null)
+                        {
+                            foreach (var varqueued in RealCustomersQueue)
+                            {
+                                if (varqueued.Variant.Type == CustomerType.OJOL)
+                                {
+                                    isSameOjol = true;
+                                }
+                            }
+                        }
+                        if (isSameOjol) break;
+                    }
+                    var newCust = GameObject.Instantiate(m_customerVariants[i], pos.start, Quaternion.identity, GameObject.Find("Customer").transform);
 
                     m_playerInput.OnLeftClick += newCust.OnTouch;
                     newCust.OnCreateOrder += AddOrder;

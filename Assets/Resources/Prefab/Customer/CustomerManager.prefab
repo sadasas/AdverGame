@@ -44,19 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2483b7f05e93ece488f1df89e437f5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_customerVariantsPrefabs:
-  - {fileID: 869642319564614188, guid: 44895dedefcef804b93e9bc149b5dd2f, type: 3}
-  - {fileID: 7383330528012148278, guid: f4b3d0b9e74ab4e4fb0da4e1b2de4603, type: 3}
-  - {fileID: 5674418416989534850, guid: ddb8d6f8be177674b867d843e079f682, type: 3}
-  - {fileID: 2827668575111692131, guid: 7f565180c0153ad408f3ea69676014d2, type: 3}
-  - {fileID: 1480897074286971744, guid: d5e000ee060df1f4ab3b07555487a03c, type: 3}
-  - {fileID: 3149154022702451284, guid: 5fbc51ee0450ee841a45bd44bba6272e, type: 3}
+  m_customerVariants: []
   m_dummyVariantsPrefabs:
   - {fileID: 1479231829488358141, guid: db78c119b2cdd3c4a8397c98cb0b703d, type: 3}
-  - {fileID: 5458148871227969076, guid: 4a26fb89791a20246a3c506f6417bd6f, type: 3}
   m_taskHUDPrefab: {fileID: 6670355633020578430, guid: ab6717a3a65b026479ba8999bfea4f13, type: 3}
   m_orderTaskPrefab: {fileID: 3251720979543702477, guid: 1710a0160856a724e81cf90a9a20a3ee, type: 3}
-  m_maxCustomerRunning: 4
-  m_maxCustomerQueued: 8
+  m_maxCustomerRunning: 2
+  m_maxCustomerQueued: 4
   DummyRunning: []
   CustomersRunning: []

@@ -17,3 +17,5 @@ MonoBehaviour:
   MaxStove: 2
   MaxExp: 40
   Sequence: 2
+  VariantCust:
+  - {fileID: 2827668575111692131, guid: 7f565180c0153ad408f3ea69676014d2, type: 3}

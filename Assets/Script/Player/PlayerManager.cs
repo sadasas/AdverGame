@@ -23,12 +23,12 @@ public class DataLevel
     public int CurrentExp;
     public Action<Level> OnLevelUpgrade;
 
-   
+
     public void SetDefaultLevel()
     {
         m_levelVariant ??= AssetHelpers.GetAllLevelVariantRegistered();
         CurrentLevel = m_levelVariant[0];
-        
+
     }
 
     public void IncreaseExp(int exp)
@@ -115,10 +115,13 @@ namespace AdverGame.Player
             }
             OnDataLoaded?.Invoke(Data);
             Data.Level.OnLevelUpgrade += (newLevel) => { OnIncreaseLevel?.Invoke(newLevel); };
-            
+
         }
 
-
+        public Level GetCurrentLevel()
+        {
+            return Data.Level.CurrentLevel;
+        }
         public void SaveDataPlayer()
         {
             m_io.SaveData(Data);

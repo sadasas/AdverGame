@@ -94,6 +94,7 @@ namespace AdverGame.Customer
 
         public void Setup()
         {
+            if (CurrentCoro != null) StopCoroutine(CurrentCoro);
             m_touchCount = 0;
             m_animDummyCharacter ??= GetComponent<Animator>();
             transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
