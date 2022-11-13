@@ -280,6 +280,7 @@ namespace AdverGame.Tutorial
         IEnumerator LookCharacterCollectionDetail()
         {
             m_HUDTutorial.SetActive(true);
+            m_HUDTutorial.transform.SetAsLastSibling();
             string text = "klik salah satu character  untuk melihat penjelasan character yang didapatkan";
             m_HUDTutorial.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = text;
             var obj = ItemCollection.m_HUDItemCollectionDetail;
@@ -314,7 +315,7 @@ namespace AdverGame.Tutorial
                 yield return null;
             }
             m_HUDTutorial.SetActive(false);
-
+            Time.timeScale = 1f;
             yield return StartCoroutine(LookCharacterCollectionDetail());
 
             while (isHUDActive)
@@ -322,7 +323,7 @@ namespace AdverGame.Tutorial
                 isHUDActive = CharacterCollectionManager.s_Instance.m_HUD.gameObject.activeInHierarchy;
                 yield return null;
             }
-            Time.timeScale = 1f;
+           
         }
 
         IEnumerator SearchDummy()

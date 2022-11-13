@@ -112,7 +112,7 @@ namespace AdverGame.Customer
                     var pos = SetRandomPos(widhtOffset, heightOffset);
                     var newDummy = GameObject.Instantiate(m_dummyVariantsPrefabs[i], pos.start, Quaternion.identity, GameObject.Find("Customer").transform).GetComponent<DummyController>();
 
-
+                    newDummy.SpawnDelay += i;
                     newDummy.TargetPos = pos.end;
                     m_playerInput.OnLeftClick += newDummy.OnTouch;
                     newDummy.OnToChair += SelectRealCustomer;

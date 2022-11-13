@@ -83,8 +83,8 @@ namespace AdverGame.UI
         public void ForceHUD(HUDName name)
         {
 
-            HUDRegistered[name].SetActive(true);
-            if (HUDRegistered[name] != m_currentHUDSelected) SelectHUD(HUDRegistered[name]);
+
+            if (HUDRegistered[name] != m_currentHUDSelected || !HUDRegistered[name].activeInHierarchy) SelectHUD(HUDRegistered[name]);
         }
     }
 }
