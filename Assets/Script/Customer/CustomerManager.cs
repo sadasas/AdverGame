@@ -269,7 +269,7 @@ namespace AdverGame.Customer
                 if (variant.Variant.Type == CustomerType.OJOL)
                 {
 
-                    if (CustomersRunning != null && CustomersRunning.Count>1)
+                    if (CustomersRunning != null && CustomersRunning.Count > 1)
                     {
                         break;
                     }
@@ -318,6 +318,7 @@ namespace AdverGame.Customer
 
             var posVariant = new int[m_customerVariants.Count];
             var persmax = 0;
+            var tempCustomers = new List<CustomerController>();
 
             for (int i = 0; i < m_customerVariants.Count; i++)
             {
@@ -325,29 +326,53 @@ namespace AdverGame.Customer
                 persmax += m_customerVariants[i].Variant.OccurrencePercentage;
             }
 
+            foreach (var cus in m_customerVariants)
+            {
+                if (cus.Variant.Type == CustomerType.OJOL)
+                {
+                    persmax -= cus.Variant.OccurrencePercentage;
+                    var widhtOffset = cus.GetComponent<SpriteRenderer>().bounds.size.x;
+                    var heightOffset = cus.GetComponent<SpriteRenderer>().bounds.size.y / 2;
+                    var pos = SetRandomPos(widhtOffset, heightOffset);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        var newCust = GameObject.Instantiate(cus, pos.start, Quaternion.identity, GameObject.Find("Customer").transform);
+
+                        m_playerInput.OnLeftClick += newCust.OnTouch;
+                        newCust.OnCreateOrder += AddOrder;
+                        newCust.OnCancelOrder += RemoveOrder;
+                        newCust.OnSeeOrder += SeeOrder;
+                        newCust.OnReset += OnResetCustomer;
+
+
+
+
+                        tempCustomers.Add(newCust);
+                    }
+
+                }
+
+            }
             for (int i = 0; i < m_customerVariants.Count; i++)
             {
 
                 posVariant[i] = (int)Math.Round(((float)m_customerVariants[i].Variant.OccurrencePercentage / persmax) * 100, MidpointRounding.AwayFromZero);
             }
 
-            var tempCustomers = new List<CustomerController>();
+
             for (int i = 0; i < posVariant.Length; i++)
             {
-                var quota = (int)Math.Round((float)posVariant[i] / 100 * m_maxCustomerQueued, MidpointRounding.AwayFromZero);
+                var quota = (int)Math.Round((float)posVariant[i] / 100 * (m_customerVariants.Count * 2), MidpointRounding.AwayFromZero);
                 for (int j = 0; j < quota; j++)
                 {
-                    var variant = m_customerVariants[i].GetComponent<CustomerController>();
-                    var widhtOffset = variant.GetComponent<SpriteRenderer>().bounds.size.x;
-                    var heightOffset = variant.GetComponent<SpriteRenderer>().bounds.size.y / 2;
+
+                    var widhtOffset = m_customerVariants[i].GetComponent<SpriteRenderer>().bounds.size.x;
+                    var heightOffset = m_customerVariants[i].GetComponent<SpriteRenderer>().bounds.size.y / 2;
                     var pos = SetRandomPos(widhtOffset, heightOffset);
                     if (m_customerVariants[i].Variant.Type == CustomerType.OJOL)
                     {
 
-                        if (CustomersRunning != null && CustomersRunning.Count > 1)
-                        {
-                            break;
-                        }
+                        break;
 
 
                     }
