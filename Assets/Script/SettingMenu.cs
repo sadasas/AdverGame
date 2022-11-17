@@ -9,11 +9,12 @@ namespace AdverGame
 {
     public class SettingMenu : MonoBehaviour
     {
-        bool m_isMute = false;
+
 
         [SerializeField] GameObject m_buttonBGM;
-        [SerializeField] Sprite m_bgmOff;
-        [SerializeField] Sprite m_bgmOn;
+        [SerializeField] GameObject m_buttonSFX;
+        [SerializeField] Sprite m_soundOff;
+        [SerializeField] Sprite m_soundOn;
 
         public void Open()
         {
@@ -24,45 +25,55 @@ namespace AdverGame
         }
         private void Start()
         {
-            m_isMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;
+            LoadPlayerSetting();
 
-            SetupBGM(m_isMute);
         }
+
+        void LoadPlayerSetting()
+        {
+            var isBGMMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;
+            var isSFXMute = PlayerPrefs.GetInt("SFX") == 1 ? true : false;
+            m_buttonBGM.GetComponent<Image>().sprite = isBGMMute ? m_soundOff : m_soundOn;
+            m_buttonSFX.GetComponent<Image>().sprite = isSFXMute ? m_soundOff : m_soundOn;
+        }
+
         public void SetupBGM()
         {
-            if (m_isMute)
+            var isBGMMute = SoundManager.s_Instance.IsBGMMute;
+            if (isBGMMute)
             {
                 PlayerPrefs.SetInt("BGM", 0);
-                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
-                SoundManager.s_Instance.PlayBGM();
+                m_buttonBGM.GetComponent<Image>().sprite = m_soundOn;
+                SoundManager.s_Instance.PlayBGM(BGMType.INGAME);
             }
             else
             {
                 PlayerPrefs.SetInt("BGM", 1);
-                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+                m_buttonBGM.GetComponent<Image>().sprite = m_soundOff;
                 SoundManager.s_Instance.StopBGM();
             }
 
-            m_isMute = !m_isMute;
+            SoundManager.s_Instance.IsBGMMute = !isBGMMute;
         }
-        public void SetupBGM(bool ismute)
+
+        public void SetupSFX()
         {
-            if (!m_isMute)
+            var isSFXMute = SoundManager.s_Instance.IsSFXMute;
+            if (isSFXMute)
             {
-                PlayerPrefs.SetInt("BGM", 0);
-                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
-                SoundManager.s_Instance.PlayBGM();
+                PlayerPrefs.SetInt("SFX", 0);
+                m_buttonSFX.GetComponent<Image>().sprite = m_soundOn;
+
             }
             else
             {
-                PlayerPrefs.SetInt("BGM", 1);
-                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
-                SoundManager.s_Instance.StopBGM();
+                PlayerPrefs.SetInt("SFX", 1);
+                m_buttonSFX.GetComponent<Image>().sprite = m_soundOff;
+
             }
 
-
+            SoundManager.s_Instance.IsSFXMute = !isSFXMute;
         }
-
         public void Close()
         {
 

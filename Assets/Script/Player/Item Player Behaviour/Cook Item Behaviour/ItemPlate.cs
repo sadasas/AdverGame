@@ -29,6 +29,7 @@ namespace AdverGame.Player
 
         public void Cooking(Sprite image)
         {
+            m_imageItem.gameObject.SetActive(true);
             m_imageItem.sprite = image;
             m_imageItem.preserveAspect = true;
             IsEmpty = false;
@@ -42,7 +43,7 @@ namespace AdverGame.Player
         {
             if (Item == null || Item.Content == null) return;
             OnPutItem?.Invoke(Item, this);
-
+            m_imageItem.gameObject.SetActive(false);
             m_imageItem.sprite = null;
             IsEmpty = true;
             Item = null;

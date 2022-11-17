@@ -3,18 +3,37 @@ using UnityEngine;
 
 namespace AdverGame.Sound
 {
-    public enum AudioType
+    public enum BGMType
     {
-        BGM,
-        AMBIENCE
+        INGAME,
+        AMBIENCE,
+        MAINMENU
+
     }
+
+    public enum SFXType
+    {
+        BTNCLICK,
+
+    }
+
     public class SoundManager : MonoBehaviour
     {
         public static SoundManager s_Instance;
-        bool m_isBGMMute;
 
         [SerializeField] AudioSource m_BGMAudio;
-        [SerializeField] AudioClip m_defaultBGM;
+        [SerializeField] AudioSource m_SFXAudio;
+
+        [Header("BGM List")]
+        [SerializeField] AudioClip m_inGameBGM;
+
+        [Header("SFX List")]
+        [SerializeField] AudioClip m_btnClickSFX;
+
+
+        public bool IsBGMMute;
+        public bool IsSFXMute;
+
         private void Awake()
         {
 
@@ -27,30 +46,44 @@ namespace AdverGame.Sound
         {
             LoadPlayerSetting();
 
-            m_BGMAudio.clip = m_defaultBGM;
-            if (!m_isBGMMute) PlayBGM();
+
+            if (!IsBGMMute) PlayBGM(BGMType.INGAME);
         }
 
         void LoadPlayerSetting()
         {
-            m_isBGMMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;
+            IsBGMMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;
+            IsSFXMute = PlayerPrefs.GetInt("SFX") == 1 ? true : false;
         }
 
-        public void PlayBGM(AudioClip clip)
+        public void PlayBGM(BGMType type)
         {
-            m_BGMAudio.clip = clip;
+            var audioClip = (type) switch
+            {
+                BGMType.INGAME => m_inGameBGM,
+                _ => null
+            };
+            m_BGMAudio.clip = audioClip;
             m_BGMAudio.Play();
         }
-        public void PlayBGM()
-        {
 
-            m_BGMAudio.Play();
-        }
 
         public void StopBGM()
         {
-
             m_BGMAudio.Pause();
+        }
+
+        public void PlaySFX(SFXType type)
+        {
+            if (IsSFXMute) return;
+            var audioClip = (type) switch
+            {
+                SFXType.BTNCLICK => m_btnClickSFX,
+                _ => null
+            };
+
+            m_SFXAudio.clip = audioClip;
+            m_SFXAudio.Play();
         }
     }
 }

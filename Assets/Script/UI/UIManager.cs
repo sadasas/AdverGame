@@ -1,5 +1,6 @@
 ﻿
 
+using AdverGame.Sound;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +46,7 @@ namespace AdverGame.UI
 
         public void SelectHUD(GameObject hud)
         {
+            SoundManager.s_Instance.PlaySFX(SFXType.BTNCLICK);
             if (m_currentHUDSelected != null)
             {
 
@@ -66,6 +68,7 @@ namespace AdverGame.UI
 
         public void OverlapHUD(GameObject hud)
         {
+            SoundManager.s_Instance.PlaySFX(SFXType.BTNCLICK);
             hud.SetActive(true);
 
             LeanTween.scale(hud, Vector3.one, AnimTime).setEase(AnimCurve)

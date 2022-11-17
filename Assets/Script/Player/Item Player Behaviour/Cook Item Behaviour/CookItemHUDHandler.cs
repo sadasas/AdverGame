@@ -51,8 +51,10 @@ namespace AdverGame.Player
             var newSelection = Instantiate(m_itemSelectionPrefab, m_itemSelectionsPlace).GetComponent<ItemCookSelection>();
             newSelection.Content = item;
             newSelection.OnChoosed += StartCooking;
-            newSelection.GetComponent<Image>().sprite = item.Content.Image;
-            newSelection.GetComponent<Image>().preserveAspect = true;
+            newSelection.transform.GetChild(0).GetComponent<Image>().sprite = item.Content.Image;
+            newSelection.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
+            newSelection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Content.Name;
+           
 
         }
         void StartCooking(ItemSerializable item)
