@@ -51,7 +51,7 @@ namespace AdverGame.Player
             m_menuAvailableHUDHandler = GameObject.Instantiate(m_menuAvailableHUDPrefab, m_mainCanvas).GetComponent<ItemAvailableHUDHandler>();
             m_menuAvailableHUDHandler.OnItemTouched += ItemTouched;
             m_menuAvailableHUDHandler.OnActive += DisplayUpdateItem;
-
+            //ResolutionHelper.ScaleToFitScreen(m_menuAvailableHUDHandler.gameObject);
             foreach (var item in m_allItems)
             {
                 item.IncreaseStack(-1);

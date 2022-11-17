@@ -49,7 +49,7 @@ namespace AdverGame.Player
         public void DisplayItem(ItemSerializable item)
         {
             m_count++;
-            if (m_count > 4)
+            if (m_count > 3)
             {
                 m_count = 1;
                 var tempsize = new Vector2(m_itemPlace.GetComponent<RectTransform>().sizeDelta.x, m_itemPlace.GetComponent<RectTransform>().sizeDelta.y + item.Content.ItemPrefab.GetComponent<RectTransform>().sizeDelta.y);

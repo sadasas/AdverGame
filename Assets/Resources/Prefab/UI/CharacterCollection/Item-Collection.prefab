@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 2890064291623263403}
   - component: {fileID: 5327252700121508458}
   m_Layer: 5
-  m_Name: Panel-bg
+  m_Name: Text-bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -382,6 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_image: {fileID: 1505329400580438092}
   m_BG: {fileID: 8565606618749333742}
+  m_textBG: {fileID: 5327252700121508458}
   m_HUDItemCollectionDetailPrefab: {fileID: 315138981419328993, guid: 209cfbd57c9e7fe46bd725efa3c88a09, type: 3}
   Name: {fileID: 5301058334357634081}
   IsLocked: 0

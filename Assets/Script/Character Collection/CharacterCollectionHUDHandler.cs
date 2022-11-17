@@ -56,7 +56,7 @@ namespace AdverGame.CharacterCollection
                 CheckNewRow(ref m_rareItems, ref m_RareItemPlaceRect);
                 var newItem = Instantiate(m_itemCollectionPrefab, m_RareItemPlace).GetComponent<ItemCollection>();
                 newItem.Setup(cust.Image, cust.Name, bg, cust.Description);
-                newItem.SetColor(color);
+                newItem.Lock(color);
                 itemsDisplayed.Add(newItem);
                 return newItem;
             }
@@ -66,7 +66,7 @@ namespace AdverGame.CharacterCollection
                 CheckNewRow(ref m_CommonItems, ref m_commonItemPlaceRect);
                 var newItem = Instantiate(m_itemCollectionPrefab, m_commonItemPlace).GetComponent<ItemCollection>();
                 newItem.Setup(cust.Image, cust.Name, bg, cust.Description);
-                newItem.SetColor(color);
+                newItem.Lock(color);
                 itemsDisplayed.Add(newItem);
                 return newItem;
             }
@@ -80,7 +80,7 @@ namespace AdverGame.CharacterCollection
                 if (itemDisplayed.Name.text.Equals(cust.Name))
                 {
                     var whiteColor = new Color32(255, 255, 255, 255);
-                    itemDisplayed.SetColor(whiteColor);
+                    itemDisplayed.Unlock(whiteColor);
                     itemDisplayed.IsLocked = false;
                     return itemDisplayed;
 

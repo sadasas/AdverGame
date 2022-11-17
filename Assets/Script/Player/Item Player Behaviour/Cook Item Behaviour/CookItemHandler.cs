@@ -55,6 +55,7 @@ namespace AdverGame.Player
                 m_HUDHandler.SpawnPlate(m_plates);
                 m_HUDHandler.OnItemChoosed += (itemPlate, item) => m_playerMono.StartCoroutine(Cooking(itemPlate, item));
 
+                //ResolutionHelper.ScaleToFitScreen(m_HUDHandler.gameObject);
                 foreach (var item in m_allItems)
                 {
                     m_HUDHandler.SpawnItem(item);

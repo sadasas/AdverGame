@@ -11,6 +11,7 @@ namespace AdverGame.CharacterCollection
 
         public Image m_image;
         [SerializeField] Image m_BG;
+        [SerializeField] Image m_textBG;
         [SerializeField] GameObject m_HUDItemCollectionDetailPrefab;
         public static GameObject m_HUDItemCollectionDetail;
 
@@ -25,12 +26,28 @@ namespace AdverGame.CharacterCollection
             m_description = desk;
             m_image.sprite = image;
             Name.text = name;
+            m_textBG.gameObject.SetActive(true);
+            Name.gameObject.SetActive(true);
         }
 
-        public void SetColor(Color32 color)
+        public void Unlock(Color32 color)
+        {
+            m_textBG.gameObject.SetActive(true);
+            Name.gameObject.SetActive(true);
+            SetColor(color);
+        }
+
+        public void Lock(Color32 color)
+        {
+            m_textBG.gameObject.SetActive(false);
+            Name.gameObject.SetActive(false);
+            SetColor(color);
+        }
+        void SetColor(Color32 color)
         {
             m_image.color = color;
             m_BG.color = color;
+
         }
         public void Onclick()
         {
@@ -49,7 +66,7 @@ namespace AdverGame.CharacterCollection
             {
                 UIManager.s_Instance.CloseHUD(m_HUDItemCollectionDetail);
             });
-            
+
 
 
         }
