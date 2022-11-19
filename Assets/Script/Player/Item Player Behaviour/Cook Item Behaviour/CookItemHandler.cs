@@ -17,6 +17,7 @@ namespace AdverGame.Player
         MonoBehaviour m_playerMono;
         int m_plates = 1;
 
+
         public int ItemBeingCook = 0;
         public int ItemCooked = 0;
         public CookItemHandler(GameObject cookItemHUDPrefab, float timeCooking, ItemContainer itemContainer, MonoBehaviour playerMono)
@@ -85,15 +86,16 @@ namespace AdverGame.Player
 
         IEnumerator Cooking(ItemPlate itemPlate, ItemSerializable item)
         {
+
             ItemBeingCook++;
             itemPlate.TimeCooking = m_timeCooking;
             itemPlate.OnPutItem += PutItemCooked;
 
-            itemPlate.Cooking(item.Content.Image);
             var amount = m_timeCooking;
             while (amount >= 0.0f)
             {
-                itemPlate.ProggressCooking = amount;
+                itemPlate.Cooking(amount);
+
                 yield return new WaitForSeconds(1);
                 amount -= 1;
             }
@@ -104,8 +106,9 @@ namespace AdverGame.Player
             ItemBeingCook--;
             ItemCooked++;
 
+            itemPlate.FinishCooking(item.Content.Image);
         }
 
-        
+
     }
 }

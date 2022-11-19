@@ -16,7 +16,7 @@ namespace AdverGame.Player
 
         public bool IsDrag;
         public Action<GameObject> OnLeftClick;
-        
+
 
         public Action<float> OnLeftEndDrag;
         [SerializeField] Vector2 m_startPos;
@@ -45,35 +45,32 @@ namespace AdverGame.Player
 
             m_touch = Input.GetTouch(0);
 
-            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Began)
+            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Began || EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Stationary)
             {
                 m_startPos = m_touch.position;
+                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
+
+                if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
+                {
+                    OnLeftClick?.Invoke(hit.transform.gameObject);
+
+                }
+
+                else
+                {
+                    OnLeftClick?.Invoke(null);
+                }
             }
             else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
             {
-                if (!IsDrag)
-                {
-                    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
-                    if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
-                    {
-                        OnLeftClick?.Invoke(hit.transform.gameObject);
 
-                    }
-                    else
-                    {
-                        OnLeftClick?.Invoke(null);
-                    }
-                }
-                else
-                {
-
-                    var distance = m_touch.position.x - m_startPos.x;
+                if (!IsDrag) return;
+                var distance = m_touch.position.x - m_startPos.x;
 
 
-                    OnLeftEndDrag?.Invoke(distance);
+                OnLeftEndDrag?.Invoke(distance);
 
 
-                }
                 IsDrag = false;
 
             }
