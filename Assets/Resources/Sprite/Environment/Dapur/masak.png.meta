@@ -132,9 +132,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 5920
+        y: 5910
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,9 +153,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 5080
+        y: 5060
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,9 +174,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 4240
+        y: 4210
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,9 +195,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 3400
+        y: 3360
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -216,9 +216,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 2560
+        y: 2510
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,9 +237,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1720
+        y: 1660
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -258,9 +258,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 880
+        y: 810
         width: 481
-        height: 840
+        height: 850
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -270,27 +270,6 @@ TextureImporter:
       bones: []
       spriteID: f9433a1d20dd70245950531a957dc9d2
       internalID: 540181233
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: masak_7
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 40
-        width: 481
-        height: 840
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 848a71d3191fb3b469fc7423b4eca32b
-      internalID: 1692173212
       vertices: []
       indices: 
       edges: []
@@ -312,7 +291,6 @@ TextureImporter:
       masak_6: 540181233
       masak_0: -358416714
       masak_5: -271473257
-      masak_7: 1692173212
       masak_2: -1710829560
   spritePackingTag: 
   pSDRemoveMatte: 0
