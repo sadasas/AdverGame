@@ -22,11 +22,9 @@ MonoBehaviour:
   <SpawnDelay>k__BackingField: 0
   <WaitOrderMaxTime>k__BackingField: 5
   <WaitChairAvailableTime>k__BackingField: 2
-  <IdleTime>k__BackingField: 1
-  <CustomerPrefab>k__BackingField: {fileID: 9086814109281910670, guid: d5e000ee060df1f4ab3b07555487a03c, type: 3}
   <EatImage>k__BackingField: {fileID: 21300000, guid: ef33a6ebd9abcb24abe04a6e1a47894a, type: 3}
-  <HappyImage>k__BackingField: {fileID: 21300000, guid: 474d460589f31c043a6b918ed491b007, type: 3}
+  <HappyImage>k__BackingField: {fileID: 21300000, guid: 391a00a90c7c6464597706aeed1bc1d2, type: 3}
   <ConfusedImage>k__BackingField: {fileID: 21300000, guid: 5fb69ef9390d613429cb4acb577e196b, type: 3}
-  <AngryImage>k__BackingField: {fileID: 21300000, guid: aa5213c614eb98548abb508e29039d8e, type: 3}
+  <AngryImage>k__BackingField: {fileID: 21300000, guid: 5104c81724dc8f641aebf799dc9a1fe7, type: 3}
   <Image>k__BackingField: {fileID: -853335606, guid: 72c54077c782e07419144fc1540c2668, type: 3}
   <Type>k__BackingField: 40

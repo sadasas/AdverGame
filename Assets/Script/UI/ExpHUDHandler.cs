@@ -23,12 +23,12 @@ namespace AdverGame.UI
         {
             var dataPlayer = PlayerManager.s_Instance.Data.Level;
             m_currentLevel = dataPlayer.CurrentLevel;
-            m_exp.text = "Current exp :\n" + dataPlayer.CurrentExp.ToString() + " / " + m_currentLevel.MaxExp;
+            m_exp.text = "Exp terkini :\n" + dataPlayer.CurrentExp.ToString() + " / " + m_currentLevel.MaxExp;
             m_level.text = dataPlayer.CurrentLevel.Sequence.ToString();
         }
         public void IncreaseXP(int xp, int increment)
         {
-            m_exp.text = "Current exp : " + xp.ToString() + " / " + m_currentLevel.MaxExp;
+            m_exp.text = "Exp terkini : " + xp.ToString() + "/" + m_currentLevel.MaxExp;
 
             StartCoroutine(IncrementNotif(increment));
         }

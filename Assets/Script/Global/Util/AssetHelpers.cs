@@ -14,7 +14,7 @@ namespace AdverGame.Utility
     {
         public static List<ItemSerializable> GetAllItemRegistered()
         {
-            var so = Resources.LoadAll<ItemContent>(path: "ScriptableObject/Items");
+            var so = Resources.LoadAll<ItemContent>(path: "ScriptableObject/Foods");
             var items = new List<ItemSerializable>();
             foreach (var s in so)
             {
@@ -27,7 +27,7 @@ namespace AdverGame.Utility
         public static ItemContent GetScriptableItemRegistered(string name)
         {
 
-            var so = Resources.Load<ItemContent>($"ScriptableObject/Items/{name}");
+            var so = Resources.Load<ItemContent>($"ScriptableObject/Foods/{name}");
             return so;
         }
 

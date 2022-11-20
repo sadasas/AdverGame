@@ -87,10 +87,10 @@ namespace AdverGame.Player
         IEnumerator Cooking(ItemPlate itemPlate, ItemSerializable item)
         {
 
+            itemPlate.StartCook();
             ItemBeingCook++;
             itemPlate.TimeCooking = m_timeCooking;
             itemPlate.OnPutItem += PutItemCooked;
-
             var amount = m_timeCooking;
             while (amount >= 0.0f)
             {

@@ -109,12 +109,32 @@ namespace AdverGame.Player
 
                 if (isInstantCooking)
                 {
-                    for (int i = ItemFounded.Count; i < m_maxItemCooked; i++)
+                    index = new int[m_maxItemCooked - ItemFounded.Count];
+                    for (int i = 0; i < index.Length; i++)
+                    {
+                        index[i] = UnityEngine.Random.Range(0, m_allItems.Count);
+                    }
+
+                    for (int i = 0; i < index.Length; i++)
                     {
                         //Find item
-                        ItemFounded.Add(new ItemSerializable(m_allItems[index[i]].Content));
 
-
+                        var newItem = new ItemSerializable(m_allItems[index[i]].Content);
+                        //Find item
+                        bool isSame = false;
+                        if (ItemFounded.Count > 0)
+                        {
+                            foreach (var item in ItemFounded)
+                            {
+                                if (item.Content.Name.Equals(newItem.Content.Name))
+                                {
+                                    item.IncreaseStack(newItem.Stack);
+                                    isSame = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!isSame) ItemFounded.Add(newItem);
                         OnFindItem?.Invoke(ItemFounded.Count, m_maxItemCooked, 0);
                     }
 
@@ -143,7 +163,7 @@ namespace AdverGame.Player
         void InstantCook()
         {
             isInstantCooking = true;
-
+            PutItemFinded();
         }
 
         public void InitFindItemHUD()
@@ -162,7 +182,7 @@ namespace AdverGame.Player
             }
             else
             {
-              
+
 
                 UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
 
@@ -170,7 +190,7 @@ namespace AdverGame.Player
 
         }
 
-      
+
     }
 
 

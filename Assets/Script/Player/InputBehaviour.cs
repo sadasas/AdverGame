@@ -45,7 +45,7 @@ namespace AdverGame.Player
 
             m_touch = Input.GetTouch(0);
 
-            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Began || EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Stationary)
+            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Began )
             {
                 m_startPos = m_touch.position;
                 RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);

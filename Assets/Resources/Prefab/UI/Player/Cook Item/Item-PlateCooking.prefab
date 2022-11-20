@@ -95,7 +95,6 @@ MonoBehaviour:
   m_imageItem: {fileID: 2470242999969477666}
   m_clove: {fileID: 229239409783661877}
   m_cloveAnimController: {fileID: 7923999117775831800}
-  ProggressCooking: 0
   TimeCooking: 0
   Item:
     m_content: 

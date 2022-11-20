@@ -81,7 +81,7 @@ namespace AdverGame.Player
             Instantiate(m_adverHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
 
             OnInstantSearchItemTriggered?.Invoke();
-            OnGetTriggered?.Invoke();
+           
             m_itemPlace.parent.gameObject.SetActive(true);
 
         }

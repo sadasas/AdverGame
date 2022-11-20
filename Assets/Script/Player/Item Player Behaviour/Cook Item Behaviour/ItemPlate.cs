@@ -22,7 +22,10 @@ namespace AdverGame.Player
         {
             m_progressBar = GetComponent<Image>();
         }
-     
+        public void StartCook()
+        {
+            m_cloveAnimController.SetBool("IsStartCook", true);
+        }
 
         public void Cooking(float progressCooking)
         {

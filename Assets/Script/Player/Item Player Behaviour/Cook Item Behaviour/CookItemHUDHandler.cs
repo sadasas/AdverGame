@@ -75,7 +75,7 @@ namespace AdverGame.Player
         public void UpdateItemCooked(int itemCooked)
         {
             m_itemCooked += itemCooked;
-            m_proggres.text = $"{m_itemCooked} / {m_plates.Count}";
+            m_proggres.text = $"{m_itemCooked}/{m_plates.Count}";
         }
         public void SpawnPlate()
         {
