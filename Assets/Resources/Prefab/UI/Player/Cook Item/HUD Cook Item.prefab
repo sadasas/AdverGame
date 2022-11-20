@@ -478,6 +478,7 @@ MonoBehaviour:
   m_platePlace: {fileID: 6193065476609873270}
   m_itemSelectionsPlace: {fileID: 2786465521610322445}
   m_proggres: {fileID: 6053354891345636752}
+  m_chef: {fileID: 7887237411146766769}
 --- !u!1 &6410176149775958687
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,7 +648,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -7199.4937, y: -90}
+  m_AnchoredPosition: {x: -14448.593, y: -90}
   m_SizeDelta: {x: 0, y: 180}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &2351357658497367084
@@ -1020,10 +1021,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panel-kitchen
       objectReference: {fileID: 0}
+    - target: {fileID: 6971434986169450978, guid: 4b63e00e4d204f246bb773a28d736d98, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b63e00e4d204f246bb773a28d736d98, type: 3}
 --- !u!224 &1368976013815547912 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2248721053927788635, guid: 4b63e00e4d204f246bb773a28d736d98, type: 3}
+  m_PrefabInstance: {fileID: 993777693718698067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7887237411146766769 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6971434986169450978, guid: 4b63e00e4d204f246bb773a28d736d98, type: 3}
   m_PrefabInstance: {fileID: 993777693718698067}
   m_PrefabAsset: {fileID: 0}

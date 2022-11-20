@@ -137,7 +137,7 @@ namespace AdverGame.Customer
 
             m_noticeImage.gameObject.SetActive(false);
 
-
+            CountDownWaitOrder = 0;
             if (CurrentCoro != null) StopCoroutine(CurrentCoro);
             if (Variant.Type != CustomerType.OJOL) m_animCharacter.SetBool("IsEat", false);
             m_animCharacter.SetBool("IsWait", false);

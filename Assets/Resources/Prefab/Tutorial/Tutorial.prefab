@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9583a4d3406058245b4a9b8087a1ce93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HUDTutorialPrefab: {fileID: 8647551866600350647, guid: 733c90ab05971c14b862d95fa8d5fcd8, type: 3}
+  m_bgBlurPrefab: {fileID: 4260777191215607402, guid: 398fbdba1a714494c83b9d180e5c9b60, type: 3}
+  m_HUDTutorialMidlePrefab: {fileID: 8647551866600350647, guid: 733c90ab05971c14b862d95fa8d5fcd8, type: 3}
+  m_HUDTutorialTopPrefab: {fileID: 8647551866600350647, guid: 120a96d0b6e3aff428895cbb3177c892, type: 3}
+  m_HUDTutorialEndPrefab: {fileID: 8647551866600350647, guid: f47ada93d76f93a4ab4ce20a382cfaa9, type: 3}
 --- !u!1001 &853631387538817574
 PrefabInstance:
   m_ObjectHideFlags: 0

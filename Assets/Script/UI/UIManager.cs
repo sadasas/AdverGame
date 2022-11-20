@@ -31,6 +31,8 @@ namespace AdverGame.UI
         public float AnimTime;
 
         public Dictionary<HUDName, GameObject> HUDRegistered;
+        public bool isProhibited = false;
+
 
         private void Awake()
         {
@@ -46,6 +48,7 @@ namespace AdverGame.UI
 
         public void SelectHUD(GameObject hud)
         {
+            if (isProhibited) return;
             SoundManager.s_Instance.PlaySFX(SFXType.BTNCLICK);
             if (m_currentHUDSelected != null)
             {
@@ -81,8 +84,9 @@ namespace AdverGame.UI
         }
         public void CloseHUD(GameObject hud)
         {
-            LeanTween.scale(hud, Vector3.zero, AnimTime).setEase(AnimCurve).setOnComplete(() => { m_currentHUDSelected.SetActive(false); });
-
+          
+            LeanTween.scale(hud, Vector3.zero, AnimTime).setOnComplete(() => { hud.SetActive(false); });
+           
         }
         public void ForceHUD(HUDName name)
         {

@@ -19,6 +19,7 @@ namespace AdverGame.Utility
             foreach (var s in so)
             {
                 var obj = new ItemSerializable(s);
+                
                 items.Add(obj);
             }
 

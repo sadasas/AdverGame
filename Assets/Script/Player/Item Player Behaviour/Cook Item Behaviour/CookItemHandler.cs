@@ -86,7 +86,7 @@ namespace AdverGame.Player
 
         IEnumerator Cooking(ItemPlate itemPlate, ItemSerializable item)
         {
-
+            m_HUDHandler.m_workTime += m_timeCooking;
             itemPlate.StartCook();
             ItemBeingCook++;
             itemPlate.TimeCooking = m_timeCooking;

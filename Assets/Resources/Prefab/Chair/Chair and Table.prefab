@@ -107,12 +107,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d52637228b3e420418251581667cd9c1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b538f3275707c8a4ebfb72eaf03dfe4c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.2392, y: 1.1508585}
+  m_Size: {x: 0.8597075, y: 0.798}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -176,6 +176,38 @@ PrefabInstance:
     - target: {fileID: 4807193264881995182, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
       propertyPath: m_Name
       value: Chair (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_Size.x
+      value: 0.554545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_Size.y
+      value: 0.83939993
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 580228164a251d145bf4f645c4ff75fc, type: 3}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 0.554545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 0.83939993
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.554545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.83939993
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
@@ -242,6 +274,38 @@ PrefabInstance:
     - target: {fileID: 4807193264881995182, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
       propertyPath: m_Name
       value: Chair (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_Size.x
+      value: 0.554545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_Size.y
+      value: 0.83939993
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 580228164a251d145bf4f645c4ff75fc, type: 3}
+    - target: {fileID: 4807193264881995183, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 0.554545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 0.83939993
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.554545
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807193264881995218, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.83939993
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93e657520c0a5024f8ab89bc1fcf8b29, type: 3}

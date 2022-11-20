@@ -17,8 +17,9 @@ namespace AdverGame.Player
         [SerializeField] Transform m_platePlace;
         [SerializeField] Transform m_itemSelectionsPlace;
         [SerializeField] TextMeshProUGUI m_proggres;
+        [SerializeField] GameObject m_chef;
 
-
+        public float m_workTime;
         public Action<ItemPlate, ItemSerializable> OnItemChoosed;
 
         private void Start()
@@ -27,7 +28,20 @@ namespace AdverGame.Player
             UpdateItemCooked(0);
         }
 
-
+        private void Update()
+        {
+            if(m_workTime>0)
+            {
+                m_workTime -= Time.deltaTime;
+                if (!m_chef.activeInHierarchy) m_chef.SetActive(true);
+               
+            }
+            else
+            {
+                m_workTime = 0;
+                if (m_chef.activeInHierarchy) m_chef.SetActive(false);
+            }
+        }
 
         public void SpawnPlate(int tot)
         {
@@ -54,7 +68,7 @@ namespace AdverGame.Player
             newSelection.transform.GetChild(0).GetComponent<Image>().sprite = item.Content.Image;
             newSelection.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
             newSelection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.Content.Name;
-           
+
 
         }
         void StartCooking(ItemSerializable item)
@@ -76,6 +90,11 @@ namespace AdverGame.Player
         {
             m_itemCooked += itemCooked;
             m_proggres.text = $"{m_itemCooked}/{m_plates.Count}";
+            if (m_itemCooked == m_plates.Count) m_chef.SetActive(false);
+            else
+            {
+                m_chef.SetActive(true);
+            }
         }
         public void SpawnPlate()
         {

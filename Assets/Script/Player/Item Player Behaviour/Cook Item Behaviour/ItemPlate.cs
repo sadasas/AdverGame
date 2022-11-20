@@ -29,7 +29,7 @@ namespace AdverGame.Player
 
         public void Cooking(float progressCooking)
         {
-            UpdateProggressBar(progressCooking, TimeCooking);
+            //UpdateProggressBar(progressCooking, TimeCooking);
             m_cloveAnimController.SetBool("IsCook", true);
 
             m_imageItem.gameObject.SetActive(false);

@@ -17,7 +17,6 @@ namespace AdverGame.CharacterCollection
     {
         public static CharacterCollectionManager s_Instance;
         Transform m_mainCanvas;
-        Button m_buttonCharacterCollection;
         [SerializeField] List<ItemCollection> m_items;
 
         GameObject m_HUDNewCharacterNotif;
@@ -28,7 +27,8 @@ namespace AdverGame.CharacterCollection
         [SerializeField] Sprite m_rareBG;
         [SerializeField] Sprite m_commonBG;
 
-        public CharacterCollectionHUDHandler m_HUD;
+        public Button ButtonCharacterCollection;
+        public CharacterCollectionHUDHandler HUD;
 
 
         private void Awake()
@@ -42,7 +42,7 @@ namespace AdverGame.CharacterCollection
             CustomerManager.s_Instance.OnCustomerChoosed += TrackNewCharacter;
             InitButton();
             InitHUD();
-            m_HUD.gameObject.SetActive(false);
+            HUD.gameObject.SetActive(false);
 
             LoadCharacterCollection();
         }
@@ -61,7 +61,7 @@ namespace AdverGame.CharacterCollection
                             var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
 
                             m_items ??= new();
-                            var newItem = m_HUD.DisplayItem(variant, bg);
+                            var newItem = HUD.DisplayItem(variant, bg);
                             newItem.IsLocked = false;
                             m_items.Add(newItem);
                             customerVariantRegistered.Remove(variant);
@@ -77,27 +77,27 @@ namespace AdverGame.CharacterCollection
             {
                 var bg = variant.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
                 var black = new Color32(0, 0, 0, 255);
-                var newItem = m_HUD.DisplayItem(variant, bg, black);
+                var newItem = HUD.DisplayItem(variant, bg, black);
                 newItem.IsLocked = true;
             }
 
         }
         void InitButton()
         {
-            m_buttonCharacterCollection = Instantiate(m_buttonCharacterCollectionPrefab, m_mainCanvas).GetComponent<Button>();
-            m_buttonCharacterCollection.onClick.AddListener(InitHUD);
+            ButtonCharacterCollection = Instantiate(m_buttonCharacterCollectionPrefab, m_mainCanvas).GetComponent<Button>();
+            ButtonCharacterCollection.onClick.AddListener(InitHUD);
 
         }
 
         void InitHUD()
         {
-            if (m_HUD == null)
+            if (HUD == null)
             {
-                m_HUD = Instantiate(m_HUDCharacterCollectionPrefab, m_mainCanvas).GetComponent<CharacterCollectionHUDHandler>();
-                UIManager.s_Instance.HUDRegistered.Add(HUDName.CHARACTERCOLLECTION, m_HUD.gameObject);
+                HUD = Instantiate(m_HUDCharacterCollectionPrefab, m_mainCanvas).GetComponent<CharacterCollectionHUDHandler>();
+                UIManager.s_Instance.HUDRegistered.Add(HUDName.CHARACTERCOLLECTION, HUD.gameObject);
             }
 
-            UIManager.s_Instance.SelectHUD(m_HUD.gameObject);
+            UIManager.s_Instance.SelectHUD(HUD.gameObject);
         }
         public void TrackNewCharacter(CustomerVariant cust)
         {
@@ -106,7 +106,7 @@ namespace AdverGame.CharacterCollection
                 var bg = cust.Type == CustomerType.RARE ? m_rareBG : m_commonBG;
                 InitHUDNewCharacterNotif(bg, cust.Image);
                 m_items ??= new();
-                var newItem = m_HUD.UnlockItem(cust);
+                var newItem = HUD.UnlockItem(cust);
                 m_items.Add(newItem);
                 PlayerManager.s_Instance.SaveCharacterCollected(cust.Name);
             }
@@ -129,19 +129,20 @@ namespace AdverGame.CharacterCollection
 
         void InitHUDNewCharacterNotif(Sprite bg, Sprite img)
         {
+            
             if (m_HUDNewCharacterNotif == null)
             {
                 m_HUDNewCharacterNotif = Instantiate(m_HUDNewCharacterNotifPrefab, m_mainCanvas);
                 UIManager.s_Instance.HUDRegistered.Add(HUDName.NEWCHARACTERNOTIF, m_HUDNewCharacterNotif);
 
             }
-
+            m_HUDNewCharacterNotif.SetActive(true);
             var uiManager = UIManager.s_Instance;
             LeanTween.scale(m_HUDNewCharacterNotif, Vector3.one, uiManager.AnimTime).setEase(uiManager.AnimCurve)
             .setOnComplete(() =>
             {
                 m_HUDNewCharacterNotif.transform.SetAsLastSibling();
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
 
             });
 
@@ -149,7 +150,7 @@ namespace AdverGame.CharacterCollection
             m_HUDNewCharacterNotif.transform.GetChild(3).GetComponent<Image>().sprite = img;
             m_HUDNewCharacterNotif.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() =>
             {
-                Time.timeScale = 1f;
+                //Time.timeScale = 1f;
                 UIManager.s_Instance.CloseHUD(m_HUDNewCharacterNotif);
             });
 
