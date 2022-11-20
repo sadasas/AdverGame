@@ -41,12 +41,15 @@ namespace AdverGame.Player
         }
         void OnLeftClickCallback(GameObject obj)
         {
+            Debug.Log("c");
             if (obj == m_cookTandomItemClickable)
             {
+                Debug.Log("a");
                 m_cookRandomItemHandler.InitFindItemHUD();
             }
             else if (obj == m_cookItemClickable)
             {
+                Debug.Log("b");
                 CookItemHandler.InitCookItemHUD();
             }
         }
