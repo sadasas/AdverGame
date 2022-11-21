@@ -11,12 +11,12 @@ namespace AdverGame.Player
 
         List<ItemSerializable> m_allItems;
         GameObject m_cookItemHUDPrefab;
-        CookItemHUDHandler m_HUDHandler;
         float m_timeCooking;
         ItemContainer m_itemContainer;
         MonoBehaviour m_playerMono;
         int m_plates = 1;
 
+        public CookItemHUDHandler HUDHandler;
 
         public int ItemBeingCook = 0;
         public int ItemCooked = 0;
@@ -29,7 +29,7 @@ namespace AdverGame.Player
 
             m_allItems = AssetHelpers.GetAllItemRegistered();
             InitCookItemHUD();
-            m_HUDHandler.gameObject.SetActive(false);
+            HUDHandler.gameObject.SetActive(false);
             PlayerManager.s_Instance.OnDataLoaded += LoadStovePlayer;
             PlayerManager.s_Instance.OnIncreaseLevel += UpdatePlate;
 
@@ -46,29 +46,31 @@ namespace AdverGame.Player
 
             var newPlate = level.MaxStove - m_plates;
             m_plates = level.MaxStove;
-            m_HUDHandler.SpawnPlate(newPlate);
+            HUDHandler.SpawnPlate(newPlate);
         }
         public void InitCookItemHUD()
         {
-            if (m_HUDHandler == null)
+            if (HUDHandler == null)
             {
-                m_HUDHandler = GameObject.Instantiate(m_cookItemHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform).GetComponent<CookItemHUDHandler>();
-                m_HUDHandler.SpawnPlate(m_plates);
-                m_HUDHandler.OnItemChoosed += (itemPlate, item) => m_playerMono.StartCoroutine(Cooking(itemPlate, item));
+                HUDHandler = GameObject.Instantiate(m_cookItemHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform).GetComponent<CookItemHUDHandler>();
+                HUDHandler.SpawnPlate(m_plates);
+                HUDHandler.OnItemChoosed += (itemPlate, item) => m_playerMono.StartCoroutine(Cooking(itemPlate, item));
 
-                //ResolutionHelper.ScaleToFitScreen(m_HUDHandler.gameObject);
+                //ResolutionHelper.ScaleToFitScreen(HUDHandler.gameObject);
                 foreach (var item in m_allItems)
                 {
-                    m_HUDHandler.SpawnItem(item);
+                    HUDHandler.SpawnItem(item);
                 }
 
-                UIManager.s_Instance.HUDRegistered.Add(HUDName.COOK_ITEM, m_HUDHandler.gameObject);
+                UIManager.s_Instance.HUDRegistered.Add(HUDName.COOK_ITEM, HUDHandler.gameObject);
             }
             else
             {
-                UIManager.s_Instance.SelectHUD(m_HUDHandler.gameObject);
+
+                UIManager.s_Instance.SelectHUD(HUDHandler.gameObject);
 
             }
+            HUDHandler.SetupChef(ItemBeingCook);
 
 
         }
@@ -80,21 +82,22 @@ namespace AdverGame.Player
 
             m_itemContainer.AddItem(newItem);
             itemPlate.OnPutItem -= PutItemCooked;
-            m_HUDHandler.UpdateItemCooked(-1);
-            itemPlate.UpdateProggressBar(m_timeCooking, m_timeCooking);
+            HUDHandler.UpdateItemCooked(-1);
+
         }
 
         IEnumerator Cooking(ItemPlate itemPlate, ItemSerializable item)
         {
-            m_HUDHandler.m_workTime += m_timeCooking;
-            itemPlate.StartCook();
-            ItemBeingCook++;
+            itemPlate.StartState(item.Content.Image);
             itemPlate.TimeCooking = m_timeCooking;
+            ItemBeingCook++;
+            HUDHandler.SetupChef(ItemBeingCook);
+
             itemPlate.OnPutItem += PutItemCooked;
             var amount = m_timeCooking;
             while (amount >= 0.0f)
             {
-                itemPlate.Cooking(amount);
+                itemPlate.UpdateState(amount);
 
                 yield return new WaitForSeconds(1);
                 amount -= 1;
@@ -102,11 +105,11 @@ namespace AdverGame.Player
 
 
             itemPlate.Item = item;
-            m_HUDHandler.UpdateItemCooked(1);
+            HUDHandler.UpdateItemCooked(1);
             ItemBeingCook--;
             ItemCooked++;
-
-            itemPlate.FinishCooking(item.Content.Image);
+            HUDHandler.SetupChef(ItemBeingCook);
+            itemPlate.FinishState(item.Content.Image);
         }
 
 

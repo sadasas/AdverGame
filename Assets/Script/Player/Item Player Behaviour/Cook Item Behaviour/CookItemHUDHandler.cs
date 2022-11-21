@@ -18,28 +18,26 @@ namespace AdverGame.Player
         [SerializeField] Transform m_itemSelectionsPlace;
         [SerializeField] TextMeshProUGUI m_proggres;
         [SerializeField] GameObject m_chef;
+        [SerializeField] DrinksPlate m_drinkPlate;
 
-        public float m_workTime;
         public Action<ItemPlate, ItemSerializable> OnItemChoosed;
-
+        public bool isProhibited = false;
         private void Start()
         {
 
             UpdateItemCooked(0);
         }
 
-        private void Update()
+        public void SetupChef(int itemcooking)
         {
-            if(m_workTime>0)
+         
+            if (itemcooking <= 0)
             {
-                m_workTime -= Time.deltaTime;
-                if (!m_chef.activeInHierarchy) m_chef.SetActive(true);
-               
+                m_chef.SetActive(false);
             }
             else
             {
-                m_workTime = 0;
-                if (m_chef.activeInHierarchy) m_chef.SetActive(false);
+                m_chef.SetActive(value: true);
             }
         }
 
@@ -73,28 +71,36 @@ namespace AdverGame.Player
         }
         void StartCooking(ItemSerializable item)
         {
-            if (m_plates == null || m_plates.Count == 0) return;
-            foreach (var plate in m_plates)
+            if (isProhibited) return;
+            if (item.Content.Type == MenuType.FOOD)
             {
-
-                if (plate.IsEmpty)
+                if (m_plates == null || m_plates.Count == 0) return;
+                foreach (var plate in m_plates)
                 {
-                    OnItemChoosed?.Invoke(plate, item);
-                    break;
 
+                    if (plate.IsEmpty)
+                    {
+                        OnItemChoosed?.Invoke(plate, item);
+                        break;
+
+                    }
                 }
             }
+            else
+            {
+                if (m_drinkPlate.IsEmpty)
+                {
+                    OnItemChoosed?.Invoke(m_drinkPlate, item);
+                }
+            }
+
 
         }
         public void UpdateItemCooked(int itemCooked)
         {
             m_itemCooked += itemCooked;
-            m_proggres.text = $"{m_itemCooked}/{m_plates.Count}";
-            if (m_itemCooked == m_plates.Count) m_chef.SetActive(false);
-            else
-            {
-                m_chef.SetActive(true);
-            }
+            m_proggres.text = $"{m_itemCooked}/{m_plates.Count + 1} ";
+
         }
         public void SpawnPlate()
         {

@@ -22,6 +22,7 @@ namespace AdverGame.CameraGame
 
         [SerializeField] float m_minLengthSwipe;
 
+        public bool isProhibited = false;
         public int CurrentView = 2;
         public CameraMoveDir LastDir = CameraMoveDir.DEFAULT;
 
@@ -56,7 +57,7 @@ namespace AdverGame.CameraGame
         }
         void TrackTouch(float length)
         {
-
+            if (isProhibited) return;
             if (Mathf.Abs(length) < m_minLengthSwipe) return;
 
 

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 namespace AdverGame.Player
 {
     public class PlayerController : MonoBehaviour
@@ -16,6 +18,8 @@ namespace AdverGame.Player
         [SerializeField] GameObject m_cookItemHUDPrefab;
         [SerializeField] GameObject m_itemAvailableHUDPrefab;
         [SerializeField] GameObject m_itemAvailableButtonPrefab;
+        [SerializeField] SpriteRenderer m_etalase;
+        [SerializeField] Sprite m_etalaseFull, m_etalaseHalf, m_etalaseEmpty;
         [SerializeField] int m_maxItemGetted;
         [SerializeField] int m_searchItemTime;
         [SerializeField] GameObject m_cookRandomItemClickable;
@@ -27,7 +31,7 @@ namespace AdverGame.Player
         private void Start()
         {
             InputBehaviour = new(m_clickableMask);
-            ItemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking);
+            ItemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking, m_etalase,m_etalaseFull,m_etalaseHalf,m_etalaseEmpty);
         }
 
         private void Update()

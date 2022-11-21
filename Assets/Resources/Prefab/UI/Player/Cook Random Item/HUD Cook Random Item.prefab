@@ -1325,6 +1325,7 @@ MonoBehaviour:
   m_getInstantItemButton: {fileID: 3802795766688630958}
   m_getItemButton: {fileID: 2783269492411787842}
   m_itemFoundedPrefab: {fileID: 1160543241069917799, guid: 00f279f591f019b4bba2fd7264f07bf0, type: 3}
+  m_chef: {fileID: 7302972528149167234}
   <m_itemDisplayed>k__BackingField: []
 --- !u!1 &6460065076371030793
 GameObject:
@@ -1860,5 +1861,10 @@ PrefabInstance:
 --- !u!224 &1933119696594726203 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2248721053927788635, guid: 4b63e00e4d204f246bb773a28d736d98, type: 3}
+  m_PrefabInstance: {fileID: 425271294965595488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7302972528149167234 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6971434986169450978, guid: 4b63e00e4d204f246bb773a28d736d98, type: 3}
   m_PrefabInstance: {fileID: 425271294965595488}
   m_PrefabAsset: {fileID: 0}

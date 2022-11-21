@@ -23,6 +23,7 @@ namespace AdverGame.Player
         [SerializeField] GameObject m_getInstantItemButton;
         [SerializeField] GameObject m_getItemButton;
         [SerializeField] GameObject m_itemFoundedPrefab;
+        [SerializeField] GameObject m_chef;
 
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
@@ -43,6 +44,11 @@ namespace AdverGame.Player
 
             }
 
+            if (m_itemFound == m_itemFoundMax && m_chef.activeInHierarchy) m_chef.SetActive(false);
+            else if(m_itemFound!= m_itemFoundMax)
+            {
+                if (!m_chef.activeInHierarchy) m_chef.SetActive(true);
+            }
         }
 
         public void DisplayItemFounded(ItemSerializable itemfounded)
@@ -81,7 +87,7 @@ namespace AdverGame.Player
             Instantiate(m_adverHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
 
             OnInstantSearchItemTriggered?.Invoke();
-           
+
             m_itemPlace.parent.gameObject.SetActive(true);
 
         }

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
@@ -22,17 +23,21 @@ namespace AdverGame.Player
         bool isInstantCooking = false;
         Action<int, float, float> OnFindItem;
         int[] index;
-
+        SpriteRenderer m_etalase;
+        Sprite m_etalaseFull, m_etalaseHalf, m_etalaseEmpty;
         public List<ItemSerializable> ItemFounded { get; private set; }
 
-        public CookRandomItemHandler(MonoBehaviour player, GameObject cookRandomItemHUDPrefab, int searchItemTime, int maxItemCooked, ItemContainer itemContainer)
+        public CookRandomItemHandler(MonoBehaviour player, GameObject cookRandomItemHUDPrefab, int searchItemTime, int maxItemCooked, ItemContainer itemContainer, SpriteRenderer etalase, Sprite etalaseFull, Sprite etalaseHalf, Sprite etalaseEmpty)
         {
             m_cookRandomItemHUDPrefab = cookRandomItemHUDPrefab;
             m_player = player;
             m_searchItemTime = searchItemTime;
             m_maxItemCooked = maxItemCooked;
-
+            m_etalase = etalase;
             m_allItems = AssetHelpers.GetAllItemRegistered();
+            m_etalaseFull = etalaseFull;
+            m_etalaseHalf = etalaseHalf;
+            m_etalaseEmpty = etalaseEmpty;
 
             InitFindItemHUD();
             StartCookRandomItem();
@@ -79,8 +84,15 @@ namespace AdverGame.Player
                 count++;
                 if (count == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
 
-
+                SetupEtalase();
             }
+        }
+
+        void SetupEtalase()
+        {
+            if (ItemFounded.Count == 0) m_etalase.sprite = m_etalaseEmpty;
+            else if (ItemFounded.Count < m_maxItemCooked) m_etalase.sprite = m_etalaseHalf;
+            else m_etalase.sprite = m_etalaseFull;
         }
         void StartCookRandomItem()
         {
@@ -157,6 +169,7 @@ namespace AdverGame.Player
         {
 
             ItemFounded = new();
+            SetupEtalase();
             StartCookRandomItem();
         }
 

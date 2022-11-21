@@ -84,7 +84,7 @@ namespace AdverGame.UI
         }
         public void CloseHUD(GameObject hud)
         {
-          
+            if (isProhibited) return;
             LeanTween.scale(hud, Vector3.zero, AnimTime).setOnComplete(() => { hud.SetActive(false); });
            
         }

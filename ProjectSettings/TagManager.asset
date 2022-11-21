@@ -11,6 +11,7 @@ TagManager:
   - TaskHUD
   - BtnItemAvailable
   - BtnCookItem
+  - BtnRandomItem
   layers:
   - Default
   - TransparentFX
