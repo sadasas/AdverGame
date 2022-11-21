@@ -1,7 +1,9 @@
 ﻿
 
 using AdverGame.Sound;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace AdverGame.UI
@@ -25,7 +27,12 @@ namespace AdverGame.UI
     {
         public static UIManager s_Instance;
 
+        GameObject m_notificationHUD;
+        Coroutine m_notifState;
+
         [SerializeField] GameObject m_currentHUDSelected = null;
+        [SerializeField] GameObject m_notificationHUDPrefab;
+        [SerializeField] float m_notifTime;
 
         public AnimationCurve AnimCurve;
         public float AnimTime;
@@ -69,7 +76,7 @@ namespace AdverGame.UI
 
         }
 
-        
+
         public void OverlapHUD(GameObject hud)
         {
             SoundManager.s_Instance.PlaySFX(SFXType.BTNCLICK);
@@ -86,13 +93,30 @@ namespace AdverGame.UI
         {
             if (isProhibited) return;
             LeanTween.scale(hud, Vector3.zero, AnimTime).setOnComplete(() => { hud.SetActive(false); });
-           
+
         }
         public void ForceHUD(HUDName name)
         {
 
 
             if (HUDRegistered[name] != m_currentHUDSelected || !HUDRegistered[name].activeInHierarchy) SelectHUD(HUDRegistered[name]);
+        }
+
+        public void ShowNotification(string message)
+        {
+            m_notificationHUD ??= Instantiate(m_notificationHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
+            if(m_notifState!=null) StopCoroutine(m_notifState);
+            m_notifState = StartCoroutine(ShowingNotif(message));
+
+        }
+
+        IEnumerator ShowingNotif(string message)
+        {
+            m_notificationHUD.SetActive(value: true);
+            m_notificationHUD.transform.SetAsLastSibling();
+            m_notificationHUD.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = message;
+            yield return new WaitForSeconds(m_notifTime);
+            m_notificationHUD.SetActive(false);
         }
     }
 }

@@ -68,7 +68,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1620, y: 200}
+  m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3922259766075133108
 MonoBehaviour:
@@ -540,6 +540,7 @@ MonoBehaviour:
   Variant: {fileID: 0}
   isValid: 1
   m_currentChair: {fileID: 0}
+  CountDownWaitOrder: 0
 --- !u!1 &8813950669380767602
 GameObject:
   m_ObjectHideFlags: 0

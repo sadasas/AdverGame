@@ -1,6 +1,8 @@
 ﻿
 
+
 using AdverGame.Player;
+using AdverGame.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +33,7 @@ namespace AdverGame.Chair
             m_centerPos = centerPos;
             m_chairCost = chairCost;
             LokArea();
+            m_playerInput.OnLeftClick += OnClick;
         }
 
         (ChairAnchor, Vector2) m_lastChairAdded;
@@ -92,6 +95,23 @@ namespace AdverGame.Chair
 
         }
 
+        void OnClick(GameObject obj)
+        {
+            if (m_areaLock == null) return;
+
+            if (obj == m_areaLock.transform.GetChild(0).gameObject)
+            {
+              
+                if (m_address == 1)
+                {
+                    UIManager.s_Instance.ShowNotification("Perlu experience level 4 untuk membuka area ini ");
+                }
+                else if (m_address == 2)
+                {
+                    UIManager.s_Instance.ShowNotification("Perlu experience level 7 untuk membuka area ini ");
+                }
+            }
+        }
         void LokArea()
         {
             m_areaLock = GameObject.Instantiate(m_areaLockPrefab, m_centerPos, Quaternion.identity);

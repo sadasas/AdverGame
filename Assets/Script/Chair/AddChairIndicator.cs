@@ -1,4 +1,5 @@
 ﻿using AdverGame.Player;
+using AdverGame.UI;
 using System;
 using TMPro;
 using UnityEngine;
@@ -28,6 +29,10 @@ namespace AdverGame.Chair
                 PlayerManager.s_Instance.IncreaseExp(Exp);
                 OnAddChair?.Invoke(this);
 
+            }
+            else
+            {
+                UIManager.s_Instance.ShowNotification("Coin anda tidak cukup untuk membeli set meja kursi");
             }
 
 

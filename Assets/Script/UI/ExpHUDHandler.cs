@@ -69,9 +69,9 @@ namespace AdverGame.UI
         {
 
             m_increment.text = "+ " + increment;
-            m_increment.gameObject.SetActive(true);
+            m_increment.transform.parent.gameObject.SetActive(true);
             yield return new WaitForSeconds(1);
-            m_increment.gameObject.SetActive(false);
+            m_increment.transform.parent.gameObject.SetActive(false);
 
         }
     }

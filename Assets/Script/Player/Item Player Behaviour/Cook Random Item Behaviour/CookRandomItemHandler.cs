@@ -84,14 +84,15 @@ namespace AdverGame.Player
                 count++;
                 if (count == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
 
-                SetupEtalase();
+                SetupEtalase(count);
             }
         }
 
-        void SetupEtalase()
+        void SetupEtalase(int itemFounded)
         {
-            if (ItemFounded.Count == 0) m_etalase.sprite = m_etalaseEmpty;
-            else if (ItemFounded.Count < m_maxItemCooked) m_etalase.sprite = m_etalaseHalf;
+            
+            if (itemFounded == 0) m_etalase.sprite = m_etalaseEmpty;
+            else if (itemFounded < m_maxItemCooked) m_etalase.sprite = m_etalaseHalf;
             else m_etalase.sprite = m_etalaseFull;
         }
         void StartCookRandomItem()
@@ -169,7 +170,7 @@ namespace AdverGame.Player
         {
 
             ItemFounded = new();
-            SetupEtalase();
+            SetupEtalase(0);
             StartCookRandomItem();
         }
 

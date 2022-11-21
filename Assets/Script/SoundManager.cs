@@ -14,6 +14,7 @@ namespace AdverGame.Sound
     public enum SFXType
     {
         BTNCLICK,
+        DUMMYCLICK
 
     }
 
@@ -29,6 +30,7 @@ namespace AdverGame.Sound
 
         [Header("SFX List")]
         [SerializeField] AudioClip m_btnClickSFX;
+        [SerializeField] AudioClip m_dummyClickSFX;
 
 
         public bool IsBGMMute;
@@ -79,6 +81,7 @@ namespace AdverGame.Sound
             var audioClip = (type) switch
             {
                 SFXType.BTNCLICK => m_btnClickSFX,
+                SFXType.DUMMYCLICK => m_dummyClickSFX,
                 _ => null
             };
 

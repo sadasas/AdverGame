@@ -50,6 +50,9 @@ MonoBehaviour:
   m_SFXAudio: {fileID: 5762380406558560795}
   m_inGameBGM: {fileID: 8300000, guid: c73f5038608216c42b7eb2ecb4db06f0, type: 3}
   m_btnClickSFX: {fileID: 8300000, guid: 5aadc8671f0837243aadc241c13bbfbf, type: 3}
+  m_dummyClickSFX: {fileID: 8300000, guid: 47d2e786f16bb9742841c1015a4eed22, type: 3}
+  IsBGMMute: 0
+  IsSFXMute: 0
 --- !u!1001 &1061451172283427582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57,6 +60,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6169820847546889579}
     m_Modifications:
+    - target: {fileID: 405104892846514551, guid: 12c1757579835b34ba1d0cd1cfe5d1af, type: 3}
+      propertyPath: Priority
+      value: 123
+      objectReference: {fileID: 0}
+    - target: {fileID: 405104892846514551, guid: 12c1757579835b34ba1d0cd1cfe5d1af, type: 3}
+      propertyPath: m_Volume
+      value: 0.395
+      objectReference: {fileID: 0}
     - target: {fileID: 1530932099712524822, guid: 12c1757579835b34ba1d0cd1cfe5d1af, type: 3}
       propertyPath: m_Name
       value: BGMAudio

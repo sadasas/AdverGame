@@ -23,11 +23,11 @@ namespace AdverGame.UI
         IEnumerator IncrementNotif(int increment)
         {
             if (increment == 0) yield break;
-            var simbol = increment > 0 ? "+" : "-";
+            var simbol = increment > 0 ? "+ " : "- ";
             m_increment.text = simbol + increment;
-            m_increment.gameObject.SetActive(true);
+            m_increment.transform.parent.gameObject.SetActive(true);
             yield return new WaitForSeconds(1);
-            m_increment.gameObject.SetActive(false);
+            m_increment.transform.parent.gameObject.SetActive(false);
 
         }
 

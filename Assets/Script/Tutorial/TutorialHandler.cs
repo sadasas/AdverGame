@@ -323,7 +323,7 @@ namespace AdverGame.Tutorial
 
                 yield return null;
             }
-
+            CameraController.s_Instance.MoveCamera(2);
             m_nextBtn.SetActive(false);
             yield return StartCoroutine(LookMenuAavailable());
             yield return StartCoroutine(LookCharacterOrdered());
@@ -357,7 +357,7 @@ namespace AdverGame.Tutorial
             Time.timeScale = 1f;
             string text = "untuk menyajikan makanan ke pelanggan pertama tama  klik tombol menu tersedia pada pojok bawah kiri untuk melihat menu yang sudah dimasak";
             m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
-
+            UIManager.s_Instance.HUDRegistered[HUDName.ITEM_AVAILABLE].SetActive(false);
             while (!UIManager.s_Instance.HUDRegistered[HUDName.ITEM_AVAILABLE].activeInHierarchy)
             {
                 m_cust.CurrentState = CustomerManager.s_Instance.CustomersRunning[0].CurrentState;
@@ -504,7 +504,7 @@ namespace AdverGame.Tutorial
                 m_HUDTutorialEnd.transform.SetAsLastSibling();
                 yield return null;
             }
-            text = "Setelah makanan jadi atau sudah diambil , klik item pada kompor atau kulkas untuk menaruh di display agar bisa memasak kembali ";
+            text = "Setelah makanan jadi atau sudah diambil , klik item pada kompor atau kulkas untuk menaruh di display / menu tersedia agar bisa memasak  kembali ";
             m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
            
             while (PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.ItemCooked >0)

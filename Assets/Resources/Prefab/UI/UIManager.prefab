@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_currentHUDSelected: {fileID: 0}
+  m_notificationHUDPrefab: {fileID: 3608679444529740042, guid: 6461b4326a9f90e458c7604b409bf0d5, type: 3}
+  m_notifTime: 3
   AnimCurve:
     serializedVersion: 2
     m_Curve:
@@ -70,3 +72,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   AnimTime: 0.1
+  isProhibited: 0

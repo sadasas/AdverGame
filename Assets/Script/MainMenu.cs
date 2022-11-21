@@ -1,5 +1,4 @@
-﻿using AdverGame.Sound;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -31,10 +30,10 @@ namespace AdverGame.MainMenu
 
         IEnumerator ProcessLoadScene()
         {
+            m_loadHUD.SetActive(true);
             AsyncOperation asyncLoadScene = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
             while (!asyncLoadScene.isDone)
             {
-                m_loadHUD.SetActive(true);
                 m_loadSlider.value = asyncLoadScene.progress;
 
                 yield return null;
@@ -65,15 +64,15 @@ namespace AdverGame.MainMenu
         {
             if (!m_isMute)
             {
-                PlayerPrefs.SetInt("BGM", 0);
+
                 m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
-               
+
             }
             else
             {
-                PlayerPrefs.SetInt("BGM", 1);
+
                 m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
-              
+
             }
 
 
