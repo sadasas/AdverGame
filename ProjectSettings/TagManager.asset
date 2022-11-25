@@ -12,6 +12,8 @@ TagManager:
   - BtnItemAvailable
   - BtnCookItem
   - BtnRandomItem
+  - ChairSet
+  - Table
   layers:
   - Default
   - TransparentFX

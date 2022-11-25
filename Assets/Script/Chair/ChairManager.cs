@@ -4,6 +4,7 @@
 using AdverGame.Player;
 using AdverGame.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -101,7 +102,7 @@ namespace AdverGame.Chair
 
             if (obj == m_areaLock.transform.GetChild(0).gameObject)
             {
-              
+
                 if (m_address == 1)
                 {
                     UIManager.s_Instance.ShowNotification("Perlu experience level 4 untuk membuka area ini ");
@@ -220,7 +221,7 @@ namespace AdverGame.Chair
                 SpawnAreas();
             }
 
-            LoadPlayerChairs();
+            StartCoroutine(LoadPlayerChairs());
 
             SpawnOjolChairs();
 
@@ -266,14 +267,20 @@ namespace AdverGame.Chair
             m_ojolChairs.Add(chairOjol);
         }
 
-        public void LoadPlayerChairs()
+        public IEnumerator LoadPlayerChairs()
         {
 
 
             var dataChairsAreas = PlayerManager.s_Instance.GetDataChairs();
             if (dataChairsAreas != null && dataChairsAreas.Count > 0)
             {
+                for (int a = 0; a < PlayerManager.s_Instance.GetCurrentLevel().MaxArea; a++)
+                {
+                    m_chairAreas[a].UnlockArea();
+                    m_chairAreas[a].SetupArea(m_chairAreas[a - 1 < 0 ? 0 : a - 1].CurrentChairCost);
+                }
 
+                yield return null;
                 for (int i = 0; i < dataChairsAreas.Count; i++)
                 {
 
@@ -282,9 +289,9 @@ namespace AdverGame.Chair
 
                         m_chairAreas[i].SpawnChair(data.pos, data.anchor);
                     }
-                    m_chairAreas[i].UnlockArea();
-                    m_areaUnlocked++;
+
                 }
+
 
             }
             else
@@ -323,5 +330,7 @@ namespace AdverGame.Chair
             m_chairAreas[newLevel.MaxArea - 1].SetupArea(m_chairAreas[newLevel.MaxArea - 2].CurrentChairCost);
 
         }
+
+
     }
 }

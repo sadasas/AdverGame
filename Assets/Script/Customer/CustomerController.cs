@@ -17,14 +17,9 @@ namespace AdverGame.Customer
     public class CustomerController : MonoBehaviour
     {
         ItemSerializable m_currentOrder;
-
-
-
         List<ItemSerializable> m_itemsRegistered;
-
         Animator m_animCharacter;
-
-
+        bool isOverlap = false;
         [SerializeField] Image m_noticeImage;
         [SerializeField] Transform m_assPos;
 
@@ -34,7 +29,7 @@ namespace AdverGame.Customer
 
         [HideInInspector] public Vector3 TargetPos;
         [HideInInspector] public Vector2 DefaultPos;
-        public CustomerState CurrentState { get; set; } = CustomerState.DEFAULT;
+        public CustomerState CurrentState = CustomerState.DEFAULT;
         public Action<CustomerController, ItemSerializable> OnCreateOrder;
         public Action<ItemSerializable, CustomerController> OnCancelOrder;
         public Action<ItemSerializable, CustomerController> OnSeeOrder;
@@ -48,11 +43,49 @@ namespace AdverGame.Customer
         public float CountDownWaitOrder;
         private void Start()
         {
-
             Setup();
         }
 
 
+        private void OnTriggerStay2D(Collider2D collider)
+        {
+            ResolveOverlapOtherObject(collider);
+        }
+
+        void ResolveOverlapOtherObject(Collider2D collider)
+        {
+            if (CurrentState == CustomerState.DEFAULT) return;
+
+            if (collider.CompareTag("Customer") && CurrentState != CustomerState.WAITORDER && CurrentState != CustomerState.ORDER)
+            {
+                var cr = collider.transform.GetComponent<CustomerController>();
+                var posOther = cr.transform.position.y;
+                var pos = this.transform.position.y;
+
+                var layer = pos < posOther ?
+                     this.GetComponent<SpriteRenderer>().sortingOrder > cr.GetComponent<SpriteRenderer>().sortingOrder ? this.GetComponent<SpriteRenderer>().sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+                this.GetComponent<SpriteRenderer>().sortingOrder = layer;
+
+            }
+            if (collider.CompareTag("Chair") || collider.CompareTag(tag: "Table"))
+            {
+
+
+                if (collider.transform.position == TargetPos)
+                {
+                    this.GetComponent<SpriteRenderer>().sortingOrder = collider.GetComponent<SpriteRenderer>().sortingOrder + 1;
+                    return;
+                }
+
+                var posOther = collider.transform.position.y;
+                var pos = this.transform.position.y;
+                var layer = pos < posOther ?
+                   this.GetComponent<SpriteRenderer>().sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? this.GetComponent<SpriteRenderer>().sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+                this.GetComponent<SpriteRenderer>().sortingOrder = layer;
+            }
+        }
         void Setup()
         {
 
@@ -126,7 +159,7 @@ namespace AdverGame.Customer
         }
         public void ResetPos()
         {
-
+            this.GetComponent<SpriteRenderer>().sortingOrder = 2;
             transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 
             CurrentState = CustomerState.DEFAULT;
@@ -171,13 +204,11 @@ namespace AdverGame.Customer
 
         }
 
-
-
         public IEnumerator ToChair()
         {
             m_animCharacter ??= GetComponent<Animator>();
             var distanceX = transform.position.x - TargetPos.x;
-
+            CurrentState = CustomerState.WALK;
             if (distanceX < 0) transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
             else transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 

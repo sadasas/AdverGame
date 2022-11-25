@@ -591,7 +591,7 @@ namespace AdverGame.Tutorial
             yield return new WaitForSeconds(3f);
             m_HUDTutorialTop.SetActive(false);
 
-            EndTutorial();
+            
         }
 
         IEnumerator BonusMenuExplanation()
@@ -641,6 +641,8 @@ namespace AdverGame.Tutorial
             m_HUDTutorialTop.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
 
             yield return new WaitForSeconds(2f);
+
+            EndTutorial();
         }
         void ScaleUp(GameObject obj, out int id, Vector3 defaultScale)
         {
