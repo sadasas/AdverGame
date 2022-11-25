@@ -19,6 +19,9 @@ namespace AdverGame.Chair
         DEFAULT
     }
 
+    /// <summary>
+    /// TODO: Make obj to buy more chair set  algoritm more dinamic and not constrained lke current algoritm
+    /// </summary>
     [Serializable]
     public class ChairArea
     {
@@ -161,6 +164,12 @@ namespace AdverGame.Chair
             m_chairParents ??= new();
             var newChairParent = GameObject.Instantiate(m_chairCustomerPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform);
             m_chairParents.Add((anchor, newChairParent.transform.position));
+
+            for (int i = 0; i < newChairParent.transform.childCount; i++)
+            {
+                var lyr = anchor == ChairAnchor.TOPLEFT || anchor == ChairAnchor.TOPRIGHT ? 2 : 8;
+                newChairParent.transform.GetChild(i).GetComponent<SpriteRenderer>().sortingOrder = lyr;
+            }
 
             m_customerChairs ??= new();
             var chair1 = newChairParent.transform.GetChild(0).GetComponent<ChairController>();
@@ -327,7 +336,7 @@ namespace AdverGame.Chair
             if (newLevel.MaxArea <= m_areaUnlocked) return;
             m_areaUnlocked++;
             m_chairAreas[newLevel.MaxArea - 1].UnlockArea();
-            m_chairAreas[newLevel.MaxArea - 1].SetupArea(m_chairAreas[newLevel.MaxArea - 2].CurrentChairCost);
+            m_chairAreas[newLevel.MaxArea - 1].SetupArea(m_chairAreas[newLevel.MaxArea - 1].CurrentChairCost);
 
         }
 

@@ -227,7 +227,7 @@ namespace AdverGame.Customer
                 CustomersRunning.Add(cust);
             }
 
-            cust.m_currentChair = tempChair;
+            cust.CurrentChair = tempChair;
             cust.transform.position = dummy.transform.position;
             cust.TargetPos = tempChair.transform.position;
             cust.DefaultPos = defaultPos;
@@ -481,11 +481,11 @@ namespace AdverGame.Customer
 
 
             var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
-            panel.sizeDelta = new Vector2(panel.sizeDelta.x + m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y );
+            panel.sizeDelta = new Vector2(panel.sizeDelta.x + m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
 
             var task = Instantiate(m_orderTaskPrefab, m_taskHUD.transform.GetChild(0)).GetComponent<Task>();
             task.transform.GetChild(0).GetComponent<Image>().sprite = order.Content.Image;
-           // task.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
+            // task.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
 
             task.GetComponent<Task>().CustomerOrder = cusOrder;
             m_taskOrders ??= new();
@@ -524,7 +524,7 @@ namespace AdverGame.Customer
                 if (task.CustomerOrder.Customer == menu.Customer)
                 {
                     var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
-                    panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y );
+                    panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
                     m_taskOrders.Remove(task);
                     Destroy(task.gameObject);
                     break;

@@ -18,5 +18,5 @@ MonoBehaviour:
   MaxExp: 20
   Sequence: 1
   VariantCust:
-  - {fileID: 5674418416989534850, guid: ddb8d6f8be177674b867d843e079f682, type: 3}
   - {fileID: 7383330528012148278, guid: f4b3d0b9e74ab4e4fb0da4e1b2de4603, type: 3}
+  - {fileID: 5674418416989534850, guid: ddb8d6f8be177674b867d843e079f682, type: 3}

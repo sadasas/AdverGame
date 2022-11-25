@@ -22,6 +22,8 @@ namespace AdverGame.Customer
 
         [SerializeField] Slider m_touchSlider;
         [SerializeField] Image m_noticeImage;
+        [SerializeField] Canvas m_canvas;
+        [SerializeField] SpriteRenderer m_spriteRenderer;
 
         public DummyState CurrentState;
         public DummyVariant Variant;
@@ -36,6 +38,43 @@ namespace AdverGame.Customer
         {
 
             m_touchSlider.value = m_touchCount;
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            ResolveOverlapOtherObject(collision);
+        }
+        void ResolveOverlapOtherObject(Collider2D collider)
+        {
+            if (CurrentState == DummyState.DEFAULT) return;
+
+            if (collider.CompareTag("Customer"))
+            {
+
+                var posOther = collider.transform.position.y;
+                var pos = this.transform.position.y;
+
+                var layer = pos < posOther ?
+                     m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+                m_spriteRenderer.sortingOrder = layer;
+                m_canvas.sortingOrder = layer;
+
+            }
+            if (collider.CompareTag("Dummy"))
+            {
+
+                var posOther = collider.transform.position.y;
+                var pos = this.transform.position.y;
+
+                var layer = pos < posOther ?
+                     m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+                m_spriteRenderer.sortingOrder = layer;
+                m_canvas.sortingOrder = layer;
+            }
+
+
         }
         bool IsReachDestination()
         {
@@ -151,6 +190,7 @@ namespace AdverGame.Customer
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(TargetPos.x, TargetPos.y), Variant.Speed * Time.deltaTime);
         }
+
 
         public IEnumerator Walking()
         {

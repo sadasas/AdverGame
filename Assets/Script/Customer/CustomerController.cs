@@ -19,12 +19,15 @@ namespace AdverGame.Customer
         ItemSerializable m_currentOrder;
         List<ItemSerializable> m_itemsRegistered;
         Animator m_animCharacter;
-        bool isOverlap = false;
+        Collider2D m_collider;
+        SpriteRenderer m_spriteRenderer;
+
         [SerializeField] Image m_noticeImage;
+        [SerializeField] Canvas m_canvas;
         [SerializeField] Transform m_assPos;
 
-        public float widhtOffset { get; private set; }
-        public float heightOffset { get; private set; }
+        public float WidhtOffset { get; private set; }
+        public float HeightOffset { get; private set; }
 
 
         [HideInInspector] public Vector3 TargetPos;
@@ -37,9 +40,9 @@ namespace AdverGame.Customer
 
 
         public CustomerVariant Variant;
-        public bool isValid = true;
+        public bool IsValid = true;
         public Coroutine CurrentCoro;
-        public ChairController m_currentChair;
+        public ChairController CurrentChair;
         public float CountDownWaitOrder;
         private void Start()
         {
@@ -58,15 +61,28 @@ namespace AdverGame.Customer
 
             if (collider.CompareTag("Customer") && CurrentState != CustomerState.WAITORDER && CurrentState != CustomerState.ORDER)
             {
-                var cr = collider.transform.GetComponent<CustomerController>();
-                var posOther = cr.transform.position.y;
+
+                var posOther = collider.transform.position.y;
                 var pos = this.transform.position.y;
 
                 var layer = pos < posOther ?
-                     this.GetComponent<SpriteRenderer>().sortingOrder > cr.GetComponent<SpriteRenderer>().sortingOrder ? this.GetComponent<SpriteRenderer>().sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+                     m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
 
-                this.GetComponent<SpriteRenderer>().sortingOrder = layer;
+                m_spriteRenderer.sortingOrder = layer;
+                m_canvas.sortingOrder = layer;
 
+            }
+            if (collider.CompareTag("Dummy"))
+            {
+
+                var posOther = collider.transform.position.y;
+                var pos = this.transform.position.y;
+
+                var layer = pos < posOther ?
+                     m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+                m_spriteRenderer.sortingOrder = layer;
+                m_canvas.sortingOrder = layer;
             }
             if (collider.CompareTag("Chair") || collider.CompareTag(tag: "Table"))
             {
@@ -74,29 +90,35 @@ namespace AdverGame.Customer
 
                 if (collider.transform.position == TargetPos)
                 {
-                    this.GetComponent<SpriteRenderer>().sortingOrder = collider.GetComponent<SpriteRenderer>().sortingOrder + 1;
+                    m_spriteRenderer.sortingOrder = collider.GetComponent<SpriteRenderer>().sortingOrder + 1;
+                    m_canvas.sortingOrder = collider.GetComponent<SpriteRenderer>().sortingOrder + 1;
                     return;
                 }
 
-                var posOther = collider.transform.position.y;
-                var pos = this.transform.position.y;
-                var layer = pos < posOther ?
-                   this.GetComponent<SpriteRenderer>().sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? this.GetComponent<SpriteRenderer>().sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+                if (CurrentState == CustomerState.ORDER || CurrentState == CustomerState.WAITORDER || CurrentState == CustomerState.EAT)
+                {
 
-                this.GetComponent<SpriteRenderer>().sortingOrder = layer;
+                    return;
+                }
+                var posOther = collider.transform.parent.TransformPoint(collider.bounds.center).y - collider.transform.parent.TransformPoint(collider.bounds.extents).y;
+                var pos = m_collider.bounds.center.y - m_collider.bounds.extents.y;
+                var layer = pos < posOther ?
+                   m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
+
+                m_spriteRenderer.sortingOrder = layer;
+                m_canvas.sortingOrder = layer;
             }
+
         }
         void Setup()
         {
 
             m_animCharacter = GetComponent<Animator>();
-
-
-
+            m_collider = GetComponent<Collider2D>();
+            m_spriteRenderer = GetComponent<SpriteRenderer>();
             m_itemsRegistered = AssetHelpers.GetAllItemRegistered();
-
-            widhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
-            heightOffset = GetComponent<SpriteRenderer>().bounds.size.y / 2;
+            WidhtOffset = GetComponent<SpriteRenderer>().bounds.size.x;
+            HeightOffset = GetComponent<SpriteRenderer>().bounds.size.y / 2;
 
 
 
@@ -111,7 +133,7 @@ namespace AdverGame.Customer
             if (Variant.Type != CustomerType.OJOL)
             {
 
-                var diff = Vector2.Distance(m_assPos.position, m_currentChair.CushionPos.position);
+                var diff = Vector2.Distance(m_assPos.position, CurrentChair.CushionPos.position);
                 var sitPos = new Vector2(transform.position.x, transform.position.y + diff);
                 transform.position = sitPos;
             }
@@ -148,8 +170,8 @@ namespace AdverGame.Customer
 
             PlayerManager.s_Instance.IncreaseCoin(Variant.Coin);
             PlayerManager.s_Instance.IncreaseExp(Variant.Exp);
-            if (m_currentChair) m_currentChair.Customer = null;
-            m_currentChair = null;
+            if (CurrentChair) CurrentChair.Customer = null;
+            CurrentChair = null;
 
             StopCoroutine(CurrentCoro);
             if (Variant.Type != CustomerType.OJOL) m_animCharacter.SetBool("IsEat", false);
@@ -159,7 +181,7 @@ namespace AdverGame.Customer
         }
         public void ResetPos()
         {
-            this.GetComponent<SpriteRenderer>().sortingOrder = 2;
+            m_spriteRenderer.sortingOrder = 2;
             transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 
             CurrentState = CustomerState.DEFAULT;
@@ -218,7 +240,7 @@ namespace AdverGame.Customer
                 Move();
                 yield return null;
             }
-            if (m_currentChair.IsLeft) transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
+            if (CurrentChair.IsLeft) transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
             else transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 
             Order();
@@ -227,6 +249,7 @@ namespace AdverGame.Customer
 
         public IEnumerator WaitOrder()
         {
+            m_spriteRenderer.sortingOrder = CurrentChair.GetComponent<SpriteRenderer>().sortingOrder + 1;
             CountDownWaitOrder += Variant.WaitOrderMaxTime;
             while (CountDownWaitOrder > 0)
             {
@@ -257,8 +280,8 @@ namespace AdverGame.Customer
 
         public IEnumerator Leaving()
         {
-            if (m_currentChair) m_currentChair.Customer = null;
-            m_currentChair = null;
+            if (CurrentChair) CurrentChair.Customer = null;
+            CurrentChair = null;
 
             while (!IsReachDestination())
             {

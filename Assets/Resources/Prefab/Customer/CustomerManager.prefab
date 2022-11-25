@@ -49,7 +49,7 @@ MonoBehaviour:
   - {fileID: 1479231829488358141, guid: db78c119b2cdd3c4a8397c98cb0b703d, type: 3}
   m_taskHUDPrefab: {fileID: 6670355633020578430, guid: ab6717a3a65b026479ba8999bfea4f13, type: 3}
   m_orderTaskPrefab: {fileID: 3251720979543702477, guid: 1710a0160856a724e81cf90a9a20a3ee, type: 3}
-  m_maxCustomerRunning: 3
+  m_maxCustomerRunning: 4
   m_maxCustomerQueued: 8
   DummyRunning: []
   CustomersRunning: []
