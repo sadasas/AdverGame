@@ -9,7 +9,7 @@ namespace AdverGame.Player
 {
     public class UncompletedTask : MonoBehaviour, IPointerClickHandler
     {
-       
+
 
         public GameObject m_HUDOrderDetail;
         public Order CustomerOrder { get; set; }
@@ -21,10 +21,13 @@ namespace AdverGame.Player
             {
                 OnShowDetail?.Invoke(this);
                 m_HUDOrderDetail.SetActive(true);
+                UpdateOrderDetail();
             }
         }
 
-        private void Start()
+     
+
+        void UpdateOrderDetail()
         {
             m_HUDOrderDetail.transform.GetChild(0).GetComponent<Image>().sprite = CustomerOrder.ItemOrder.Content.Image;
             m_HUDOrderDetail.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = CustomerOrder.ItemOrder.Content.Name;
