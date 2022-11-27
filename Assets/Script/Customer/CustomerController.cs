@@ -60,7 +60,7 @@ namespace AdverGame.Customer
         {
             if (CurrentState == CustomerState.DEFAULT) return;
 
-            if (collider.CompareTag("Customer") && CurrentState != CustomerState.WAITORDER && CurrentState != CustomerState.ORDER)
+            if (collider.CompareTag("Customer") && CurrentState != CustomerState.WAITORDER && CurrentState != CustomerState.ORDER && CurrentState != CustomerState.EAT)
             {
 
                 var posOther = collider.transform.position.y;

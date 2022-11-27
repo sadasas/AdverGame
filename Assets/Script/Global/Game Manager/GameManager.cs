@@ -109,7 +109,8 @@ namespace AdverGame.GameManager
 
             m_soundManager = Instantiate(m_SoundManagerPrefab).GetComponent<SoundManager>();
 
-           if(PlayerPrefs.GetInt("Tutorial")==0) m_tutorialHandler = Instantiate(m_tutorialHandlerPrefab).GetComponent<TutorialHandler>();
+            yield return null;
+            if (PlayerPrefs.GetInt("Tutorial") == 0) m_tutorialHandler = Instantiate(m_tutorialHandlerPrefab).GetComponent<TutorialHandler>();
 
         }
 

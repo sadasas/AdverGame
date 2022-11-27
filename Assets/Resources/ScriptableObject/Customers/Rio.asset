@@ -21,7 +21,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 0.5
   <EatTime>k__BackingField: 7
   <SpawnDelay>k__BackingField: 1
-  <WaitOrderMaxTime>k__BackingField: 5
+  <WaitOrderMaxTime>k__BackingField: 57
   <WaitChairAvailableTime>k__BackingField: 2
   <EatImage>k__BackingField: {fileID: 21300000, guid: 7c767a28cf5d363498a99f2e5b9d2ba4, type: 3}
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 391a00a90c7c6464597706aeed1bc1d2, type: 3}

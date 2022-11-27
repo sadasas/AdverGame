@@ -87,17 +87,21 @@ namespace AdverGame.Player
                     if (plate.IsEmpty)
                     {
                         OnItemChoosed?.Invoke(plate, item);
-                        break;
+                        return;
 
                     }
                 }
+
+                UIManager.s_Instance.ShowNotification("Kompor penuh");
             }
             else
             {
                 if (m_drinkPlate.IsEmpty)
                 {
                     OnItemChoosed?.Invoke(m_drinkPlate, item);
+                    return;
                 }
+                UIManager.s_Instance.ShowNotification(message: "Tempat minuman penuh");
             }
 
 

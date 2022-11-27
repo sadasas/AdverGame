@@ -55,7 +55,7 @@ namespace AdverGame.Player
             foreach (var item in m_allItems)
             {
                 item.IncreaseStack(-1);
-                
+
                 m_menuAvailableHUDHandler.DisplayItem(item);
             }
 

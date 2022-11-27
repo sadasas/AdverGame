@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Mamang Ultramen
   <Description>k__BackingField: 'Cosplayer pemalu yang selalu menutup wajahnya '
-  <OccurrencePercentage>k__BackingField: 5
-  <Coin>k__BackingField: 200
+  <OccurrencePercentage>k__BackingField: 10
+  <Coin>k__BackingField: 300
   <Exp>k__BackingField: 40
   <Speed>k__BackingField: 1
-  <EatTime>k__BackingField: 5
+  <EatTime>k__BackingField: 3
   <SpawnDelay>k__BackingField: 3
-  <WaitOrderMaxTime>k__BackingField: 6
+  <WaitOrderMaxTime>k__BackingField: 45
   <WaitChairAvailableTime>k__BackingField: 5
   <EatImage>k__BackingField: {fileID: 21300000, guid: 7c767a28cf5d363498a99f2e5b9d2ba4, type: 3}
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 391a00a90c7c6464597706aeed1bc1d2, type: 3}

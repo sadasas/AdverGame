@@ -18,9 +18,9 @@ MonoBehaviour:
   <Coin>k__BackingField: 40
   <Exp>k__BackingField: 20
   <Speed>k__BackingField: 0.4
-  <EatTime>k__BackingField: 4
+  <EatTime>k__BackingField: 10
   <SpawnDelay>k__BackingField: 1
-  <WaitOrderMaxTime>k__BackingField: 5
+  <WaitOrderMaxTime>k__BackingField: 52
   <WaitChairAvailableTime>k__BackingField: 3
   <EatImage>k__BackingField: {fileID: 21300000, guid: 7c767a28cf5d363498a99f2e5b9d2ba4, type: 3}
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 391a00a90c7c6464597706aeed1bc1d2, type: 3}

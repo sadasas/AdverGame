@@ -44,6 +44,7 @@ namespace AdverGame.Player
 
         public void UpdateTaskUnCompleted(Task newTask)
         {
+           
             foreach (var item in m_itemContainer.Items)
             {
                 if (newTask.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name))
@@ -62,7 +63,7 @@ namespace AdverGame.Player
         public void RemoveUncompleteOrder(Task order)
         {
             if (m_tasks == null || m_tasks.Count == 0) return;
-            foreach (var item in m_tasks)
+            foreach (var item in m_tasks.ToArray())
             {
                 if (order.CustomerOrder.ItemOrder.Content.Name.Equals(item.CustomerOrder.ItemOrder.Content.Name) && order.CustomerOrder.Customer == item.CustomerOrder.Customer)
                 {
@@ -108,6 +109,19 @@ namespace AdverGame.Player
 
         void PutItemCooked(ItemSerializable item, ItemPlate itemPlate)
         {
+            if (m_tasks != null && m_tasks.Count > 0)
+            {
+                foreach (var task in m_tasks.ToArray())
+                {
+                    if (task.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name))
+                    {
+                        m_tasks.Remove(task);
+                        HUDHandler.RemoveTaskUncompleted(task);
+                        break;
+                    }
+                }
+            }
+
             ItemCooked--;
             var newItem = new ItemSerializable(item.Content);
 

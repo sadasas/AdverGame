@@ -482,7 +482,7 @@ MonoBehaviour:
   m_searchItemTime: 10
   m_cookRandomItemClickable: {fileID: 1932025133073868120}
   m_cookItemClickable: {fileID: 4405727261145111070}
-  m_timeCooking: 10
+  m_timeCooking: 7
 --- !u!1 &4405727261145111070
 GameObject:
   m_ObjectHideFlags: 0

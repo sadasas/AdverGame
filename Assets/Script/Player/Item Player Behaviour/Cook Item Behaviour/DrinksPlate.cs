@@ -46,7 +46,7 @@ namespace AdverGame.Player
             m_imageItem.sprite = null;
             IsEmpty = true;
             Item = null;
-            UpdateProggressBar(0);
+            m_progressBar.fillAmount = 0;
 
         }
     }

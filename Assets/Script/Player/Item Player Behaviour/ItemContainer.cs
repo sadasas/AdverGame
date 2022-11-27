@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AdverGame.Utility;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace AdverGame.Player
     {
         public List<ItemSerializable> Items { get; private set; }
         MonoBehaviour m_player;
+
         public ItemContainer(MonoBehaviour player)
         {
             m_player = player;
@@ -26,10 +28,23 @@ namespace AdverGame.Player
 
             yield return Items = PlayerManager.s_Instance.Data.Items;
 
-
+            if (Items==null ||Items.Count == 0)
+            {
+                SaveDefaultMenu();
+            }
         }
 
-
+        void SaveDefaultMenu()
+        {
+            Items ??= new();
+            var m_allItems = AssetHelpers.GetAllItemRegistered();
+            foreach (var item in m_allItems)
+            {
+                item.IncreaseStack(-1);
+                Items.Add(item);
+            }
+            PlayerManager.s_Instance.SaveItem(Items);
+        }
         public void AddItem(ItemSerializable newItem)
         {
             Items ??= new();
