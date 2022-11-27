@@ -22,7 +22,6 @@ namespace AdverGame.Customer
         Transform m_customerSpawnPostStart;
         Transform m_customerSpawnPostEnd;
         Task m_selectedTask;
-        List<Task> m_taskOrders;
 
         [SerializeField] List<CustomerController> m_customerVariants;
         [SerializeField] List<DummyController> m_dummyVariantsPrefabs;
@@ -33,12 +32,15 @@ namespace AdverGame.Customer
         [SerializeField] int m_maxCustomerRunning;
         [SerializeField] int m_maxCustomerQueued;
 
+        public List<Task> m_taskOrders { get; set; }
 
         public List<DummyController> DummyRunning;
         public List<CustomerController> CustomersRunning;
         public Queue<CustomerController> RealCustomersQueue;
         public Queue<DummyController> DummyCustomersQueue;
         public Action<CustomerVariant> OnCustomerChoosed;
+        public Action<Task> OnAddOrder;
+        public Action<Task> OnRemoveOrder;
         private void OnValidate()
         {
             if (m_maxCustomerQueued < m_maxCustomerRunning) m_maxCustomerQueued = m_maxCustomerRunning;
@@ -60,10 +62,13 @@ namespace AdverGame.Customer
             m_taskHUD.transform.SetAsFirstSibling();
 
             PlayerManager.s_Instance.OnIncreaseLevel += UpdateLevel;
+            OnAddOrder += PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.UpdateTaskUnCompleted;
+            OnRemoveOrder += PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.RemoveUncompleteOrder;
         }
 
         void UpdateLevel(Level newLevel)
         {
+            if (newLevel.VariantCust == null || newLevel.VariantCust.Length == 0) return;
             foreach (var variant in newLevel.VariantCust)
             {
                 m_customerVariants.Add(variant);
@@ -462,6 +467,10 @@ namespace AdverGame.Customer
 
         public void SeeOrder(ItemSerializable item, CustomerController cus)
         {
+            if (m_selectedTask != null)
+            {
+                m_selectedTask.CustomerOrder.Customer.BgItemSelected.SetActive(value: false);
+            }
             UIManager.s_Instance.ForceHUD(HUDName.ITEM_AVAILABLE);
             PlayerManager.s_Instance.Player.ItemPlayerBehaviour.ItemAvailableHandler.SelectItemInHUD(item);
             foreach (var task in m_taskOrders)
@@ -469,6 +478,7 @@ namespace AdverGame.Customer
                 if (task.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name) && task.CustomerOrder.Customer == cus)
                 {
                     m_selectedTask = task;
+                    task.CustomerOrder.Customer.BgItemSelected.SetActive(true);
                     return;
                 }
 
@@ -491,11 +501,14 @@ namespace AdverGame.Customer
             m_taskOrders ??= new();
             m_taskOrders.Add(task);
 
+            OnAddOrder?.Invoke(task);
+
         }
         void RemoveOrder(ItemSerializable menu, CustomerController cus)
         {
             if (m_selectedTask != null)
             {
+                if (cus == m_selectedTask.CustomerOrder.Customer) PlayerManager.s_Instance.Player.ItemPlayerBehaviour.ItemAvailableHandler.UnselectItemInHUD();
                 if (m_selectedTask.CustomerOrder.Customer == cus) m_selectedTask = null;
             }
             if (CheckOrder(menu, out Order order))
@@ -504,7 +517,7 @@ namespace AdverGame.Customer
                 {
                     if (task.CustomerOrder.Customer == order.Customer)
                     {
-
+                        OnRemoveOrder?.Invoke(task);
                         var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
                         panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
                         m_taskOrders.Remove(task);

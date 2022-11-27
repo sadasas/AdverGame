@@ -26,11 +26,13 @@ namespace AdverGame.Player
 
                         var pdTemp = new PlayerData();
                         pdTemp.Coin = data.Coin;
+                       
                         pdTemp.CharacterCollection = data.CharacterCollection;
                         pdTemp.Items = new();
                         pdTemp.DataChairsAreas = data.DataChairsAreas;
 
-
+                      
+                       
                         pdTemp.Level = new DataLevel();
                         pdTemp.Level.CurrentLevel = data.Level.CurrentLevel;
                         pdTemp.Level.CurrentExp = data.Level.CurrentExp;

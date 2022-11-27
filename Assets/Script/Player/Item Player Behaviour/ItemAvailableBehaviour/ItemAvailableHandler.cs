@@ -121,6 +121,10 @@ namespace AdverGame.Player
             m_menuAvailableHUDHandler.SelectItem(item);
         }
 
+        public void UnselectItemInHUD()
+        {
+            m_menuAvailableHUDHandler.UnselectItem();
+        }
     }
 
 

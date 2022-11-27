@@ -26,6 +26,7 @@ namespace AdverGame.Customer
         [SerializeField] Canvas m_canvas;
         [SerializeField] Transform m_assPos;
 
+        public GameObject BgItemSelected;
         public float WidhtOffset { get; private set; }
         public float HeightOffset { get; private set; }
 
@@ -181,6 +182,8 @@ namespace AdverGame.Customer
         }
         public void ResetPos()
         {
+
+            BgItemSelected.SetActive(false);
             m_spriteRenderer.sortingOrder = 2;
             transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
 
@@ -280,11 +283,13 @@ namespace AdverGame.Customer
 
         public IEnumerator Leaving()
         {
+
             if (CurrentChair) CurrentChair.Customer = null;
             CurrentChair = null;
 
             while (!IsReachDestination())
             {
+                BgItemSelected.SetActive(false);
                 Move();
                 yield return null;
             }
@@ -295,6 +300,7 @@ namespace AdverGame.Customer
 
         public IEnumerator Eating()
         {
+            BgItemSelected.SetActive(false);
             m_animCharacter.speed = 1;
             m_animCharacter.SetBool("IsEat", true);
             m_animCharacter.SetBool("IsWait", false);

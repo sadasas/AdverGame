@@ -19,6 +19,12 @@ namespace AdverGame.Chair
         {
             m_priceText.text = Price.ToString();
         }
+
+        public void UpdateCost(int cost)
+        {
+            Price = cost;
+            m_priceText.text = Price.ToString();
+        }
         public void Buy()
         {
 

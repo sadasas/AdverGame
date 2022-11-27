@@ -1,5 +1,6 @@
 ﻿using AdverGame.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,26 +30,30 @@ namespace AdverGame.Player
         {
             OnActive?.Invoke();
 
-           if(m_isMustReposition) RepositionScrollbarValue();
+            if (m_isMustReposition) StartCoroutine(RepositioningScrollbarValue());
 
         }
 
-        void RepositionScrollbarValue()
+        IEnumerator RepositioningScrollbarValue()
+
         {
             m_isMustReposition = false;
-            var valueIndex = 1f / m_row + 0.04f;
+            var valueIndex = 1f / m_row + 0.08f;
             var aa = ((float)m_currentIndexItemSelected / 3) - Math.Round((float)m_currentIndexItemSelected / 3, MidpointRounding.AwayFromZero) == 0 ? Math.Round((float)m_currentIndexItemSelected / 3, MidpointRounding.AwayFromZero) :
                 ((float)m_currentIndexItemSelected / 3) - Math.Round((float)m_currentIndexItemSelected / 3, MidpointRounding.AwayFromZero) < 0f ? Math.Round((float)m_currentIndexItemSelected / 3, MidpointRounding.AwayFromZero) : Math.Round((float)m_currentIndexItemSelected / 3, MidpointRounding.AwayFromZero) + 1;
             var itemRow = m_row - aa;
 
-            Debug.Log(aa);
-            Debug.Log(Math.Round((float)m_currentIndexItemSelected / 3, MidpointRounding.AwayFromZero));
-            Debug.Log(m_row + " - " + m_currentIndexItemSelected + " / " + 3 + " = " + itemRow);
+
             var value = itemRow * valueIndex;
 
-            Debug.Log(value);
 
-            m_scrollbar.value = (float)value;
+            while (m_scrollbar.value != value)
+            {
+                m_scrollbar.value = (float)value;
+                yield return null;
+            }
+
+
         }
         public void SelectItem(ItemSerializable item)
         {
@@ -66,8 +71,12 @@ namespace AdverGame.Player
                 }
             }
 
-            RepositionScrollbarValue();
+            StartCoroutine(RepositioningScrollbarValue());
 
+        }
+        public void UnselectItem()
+        {
+            m_selectedItem.UnSelected();
         }
         void ItemTouched(Item item)
         {

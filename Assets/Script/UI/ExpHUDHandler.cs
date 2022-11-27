@@ -47,7 +47,7 @@ namespace AdverGame.UI
             .setOnComplete(() =>
             {
                 m_newLevelNotif.transform.SetAsLastSibling();
-                Time.timeScale = 0;
+
                 m_currentLevel = newLevel;
             });
 
@@ -55,7 +55,7 @@ namespace AdverGame.UI
 
         public void ExitNewLevelNotif()
         {
-            Time.timeScale = 1;
+
             UIManager.s_Instance.CloseHUD(m_newLevelNotif);
         }
 

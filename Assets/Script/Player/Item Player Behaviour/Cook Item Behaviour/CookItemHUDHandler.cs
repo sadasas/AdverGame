@@ -1,4 +1,5 @@
-﻿using AdverGame.UI;
+﻿using AdverGame.Customer;
+using AdverGame.UI;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -7,11 +8,13 @@ using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
+
     public class CookItemHUDHandler : MonoBehaviour
     {
-
+        UncompletedTask m_currentTaskShowDetail;
         List<ItemPlate> m_plates;
         int m_itemCooked;
+        List<UncompletedTask> m_tasksDisplayed;
         [SerializeField] GameObject m_platePrefab;
         [SerializeField] GameObject m_itemSelectionPrefab;
         [SerializeField] Transform m_platePlace;
@@ -19,6 +22,9 @@ namespace AdverGame.Player
         [SerializeField] TextMeshProUGUI m_proggres;
         [SerializeField] GameObject m_chef;
         [SerializeField] DrinksPlate m_drinkPlate;
+        [SerializeField] GameObject m_HUDTaskUncompleted;
+        [SerializeField] GameObject m_orderTaskPrefab;
+        [SerializeField] GameObject m_HUDOrderDetail;
 
         public Action<ItemPlate, ItemSerializable> OnItemChoosed;
         public bool isProhibited = false;
@@ -30,7 +36,7 @@ namespace AdverGame.Player
 
         public void SetupChef(int itemcooking)
         {
-         
+
             if (itemcooking <= 0)
             {
                 m_chef.SetActive(false);
@@ -95,6 +101,42 @@ namespace AdverGame.Player
             }
 
 
+        }
+        public void DisplayTaskUncompleted(Task order)
+        {
+            m_tasksDisplayed ??= new();
+            var panel = m_HUDTaskUncompleted.transform.GetChild(0).GetComponent<RectTransform>();
+            panel.sizeDelta = new Vector2(panel.sizeDelta.x + m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
+
+            var cusOrder = new Order(order.CustomerOrder.ItemOrder, order.CustomerOrder.Customer);
+            var task = Instantiate(m_orderTaskPrefab, m_HUDTaskUncompleted.transform.GetChild(0)).GetComponent<UncompletedTask>();
+            task.transform.GetChild(0).GetComponent<Image>().sprite = order.CustomerOrder.ItemOrder.Content.Image;
+            task.CustomerOrder = cusOrder;
+            task.m_HUDOrderDetail = m_HUDOrderDetail;
+            task.OnShowDetail += ShowDetailOrder;
+            m_tasksDisplayed.Add(task);
+        }
+
+        void ShowDetailOrder(UncompletedTask task)
+        {
+            m_currentTaskShowDetail = task;
+        }
+        public void RemoveTaskUncompleted(Task order)
+        {
+            var panel = m_HUDTaskUncompleted.transform.GetChild(0).GetComponent<RectTransform>();
+            panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
+
+            foreach (var item in m_tasksDisplayed.ToArray())
+            {
+                if (item.CustomerOrder.Customer == order.CustomerOrder.Customer)
+                {
+                    item.OnShowDetail -= ShowDetailOrder;
+                    if (item == m_currentTaskShowDetail) m_HUDOrderDetail.SetActive(false);
+                    m_tasksDisplayed.Remove(item);
+                    Destroy(item.gameObject);
+                    break;
+                }
+            }
         }
         public void UpdateItemCooked(int itemCooked)
         {

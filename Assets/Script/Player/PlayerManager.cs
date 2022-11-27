@@ -52,7 +52,7 @@ public class DataLevel
 public class PlayerData
 {
     public int Coin;
-
+   
     public DataLevel Level;
     public List<ItemSerializable> Items;
     public List<DataChairSerializable> DataChairsAreas;

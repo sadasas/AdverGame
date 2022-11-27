@@ -1,4 +1,5 @@
-﻿using AdverGame.UI;
+﻿using AdverGame.Customer;
+using AdverGame.UI;
 using AdverGame.Utility;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace AdverGame.Player
         ItemContainer m_itemContainer;
         MonoBehaviour m_playerMono;
         int m_plates = 1;
-
+        List<Task> m_tasks;
         public CookItemHUDHandler HUDHandler;
 
         public int ItemBeingCook = 0;
@@ -41,6 +42,36 @@ namespace AdverGame.Player
 
         }
 
+        public void UpdateTaskUnCompleted(Task newTask)
+        {
+            foreach (var item in m_itemContainer.Items)
+            {
+                if (newTask.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name))
+                {
+                    if (item.Stack == 0)
+                    {
+                        m_tasks ??= new();
+                        m_tasks.Add(newTask);
+                        HUDHandler.DisplayTaskUncompleted(newTask);
+                    }
+                }
+            }
+
+
+        }
+        public void RemoveUncompleteOrder(Task order)
+        {
+            if (m_tasks == null || m_tasks.Count == 0) return;
+            foreach (var item in m_tasks)
+            {
+                if (order.CustomerOrder.ItemOrder.Content.Name.Equals(item.CustomerOrder.ItemOrder.Content.Name) && order.CustomerOrder.Customer == item.CustomerOrder.Customer)
+                {
+                    m_tasks.Remove(item);
+                    HUDHandler.RemoveTaskUncompleted(order);
+                    break;
+                }
+            }
+        }
         public void UpdatePlate(Level level)
         {
 
