@@ -1,6 +1,7 @@
 ﻿
 using AdverGame.Customer;
 using AdverGame.Player;
+using AdverGame.Sound;
 using AdverGame.UI;
 using AdverGame.Utility;
 using System.Collections.Generic;
@@ -136,6 +137,7 @@ namespace AdverGame.CharacterCollection
                 UIManager.s_Instance.HUDRegistered.Add(HUDName.NEWCHARACTERNOTIF, m_HUDNewCharacterNotif);
 
             }
+            SoundManager.s_Instance.PlaySFX(SFXType.NEWCHARACTER);
             m_HUDNewCharacterNotif.SetActive(true);
             var uiManager = UIManager.s_Instance;
             LeanTween.scale(m_HUDNewCharacterNotif, Vector3.one, uiManager.AnimTime).setEase(uiManager.AnimCurve)

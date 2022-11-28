@@ -132,9 +132,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 2358
+        y: 2548
         width: 400
-        height: 790
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,9 +153,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1568
+        y: 1948
         width: 400
-        height: 790
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,9 +174,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 778
+        y: 1348
         width: 400
-        height: 790
+        height: 600
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,6 +186,48 @@ TextureImporter:
       bones: []
       spriteID: 980cc64bc872a6d4b815e88f81c0a904
       internalID: -766264882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kasir_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 748
+        width: 400
+        height: 600
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f211968e54db46e4f92462aac31b2280
+      internalID: 2039842177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kasir_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 148
+        width: 400
+        height: 600
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 590f8b7bf92232e47b8d5cfa5e58b547
+      internalID: 123509992
       vertices: []
       indices: 
       edges: []
@@ -202,7 +244,9 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       kasir_1: -1665290991
+      kasir_4: 123509992
       kasir_2: -766264882
+      kasir_3: 2039842177
       kasir_0: -1521782770
   spritePackingTag: 
   pSDRemoveMatte: 0

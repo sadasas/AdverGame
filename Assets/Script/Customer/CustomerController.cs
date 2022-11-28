@@ -1,6 +1,7 @@
 
 using AdverGame.Chair;
 using AdverGame.Player;
+using AdverGame.Sound;
 using AdverGame.Utility;
 using System;
 using System.Collections;
@@ -179,6 +180,7 @@ namespace AdverGame.Customer
             else m_animCharacter.SetBool("IsWait", false);
             m_animCharacter.SetBool("IsWalk", true);
             CurrentCoro = StartCoroutine(Leaving());
+            SoundManager.s_Instance.PlaySFX(SFXType.CUSTOMERHAPPY);
         }
         public void ResetPos()
         {
@@ -276,7 +278,7 @@ namespace AdverGame.Customer
 
             if (distanceX < 0) transform.rotation = Quaternion.Euler(transform.rotation.x, -180, transform.rotation.z);
             else transform.rotation = Quaternion.Euler(transform.rotation.x, 0, transform.rotation.z);
-
+            SoundManager.s_Instance.PlaySFX(SFXType.CUSTOMERANGRY);
             CurrentCoro = StartCoroutine(Leaving());
 
         }

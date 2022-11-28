@@ -1,4 +1,5 @@
 ﻿using AdverGame.Customer;
+using AdverGame.Sound;
 using AdverGame.UI;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace AdverGame.Player
         UncompletedTask m_currentTaskShowDetail;
         List<ItemPlate> m_plates;
         int m_itemCooked;
+        int m_itemCooking;
         List<UncompletedTask> m_tasksDisplayed;
         [SerializeField] GameObject m_platePrefab;
         [SerializeField] GameObject m_itemSelectionPrefab;
@@ -34,15 +36,37 @@ namespace AdverGame.Player
             UpdateItemCooked(0);
         }
 
+        private void OnEnable()
+        {
+            SetupAmbience();
+        }
+
+        private void OnDisable()
+        {
+            var sm = SoundManager.s_Instance;
+            if (sm != null) SoundManager.s_Instance.StopAmbience();
+        }
+        void SetupAmbience()
+        {
+            var sm = SoundManager.s_Instance;
+            if (m_itemCooking > 0)
+            {
+                if (sm != null) sm.PlayAmbience(AmbienceType.KITCHEN);
+            }
+
+        }
         public void SetupChef(int itemcooking)
         {
-
+            m_itemCooking = itemcooking;
+            var sm = SoundManager.s_Instance;
             if (itemcooking <= 0)
             {
                 m_chef.SetActive(false);
+                if (sm != null) sm.StopAmbience();
             }
             else
             {
+                if (sm != null) sm.PlayAmbience(AmbienceType.KITCHEN);
                 m_chef.SetActive(value: true);
             }
         }

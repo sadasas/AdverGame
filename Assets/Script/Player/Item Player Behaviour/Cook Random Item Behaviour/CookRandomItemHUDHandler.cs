@@ -1,4 +1,5 @@
-﻿using AdverGame.UI;
+﻿using AdverGame.Sound;
+using AdverGame.UI;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -16,6 +17,7 @@ namespace AdverGame.Player
         int m_itemFound = 0;
         private float m_itemFoundMax;
         private float m_maxSearchTime = 0;
+        SoundManager sm;
         [SerializeField] Slider m_slider;
         [SerializeField] Transform m_itemPlace;
         [SerializeField] TextMeshProUGUI m_itemFounded;
@@ -32,8 +34,27 @@ namespace AdverGame.Player
         public Action OnResetTriggered;
         public Action OnInstantSearchItemTriggered;
 
+        private void OnEnable()
+        {
+            SetupAmbience();
+        }
+        private void OnDisable()
+        {
+            sm = SoundManager.s_Instance;
+            if (sm != null) SoundManager.s_Instance.StopAmbience();
+        }
+        void SetupAmbience()
+        {
+            sm = SoundManager.s_Instance;
+            if (m_itemFound < m_itemFoundMax)
+            {
+                if (sm != null) sm.PlayAmbience(AmbienceType.KITCHEN);
+            }
+
+        }
         private void Update()
         {
+
             if (m_timeSlerp < m_maxSearchTime)
             {
                 var a = 1f / (m_itemFoundMax / m_itemFound);
@@ -44,9 +65,14 @@ namespace AdverGame.Player
 
             }
 
-            if (m_itemFound == m_itemFoundMax && m_chef.activeInHierarchy) m_chef.SetActive(false);
-            else if(m_itemFound!= m_itemFoundMax)
+            if (m_itemFound == m_itemFoundMax && m_chef.activeInHierarchy)
             {
+                if (sm != null) sm.StopAmbience();
+                m_chef.SetActive(false);
+            }
+            else if (m_itemFound != m_itemFoundMax)
+            {
+
                 if (!m_chef.activeInHierarchy) m_chef.SetActive(true);
             }
         }

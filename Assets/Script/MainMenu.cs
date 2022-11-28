@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AdverGame.Sound;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -50,12 +51,14 @@ namespace AdverGame.MainMenu
             {
                 PlayerPrefs.SetInt("BGM", 0);
                 m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
+                SoundManager.s_Instance.PlayBGM(Sound.BGMType.INGAME);
 
             }
             else
             {
                 PlayerPrefs.SetInt("BGM", 1);
                 m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+                SoundManager.s_Instance.StopBGM();
             }
 
             m_isMute = !m_isMute;

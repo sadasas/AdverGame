@@ -112,6 +112,7 @@ namespace AdverGame.Tutorial
         }
         IEnumerator SwipeScreen()
         {
+            CameraController.s_Instance.CurrentView = 2;
             m_HUDMidleTutorial.SetActive(true);
             UIManager.s_Instance.isProhibited = true;
             PlayerManager.s_Instance.Player.InputBehaviour.isAllowSipeOverUI = true;
@@ -285,10 +286,10 @@ namespace AdverGame.Tutorial
             CameraController.s_Instance.MoveCamera(2);
             CameraController.s_Instance.isProhibited = true;
 
-            m_HUDTutorialEnd.SetActive(true);
+            m_HUDMidleTutorial.SetActive(true);
             string text = "Setelah Pelanggan duduk  otomatis memesan makanan dan muncul popup notifikasi makanan yang dipesan";
-            m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
-            m_nextBtn = m_HUDTutorialEnd.transform.GetChild(2).gameObject;
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+           
             m_cust.CurrentState = CustomerManager.s_Instance.CustomersRunning[0].CurrentState;
 
             m_nextBtn.SetActive(true);
@@ -303,10 +304,10 @@ namespace AdverGame.Tutorial
 
             m_bgBlur.SetActive(true);
             m_bgBlur.transform.SetAsLastSibling();
-            m_HUDTutorialEnd.transform.SetAsLastSibling();
+            m_HUDMidleTutorial.transform.SetAsLastSibling();
             GameObject.FindGameObjectWithTag("TaskHUD").transform.SetAsLastSibling();
             text = "diarea pojok kanan atas  akan muncul daftar pesanan pelanggan yang harus dimasak";
-            m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
 
             m_nextBtn.SetActive(value: true);
             m_isNext = false;
@@ -317,7 +318,7 @@ namespace AdverGame.Tutorial
             }
 
             text = "anda bisa menenekan daftar pesanan tersebut untuk melihat customer mana yang memesan";
-            m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             m_nextBtn.SetActive(true);
             m_isNext = false;
             while (!m_isNext)
@@ -349,7 +350,7 @@ namespace AdverGame.Tutorial
                 dummy.StopCoroutine(dummy.CurrentCoro);
             }
             m_bgBlur.transform.SetAsLastSibling();
-            m_HUDTutorialEnd.transform.SetAsLastSibling();
+            m_HUDMidleTutorial.transform.SetAsLastSibling();
             var btnA = GameObject.FindGameObjectWithTag("BtnItemAvailable");
             btnA.transform.SetAsLastSibling();
 
@@ -357,8 +358,8 @@ namespace AdverGame.Tutorial
             ScaleUp(btnA, out var id, Vector3.one);
             UIManager.s_Instance.isProhibited = false;
             Time.timeScale = 1f;
-            string text = "untuk menyajikan makanan ke pelanggan pertama tama  klik tombol menu tersedia pada pojok bawah kiri untuk melihat menu yang sudah dimasak";
-            m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+            string text = "untuk menyajikan makanan ke pelanggan  klik tombol menu tersedia pada pojok bawah kiri";
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             UIManager.s_Instance.HUDRegistered[HUDName.ITEM_AVAILABLE].SetActive(false);
             while (!UIManager.s_Instance.HUDRegistered[HUDName.ITEM_AVAILABLE].activeInHierarchy)
             {
@@ -367,7 +368,7 @@ namespace AdverGame.Tutorial
                 yield return null;
             }
             ResetScale(btnA, id, Vector3.one);
-            m_HUDTutorialEnd.SetActive(false);
+            m_HUDMidleTutorial.SetActive(false);
         }
         IEnumerator LookCharacterOrdered()
         {
@@ -526,7 +527,7 @@ namespace AdverGame.Tutorial
                 m_HUDTutorialEnd.transform.SetAsLastSibling();
                 yield return null;
             }
-            text = "Setelah makanan jadi atau sudah diambil , klik item pada kompor atau kulkas untuk menaruh di display / menu tersedia agar bisa memasak  kembali ";
+            text = "menu sudah jadi , klik item pada kompor atau kulkas untuk menaruh di display / menu tersedia agar bisa memasak  kembali ";
             m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
 
             while (PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.ItemCooked > 0)
@@ -556,20 +557,18 @@ namespace AdverGame.Tutorial
         IEnumerator LookMenuAvailableAlternatif()
         {
 
-            m_HUDMidleTutorial.SetActive(false);
-            m_HUDTutorialEnd.SetActive(true);
-            m_nextBtn = m_HUDTutorialEnd.transform.GetChild(2).gameObject;
+           
+           
             m_nextBtn.SetActive(false);
             string text = "klik pelanggan yang sedang duduk untuk membuka menu tersedia sekaligus memilih pesanan pelanggan tersebut";
-            m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             var cust = CustomerManager.s_Instance.CustomersRunning[0].OnSeeOrder += (order, cust) => { isCustomerWaitOrderClicked = true; };
             isCustomerWaitOrderClicked = false;
             while (!isCustomerWaitOrderClicked)
             {
                 yield return null;
             }
-            m_HUDMidleTutorial.SetActive(value: true);
-            m_HUDTutorialEnd.SetActive(false);
+         
             m_nextBtn = m_HUDMidleTutorial.transform.GetChild(2).gameObject;
             m_nextBtn.SetActive(false);
             text = "klik menu yang terseleksi untuk menyajikan masakan ";
@@ -610,9 +609,9 @@ namespace AdverGame.Tutorial
             m_nextBtn.SetActive(value: false);
             yield return StartCoroutine(BonusMenuExplanation());
             text = "Selamat Bermain";
-            m_HUDTutorialTop.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             yield return new WaitForSeconds(3f);
-            m_HUDTutorialTop.SetActive(false);
+            m_HUDMidleTutorial.SetActive(false);
             EndTutorial();
 
         }
@@ -636,17 +635,16 @@ namespace AdverGame.Tutorial
 
             ResetScale(btnmb, id, defaultScale);
 
-            m_HUDMidleTutorial.SetActive(false);
-            m_HUDTutorialTop.SetActive(true);
+          
 
             text = "koki  secara acak memasak makanan otomatis dan  tersimpan sampai batas maksimal  ";
-            m_HUDTutorialTop.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
-            m_nextBtn = m_HUDTutorialTop.transform.GetChild(2).gameObject;
+            m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
+            
             m_nextBtn.SetActive(true);
             m_isNext = false;
             while (!m_isNext)
             {
-                m_HUDTutorialTop.transform.SetAsLastSibling();
+                m_HUDMidleTutorial.transform.SetAsLastSibling();
                 yield return null;
             }
             m_nextBtn.SetActive(value: false);

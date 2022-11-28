@@ -147,8 +147,8 @@ namespace AdverGame.Customer
         public void OnTouch(GameObject obj)
         {
             if (obj != this.gameObject) return;
-
             SoundManager.s_Instance.PlaySFX(SFXType.DUMMYCLICK);
+
             if (m_touchCount == 0)
             {
 

@@ -81,6 +81,12 @@ namespace AdverGame
             UIManager.s_Instance.CloseHUD(gameObject);
         }
 
+        public void ExitGame()
+        {
+
+            Application.Quit();
+        }
+
     }
 
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8029011501961857402}
   - component: {fileID: 405104892846514551}
   m_Layer: 0
-  m_Name: BGMAudio
+  m_Name: Ambienceudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,9 +42,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.3
+  m_audioClip: {fileID: 8300000, guid: 362925209374b4141b0e2b7d2e7d1ae8, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0

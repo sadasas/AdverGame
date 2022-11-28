@@ -8,6 +8,7 @@ namespace AdverGame.Player
         Image m_progressBar;
 
         [SerializeField] Image m_imageItem;
+        [SerializeField] Image m_imageHover;
 
         private void Start()
         {
@@ -16,6 +17,7 @@ namespace AdverGame.Player
 
         public override void StartState(Sprite image)
         {
+            m_imageHover.gameObject.SetActive(true);
             m_imageItem.gameObject.SetActive(true);
             m_imageItem.sprite = image;
             m_imageItem.preserveAspect = true;
@@ -34,7 +36,7 @@ namespace AdverGame.Player
         }
         public override void FinishState(Sprite image)
         {
-           
+            m_imageHover.gameObject.SetActive(false);
 
         }
 

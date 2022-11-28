@@ -114,7 +114,7 @@ namespace AdverGame.UI
         {
             m_notificationHUD.SetActive(value: true);
             m_notificationHUD.transform.SetAsLastSibling();
-            m_notificationHUD.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = message;
+            m_notificationHUD.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = message;
             yield return new WaitForSeconds(m_notifTime);
             m_notificationHUD.SetActive(false);
         }

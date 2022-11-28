@@ -6,15 +6,22 @@ namespace AdverGame.Sound
     public enum BGMType
     {
         INGAME,
-        AMBIENCE,
+
         MAINMENU
 
     }
 
+    public enum AmbienceType
+    {
+        KITCHEN
+    }
     public enum SFXType
     {
         BTNCLICK,
-        DUMMYCLICK
+        DUMMYCLICK,
+        NEWCHARACTER,
+        CUSTOMERANGRY,
+        CUSTOMERHAPPY
 
     }
 
@@ -24,13 +31,18 @@ namespace AdverGame.Sound
 
         [SerializeField] AudioSource m_BGMAudio;
         [SerializeField] AudioSource m_SFXAudio;
+        [SerializeField] AudioSource m_AmbienceAudio;
 
         [Header("BGM List")]
         [SerializeField] AudioClip m_inGameBGM;
+        [SerializeField] AudioClip m_cookingBGM;
 
         [Header("SFX List")]
         [SerializeField] AudioClip m_btnClickSFX;
         [SerializeField] AudioClip m_dummyClickSFX;
+        [SerializeField] AudioClip m_newCharacterSFX;
+        [SerializeField] AudioClip m_customerAngrySFX;
+        [SerializeField] AudioClip m_customerHappySFX;
 
 
         public bool IsBGMMute;
@@ -74,6 +86,10 @@ namespace AdverGame.Sound
         {
             m_BGMAudio.Pause();
         }
+        public void StopAmbience()
+        {
+            m_AmbienceAudio.Pause();
+        }
 
         public void PlaySFX(SFXType type)
         {
@@ -82,11 +98,28 @@ namespace AdverGame.Sound
             {
                 SFXType.BTNCLICK => m_btnClickSFX,
                 SFXType.DUMMYCLICK => m_dummyClickSFX,
+                SFXType.NEWCHARACTER => m_newCharacterSFX,
+                SFXType.CUSTOMERHAPPY => m_customerHappySFX,
+                SFXType.CUSTOMERANGRY => m_customerAngrySFX,
                 _ => null
             };
 
             m_SFXAudio.clip = audioClip;
             m_SFXAudio.Play();
         }
+
+        public void PlayAmbience(AmbienceType type)
+        {
+            if (IsSFXMute) return;
+            var audioClip = (type) switch
+            {
+                AmbienceType.KITCHEN => m_cookingBGM,
+                _ => null
+            };
+            if (audioClip == m_AmbienceAudio.clip && m_AmbienceAudio.isPlaying) return;
+            m_AmbienceAudio.clip = audioClip;
+            m_AmbienceAudio.Play();
+        }
+
     }
 }
