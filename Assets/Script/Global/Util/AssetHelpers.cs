@@ -3,6 +3,7 @@
 using AdverGame.Customer;
 using AdverGame.Player;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AdverGame.Utility
@@ -19,11 +20,16 @@ namespace AdverGame.Utility
             foreach (var s in so)
             {
                 var obj = new ItemSerializable(s);
-                
+
                 items.Add(obj);
             }
 
-            return items;
+            var results = (from i in items
+                           orderby i.Content.Type descending
+                           select i).ToList();
+
+
+            return results;
         }
         public static ItemContent GetScriptableItemRegistered(string name)
         {
