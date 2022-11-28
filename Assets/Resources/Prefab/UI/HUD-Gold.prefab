@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 1633054251113433684}
   - component: {fileID: 1633054251113433674}
   m_Layer: 5
-  m_Name: Panel-Gold
+  m_Name: HUD-Gold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

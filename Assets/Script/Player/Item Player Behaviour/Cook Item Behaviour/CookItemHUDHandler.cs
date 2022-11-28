@@ -16,6 +16,7 @@ namespace AdverGame.Player
         List<ItemPlate> m_plates;
         int m_itemCooked;
         int m_itemCooking;
+        SoundManager m_sm;
         List<UncompletedTask> m_tasksDisplayed;
         [SerializeField] GameObject m_platePrefab;
         [SerializeField] GameObject m_itemSelectionPrefab;
@@ -32,26 +33,27 @@ namespace AdverGame.Player
         public bool isProhibited = false;
         private void Start()
         {
-
+            m_sm = SoundManager.s_Instance;
             UpdateItemCooked(0);
         }
 
         private void OnEnable()
         {
+            
             SetupAmbience();
         }
 
         private void OnDisable()
         {
-            var sm = SoundManager.s_Instance;
-            if (sm != null) SoundManager.s_Instance.StopAmbience();
+
+            if (m_sm != null) m_sm.StopAmbience();
         }
         void SetupAmbience()
         {
-            var sm = SoundManager.s_Instance;
+
             if (m_itemCooking > 0)
             {
-                if (sm != null) sm.PlayAmbience(AmbienceType.KITCHEN);
+                if (m_sm != null) m_sm.PlayAmbience(AmbienceType.KITCHEN);
             }
 
         }
@@ -66,7 +68,7 @@ namespace AdverGame.Player
             }
             else
             {
-                if (sm != null) sm.PlayAmbience(AmbienceType.KITCHEN);
+                if (sm != null && this.gameObject.activeInHierarchy) sm.PlayAmbience(AmbienceType.KITCHEN);
                 m_chef.SetActive(value: true);
             }
         }

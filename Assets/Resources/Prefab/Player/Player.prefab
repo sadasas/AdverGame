@@ -479,11 +479,11 @@ MonoBehaviour:
   m_etalaseFull: {fileID: 21300000, guid: 6cb8b33363258b241aa3df0ba0ecb4fa, type: 3}
   m_etalaseHalf: {fileID: 21300000, guid: ce2c18d71e0f2de4d95862a92beecb5c, type: 3}
   m_etalaseEmpty: {fileID: 21300000, guid: 8e7d95a3f3fe67841a45877169db8b67, type: 3}
-  m_maxItemGetted: 8
-  m_searchItemTime: 10
+  m_maxItemGetted: 24
+  m_searchItemTime: 120
   m_cookRandomItemClickable: {fileID: 1932025133073868120}
   m_cookItemClickable: {fileID: 4405727261145111070}
-  m_timeCooking: 7
+  m_timeCooking: 30
 --- !u!1 &3770618852505824030
 GameObject:
   m_ObjectHideFlags: 0

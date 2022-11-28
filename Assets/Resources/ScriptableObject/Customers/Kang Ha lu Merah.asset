@@ -16,12 +16,12 @@ MonoBehaviour:
   <Description>k__BackingField: 'Seseorang yang selalu membongkar kehaluan orang
     lain, dan kebetulan menggunakan pakaian serba merah  '
   <OccurrencePercentage>k__BackingField: 10
-  <Coin>k__BackingField: 400
-  <Exp>k__BackingField: 55
+  <Coin>k__BackingField: 30000
+  <Exp>k__BackingField: 30
   <Speed>k__BackingField: 0.7
-  <EatTime>k__BackingField: 6
+  <EatTime>k__BackingField: 30
   <SpawnDelay>k__BackingField: 13
-  <WaitOrderMaxTime>k__BackingField: 45
+  <WaitOrderMaxTime>k__BackingField: 60
   <WaitChairAvailableTime>k__BackingField: 5
   <EatImage>k__BackingField: {fileID: 21300000, guid: 7c767a28cf5d363498a99f2e5b9d2ba4, type: 3}
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 391a00a90c7c6464597706aeed1bc1d2, type: 3}

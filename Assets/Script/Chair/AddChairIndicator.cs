@@ -17,13 +17,13 @@ namespace AdverGame.Chair
 
         private void Start()
         {
-            m_priceText.text = Price.ToString();
+            m_priceText.text = ConversionHelper.CoinToRupiah(Price);
         }
 
         public void UpdateCost(int cost)
         {
             Price = cost;
-            m_priceText.text = Price.ToString();
+            m_priceText.text = ConversionHelper.CoinToRupiah(Price);
         }
         public void Buy()
         {

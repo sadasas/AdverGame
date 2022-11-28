@@ -84,10 +84,12 @@ namespace AdverGame.Sound
 
         public void StopBGM()
         {
+           
             m_BGMAudio.Pause();
         }
         public void StopAmbience()
         {
+           
             m_AmbienceAudio.Pause();
         }
 
@@ -117,6 +119,7 @@ namespace AdverGame.Sound
                 _ => null
             };
             if (audioClip == m_AmbienceAudio.clip && m_AmbienceAudio.isPlaying) return;
+          
             m_AmbienceAudio.clip = audioClip;
             m_AmbienceAudio.Play();
         }

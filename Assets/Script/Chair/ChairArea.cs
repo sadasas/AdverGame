@@ -92,10 +92,8 @@ namespace AdverGame.Chair
 
             m_chairIndicators = GameObject.Instantiate(m_addChairIndicatorPrefab, newEmptyFieldData.pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<AddChairIndicator>();
 
-            CurrentChairCost += CurrentChairCost;
-            
-            
             m_chairIndicators.Price = CurrentChairCost;
+            CurrentChairCost = (int)(CurrentChairCost * 1.5f);
             m_chairIndicators.OnAddChair += AddIndicatorTriggered;
             m_chairIndicators.Offset = newEmptyFieldData.anchor;
 
@@ -113,8 +111,9 @@ namespace AdverGame.Chair
 
             m_chairIndicators = GameObject.Instantiate(m_addChairIndicatorPrefab, pos, Quaternion.identity, GameObject.Find("Chair").transform).GetComponent<AddChairIndicator>();
 
-            CurrentChairCost += CurrentChairCost;
+          
             m_chairIndicators.Price = CurrentChairCost;
+            CurrentChairCost =(int) (CurrentChairCost * 1.5f);
             m_chairIndicators.OnAddChair += AddIndicatorTriggered;
             m_chairIndicators.Offset = anchor;
 

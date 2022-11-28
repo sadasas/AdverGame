@@ -16,12 +16,12 @@ MonoBehaviour:
   <Description>k__BackingField: Pegawai kantoran 9 to 5 yang merasa dirinya sangat
     membutuhkan healing
   <OccurrencePercentage>k__BackingField: 50
-  <Coin>k__BackingField: 30
+  <Coin>k__BackingField: 10000
   <Exp>k__BackingField: 10
   <Speed>k__BackingField: 0.5
-  <EatTime>k__BackingField: 20
+  <EatTime>k__BackingField: 30
   <SpawnDelay>k__BackingField: 3
-  <WaitOrderMaxTime>k__BackingField: 55
+  <WaitOrderMaxTime>k__BackingField: 60
   <WaitChairAvailableTime>k__BackingField: 2
   <EatImage>k__BackingField: {fileID: 21300000, guid: 7c767a28cf5d363498a99f2e5b9d2ba4, type: 3}
   <HappyImage>k__BackingField: {fileID: 21300000, guid: 391a00a90c7c6464597706aeed1bc1d2, type: 3}

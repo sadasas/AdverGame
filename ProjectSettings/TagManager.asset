@@ -15,6 +15,7 @@ TagManager:
   - ChairSet
   - Table
   - Dummy
+  - PanelBlur
   layers:
   - Default
   - TransparentFX
