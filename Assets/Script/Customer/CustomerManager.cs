@@ -62,7 +62,7 @@ namespace AdverGame.Customer
             m_taskHUD.transform.SetAsFirstSibling();
 
             PlayerManager.s_Instance.OnIncreaseLevel += UpdateLevel;
-            OnAddOrder += PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.UpdateTaskUnCompleted;
+            OnAddOrder += PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.AddTaskUnCompleted;
             OnRemoveOrder += PlayerManager.s_Instance.Player.ItemPlayerBehaviour.CookItemHandler.RemoveUncompleteOrder;
         }
 
@@ -506,6 +506,7 @@ namespace AdverGame.Customer
         }
         void RemoveOrder(ItemSerializable menu, CustomerController cus)
         {
+
             if (m_selectedTask != null)
             {
                 if (cus == m_selectedTask.CustomerOrder.Customer) PlayerManager.s_Instance.Player.ItemPlayerBehaviour.ItemAvailableHandler.UnselectItemInHUD();
@@ -517,6 +518,7 @@ namespace AdverGame.Customer
                 {
                     if (task.CustomerOrder.Customer == order.Customer)
                     {
+
                         OnRemoveOrder?.Invoke(task);
                         var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
                         panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);

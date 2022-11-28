@@ -42,9 +42,9 @@ namespace AdverGame.Player
 
         }
 
-        public void UpdateTaskUnCompleted(Task newTask)
+        public void AddTaskUnCompleted(Task newTask)
         {
-           
+
             foreach (var item in m_itemContainer.Items)
             {
                 if (newTask.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name))
@@ -60,6 +60,9 @@ namespace AdverGame.Player
 
 
         }
+
+
+
         public void RemoveUncompleteOrder(Task order)
         {
             if (m_tasks == null || m_tasks.Count == 0) return;
@@ -67,6 +70,7 @@ namespace AdverGame.Player
             {
                 if (order.CustomerOrder.ItemOrder.Content.Name.Equals(item.CustomerOrder.ItemOrder.Content.Name) && order.CustomerOrder.Customer == item.CustomerOrder.Customer)
                 {
+                    AddTaskUnCompleted(order);
                     m_tasks.Remove(item);
                     HUDHandler.RemoveTaskUncompleted(order);
                     break;

@@ -70,6 +70,7 @@ namespace AdverGame.Tutorial
         void EndTutorial()
         {
             CameraController.s_Instance.isProhibited = false;
+            CameraController.s_Instance.CurrentView = 2;
             PlayerPrefs.SetInt("Tutorial", 1);
             Destroy(m_HUDTutorialEnd.gameObject);
             Destroy(m_HUDTutorialTop.gameObject);
@@ -381,6 +382,7 @@ namespace AdverGame.Tutorial
             m_nextBtn = m_HUDTutorialTop.transform.GetChild(2).gameObject;
             m_bgBlur.SetActive(false);
             m_HUDTutorialTop.transform.SetAsLastSibling();
+            m_nextBtn.SetActive(false);
             string text = " untuk lebih jelas klik pelanggan yang sedang menunggu pesanan untuk melihat pesanan lebih jelas";
             m_HUDTutorialTop.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             var cust = CustomerManager.s_Instance.CustomersRunning[0].OnSeeOrder += (order, cust) => { isCustomerWaitOrderClicked = true; };
@@ -558,7 +560,7 @@ namespace AdverGame.Tutorial
             m_HUDTutorialEnd.SetActive(true);
             m_nextBtn = m_HUDTutorialEnd.transform.GetChild(2).gameObject;
             m_nextBtn.SetActive(false);
-            string text = "anda juga bisa mengklik pelanggan yang sedang duduk untuk membuka menu tersedia sekaligus memilih pesanan pelanggan tersebut";
+            string text = "klik pelanggan yang sedang duduk untuk membuka menu tersedia sekaligus memilih pesanan pelanggan tersebut";
             m_HUDTutorialEnd.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             var cust = CustomerManager.s_Instance.CustomersRunning[0].OnSeeOrder += (order, cust) => { isCustomerWaitOrderClicked = true; };
             isCustomerWaitOrderClicked = false;
@@ -594,7 +596,7 @@ namespace AdverGame.Tutorial
 
 
 
-            text = "Koin digunakan untuk menambah meja dan kursi yang tersedia, sehingga menambah pelanggan yang mmemesan ";
+            text = "Koin digunakan untuk menambah meja dan kursi yang tersedia, sehingga menambah pelanggan yang memesan ";
             m_HUDMidleTutorial.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
            
             m_nextBtn.SetActive(true);
@@ -607,7 +609,7 @@ namespace AdverGame.Tutorial
             Time.timeScale = 1f;
             m_nextBtn.SetActive(value: false);
             yield return StartCoroutine(BonusMenuExplanation());
-            text = "Semalat Bermain";
+            text = "Selamat Bermain";
             m_HUDTutorialTop.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = text;
             yield return new WaitForSeconds(3f);
             m_HUDTutorialTop.SetActive(false);
