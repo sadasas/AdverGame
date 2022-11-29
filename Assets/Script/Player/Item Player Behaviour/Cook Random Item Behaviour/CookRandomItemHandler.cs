@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
@@ -90,7 +89,7 @@ namespace AdverGame.Player
 
         void SetupEtalase(int itemFounded)
         {
-            
+
             if (itemFounded == 0) m_etalase.sprite = m_etalaseEmpty;
             else if (itemFounded < m_maxItemCooked) m_etalase.sprite = m_etalaseHalf;
             else m_etalase.sprite = m_etalaseFull;
@@ -189,7 +188,7 @@ namespace AdverGame.Player
                 m_HUDHandler.OnResetTriggered += ResetItemCooked;
                 m_HUDHandler.OnInstantSearchItemTriggered += InstantCook;
                 OnFindItem += m_HUDHandler.TrackItemFinded;
-
+                m_HUDHandler.TrackItemFinded(0, m_maxItemCooked, m_searchItemTime);
                 m_HUDHandler.gameObject.SetActive(false);
                 UIManager.s_Instance.HUDRegistered.Add(HUDName.FIND_ITEM, m_HUDHandler.gameObject);
 
