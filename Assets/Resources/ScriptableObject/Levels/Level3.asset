@@ -15,7 +15,7 @@ MonoBehaviour:
   MaxChair: 4
   MaxArea: 1
   MaxStove: 3
-  MaxExp: 60
+  MaxExp: 500
   Sequence: 3
   VariantCust:
   - {fileID: 2827668575111692131, guid: 7f565180c0153ad408f3ea69676014d2, type: 3}
