@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f71f5ee94e7d3458451b1160a389db, type: 3}
   m_Name: Level5
   m_EditorClassIdentifier: 
-  MaxChair: 8
+  MaxChair: 6
   MaxArea: 2
   MaxStove: 5
   MaxExp: 1500

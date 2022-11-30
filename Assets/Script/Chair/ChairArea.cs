@@ -191,7 +191,7 @@ namespace AdverGame.Chair
 
             m_lastChairAdded = (anchor, pos);
 
-
+            
 
         }
 

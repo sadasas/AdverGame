@@ -16,7 +16,7 @@ namespace AdverGame.Player
         GameObject m_cookRandomItemHUDPrefab;
         Coroutine m_cookRandomItemCoro;
         MonoBehaviour m_player;
-        int m_maxItemCooked = 8;
+        int m_maxItemCooked = 24;
         ItemContainer m_itemContainer;
         bool isCooking = false;
         bool isInstantCooking = false;
@@ -24,9 +24,12 @@ namespace AdverGame.Player
         int[] index;
         SpriteRenderer m_etalase;
         Sprite m_etalaseFull, m_etalaseHalf, m_etalaseEmpty;
+        float m_cooldownBtnFaster;
+        float m_currentCooldownBtnFaster;
+
         public List<ItemSerializable> ItemFounded { get; private set; }
 
-        public CookRandomItemHandler(MonoBehaviour player, GameObject cookRandomItemHUDPrefab, int searchItemTime, int maxItemCooked, ItemContainer itemContainer, SpriteRenderer etalase, Sprite etalaseFull, Sprite etalaseHalf, Sprite etalaseEmpty)
+        public CookRandomItemHandler(MonoBehaviour player, GameObject cookRandomItemHUDPrefab, int searchItemTime, int maxItemCooked, ItemContainer itemContainer, SpriteRenderer etalase, Sprite etalaseFull, Sprite etalaseHalf, Sprite etalaseEmpty, float cooldownBtnFaster)
         {
             m_cookRandomItemHUDPrefab = cookRandomItemHUDPrefab;
             m_player = player;
@@ -37,33 +40,60 @@ namespace AdverGame.Player
             m_etalaseFull = etalaseFull;
             m_etalaseHalf = etalaseHalf;
             m_etalaseEmpty = etalaseEmpty;
+            m_cooldownBtnFaster = cooldownBtnFaster;
+            m_itemContainer = itemContainer;
 
             InitFindItemHUD();
+            LoadDataPlayer();
             StartCookRandomItem();
-            m_itemContainer = itemContainer;
 
         }
 
+        void LoadDataPlayer()
+        {
+            var data = PlayerManager.s_Instance.GetDataRandomItem();
+            ItemFounded = data.RandomItemGetted;
+            m_currentCooldownBtnFaster = data.CooldownBtnFaster;
+
+            if (m_currentCooldownBtnFaster > 0.0f) m_player.StartCoroutine(CooldownInstantCooking(m_currentCooldownBtnFaster));
+
+        }
         IEnumerator CookRandomItem()
         {
+            ItemFounded ??= new();
+            var loadedData = 0;
+            if (ItemFounded.Count > 0)
+            {
+                foreach (var item in ItemFounded)
+                {
+                    loadedData += item.Stack;
+                }
+            }
+            if (loadedData >= m_maxItemCooked)
+            {
 
+                OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
+
+                SetupEtalase(loadedData);
+            }
             index = new int[m_maxItemCooked];
             for (int i = 0; i < index.Length; i++)
             {
                 index[i] = UnityEngine.Random.Range(0, m_allItems.Count);
             }
-
             var count = 0;
-            ItemFounded ??= new();
-            while (isCooking && count < m_maxItemCooked)
+
+
+
+            while (isCooking && count + loadedData < m_maxItemCooked)
             {
 
 
-                OnFindItem?.Invoke(count, m_maxItemCooked, m_searchItemTime);
+                OnFindItem?.Invoke(count + loadedData, m_maxItemCooked, m_searchItemTime);
 
                 yield return new WaitForSeconds(m_searchItemTime);
 
-                var newItem = new ItemSerializable(m_allItems[index[count]].Content);
+                var newItem = new ItemSerializable(m_allItems[index[count + loadedData]].Content);
                 //Find item
                 bool isSame = false;
                 if (ItemFounded.Count > 0)
@@ -81,7 +111,7 @@ namespace AdverGame.Player
                 if (!isSame) ItemFounded.Add(newItem);
 
                 count++;
-                if (count == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
+                if (count + loadedData == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
 
                 SetupEtalase(count);
             }
@@ -115,7 +145,7 @@ namespace AdverGame.Player
         void PutItemFinded()
         {
             isCooking = false;
-            m_player.StopCoroutine(m_cookRandomItemCoro);
+            if (m_cookRandomItemCoro != null) m_player.StopCoroutine(m_cookRandomItemCoro);
             lock (m_locker)
             {
 
@@ -153,6 +183,8 @@ namespace AdverGame.Player
 
                     isInstantCooking = false;
 
+                    m_player.StartCoroutine(CooldownInstantCooking(m_cooldownBtnFaster));
+
                 }
 
                 foreach (var item in ItemFounded)
@@ -164,6 +196,21 @@ namespace AdverGame.Player
             }
             DisplayItemCooked();
 
+        }
+
+        IEnumerator CooldownInstantCooking(float cooldownBtnFaster)
+        {
+            m_currentCooldownBtnFaster = cooldownBtnFaster;
+
+            while (m_currentCooldownBtnFaster > 0.0f)
+            {
+                m_HUDHandler.DisableBtnFaster(m_currentCooldownBtnFaster);
+                m_currentCooldownBtnFaster -= Time.deltaTime;
+                yield return null;
+
+            }
+
+            m_HUDHandler.EnableBtnFaster();
         }
         void ResetItemCooked()
         {
@@ -203,6 +250,15 @@ namespace AdverGame.Player
 
         }
 
+        public void OnExit()
+        {
+
+            var data = new DataRandomItem();
+            data.CooldownBtnFaster = m_currentCooldownBtnFaster;
+            data.RandomItemGetted = ItemFounded;
+
+            PlayerManager.s_Instance.SaveDataRandomItem(data);
+        }
 
     }
 

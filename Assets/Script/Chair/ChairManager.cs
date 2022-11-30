@@ -23,6 +23,7 @@ namespace AdverGame.Chair
         InputBehaviour m_inputPlayer;
         List<ChairArea> m_chairAreas;
         ChairArea m_currentChairArea = null;
+        
         Vector2[] m_defaultPos;
         Vector2[] m_centerAreaPos;
         int m_areaUnlocked = 0;
@@ -35,7 +36,7 @@ namespace AdverGame.Chair
         [SerializeField] GameObject m_areaPrefab;
         [SerializeField] GameObject m_addChairIndicatorPrefab;
 
-
+        public int ChairsInstanced =1;
         public List<ChairController> m_ojolChairs;
         private void Awake()
         {
@@ -124,7 +125,7 @@ namespace AdverGame.Chair
 
                     foreach (var data in dataChairsAreas[i])
                     {
-
+                        ChairsInstanced++;
                         m_chairAreas[i].SpawnChair(data.pos, data.anchor);
                         m_chairAreas[i].InitAddChairIndicator();
                     }
@@ -152,6 +153,7 @@ namespace AdverGame.Chair
 
         void SaveDataChair((ChairAnchor, Vector2) chairData, int address)
         {
+            ChairsInstanced++;
             PlayerManager.s_Instance.SaveChair(chairData, address);
         }
         public bool IsOjolChairAvailable()

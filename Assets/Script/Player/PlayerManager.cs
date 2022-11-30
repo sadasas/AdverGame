@@ -14,6 +14,13 @@ public struct DataChairSerializable
     public Vector2 Pos;
     public int Address;
 }
+
+[Serializable]
+public struct DataRandomItem
+{
+    public List<ItemSerializable> RandomItemGetted;
+    public float CooldownBtnFaster;
+}
 [Serializable]
 public class DataLevel
 {
@@ -52,7 +59,7 @@ public class DataLevel
 public class PlayerData
 {
     public int Coin;
-   
+    public DataRandomItem RandomItem;
     public DataLevel Level;
     public List<ItemSerializable> Items;
     public List<DataChairSerializable> DataChairsAreas;
@@ -147,6 +154,16 @@ namespace AdverGame.Player
 
         }
 
+        public void SaveDataRandomItem(DataRandomItem data)
+        {
+            Data.RandomItem = data;
+            SaveDataPlayer();
+        }
+
+        public DataRandomItem GetDataRandomItem()
+        {
+            return Data.RandomItem;
+        }
         public List<List<(ChairAnchor anchor, Vector2 pos)>> GetDataChairs()
         {
             if (Data.DataChairsAreas == null || Data.DataChairsAreas.Count == 0) return null;

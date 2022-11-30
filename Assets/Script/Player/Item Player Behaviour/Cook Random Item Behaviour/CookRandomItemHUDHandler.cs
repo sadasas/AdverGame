@@ -3,6 +3,7 @@ using AdverGame.UI;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,7 @@ namespace AdverGame.Player
         int m_itemFound = 0;
         private float m_itemFoundMax;
         private float m_maxSearchTime = 0;
+        bool isInstantCookAllowed = true;
         SoundManager sm;
         [SerializeField] Slider m_slider;
         [SerializeField] Transform m_itemPlace;
@@ -26,6 +28,7 @@ namespace AdverGame.Player
         [SerializeField] GameObject m_getItemButton;
         [SerializeField] GameObject m_itemFoundedPrefab;
         [SerializeField] GameObject m_chef;
+        [SerializeField] TextMeshProUGUI m_btnFasterText;
 
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
@@ -93,6 +96,7 @@ namespace AdverGame.Player
 
         public void TrackItemFinded(int itemfindedTot, float itemMaxFounded, float maxSearchTime)
         {
+
             m_timeSlerp = 0f;
             m_itemFound = itemfindedTot;
             m_itemFoundMax = itemMaxFounded;
@@ -110,6 +114,8 @@ namespace AdverGame.Player
 
         public void GetItemInstant()
         {
+            if (!isInstantCookAllowed) return;
+            m_getInstantItemButton.SetActive(false);
             Instantiate(m_adverHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
 
             OnInstantSearchItemTriggered?.Invoke();
@@ -143,11 +149,23 @@ namespace AdverGame.Player
             }
             m_itemDisplayed = null;
             m_slider.value = 0;
-            m_itemFounded.text = "0 / 8";
+            m_itemFounded.text = "0 / 24";
             m_itemPlace.parent.gameObject.SetActive(false);
             m_getItemButton.SetActive(false);
             m_getInstantItemButton.SetActive(true);
             this.gameObject.SetActive(false);
+        }
+
+        public void DisableBtnFaster(float time)
+        {
+            isInstantCookAllowed = false;
+            m_btnFasterText.text = math.floor(time).ToString();
+        }
+
+        public void EnableBtnFaster()
+        {
+            isInstantCookAllowed = true;
+            m_btnFasterText.text = "Percepat";
         }
     }
 

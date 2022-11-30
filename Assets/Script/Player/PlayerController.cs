@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
@@ -8,7 +7,7 @@ namespace AdverGame.Player
         public InputBehaviour InputBehaviour { get; private set; }
         public ItemPlayerBehaviour ItemPlayerBehaviour;
 
-      
+
 
         [Header("INPUT BEHAVIOUR SETTING")]
         [SerializeField] LayerMask m_clickableMask;
@@ -25,13 +24,14 @@ namespace AdverGame.Player
         [SerializeField] GameObject m_cookRandomItemClickable;
         [SerializeField] GameObject m_cookItemClickable;
         [SerializeField] float m_timeCooking;
+        [SerializeField] float m_cooldownBtnFaster;
 
 
 
         private void Start()
         {
             InputBehaviour = new(m_clickableMask);
-            ItemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking, m_etalase,m_etalaseFull,m_etalaseHalf,m_etalaseEmpty);
+            ItemPlayerBehaviour = new(InputBehaviour, m_cookRandomItemClickable, m_cookRandomItemHUDPrefab, m_itemAvailableHUDPrefab, m_itemAvailableButtonPrefab, m_searchItemTime, m_maxItemGetted, this, m_cookItemHUDPrefab, m_cookItemClickable, m_timeCooking, m_etalase, m_etalaseFull, m_etalaseHalf, m_etalaseEmpty, m_cooldownBtnFaster);
         }
 
         private void Update()
@@ -49,7 +49,10 @@ namespace AdverGame.Player
             ItemPlayerBehaviour.OnDestroy();
         }
 
-
+        private void OnApplicationQuit()
+        {
+            ItemPlayerBehaviour.OnExit();
+        }
 
         public bool IsInstanced()
         {
