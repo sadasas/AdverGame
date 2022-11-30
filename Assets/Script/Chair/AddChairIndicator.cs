@@ -27,11 +27,11 @@ namespace AdverGame.Chair
         }
         public void Buy()
         {
-            Debug.Log(ChairManager.s_Instance.ChairsInstanced);
 
-            if (PlayerManager.s_Instance.Data.Coin >= Price && PlayerManager.s_Instance.Data.Level.CurrentLevel.MaxChair > ChairManager.s_Instance.ChairsInstanced )
+
+            if (PlayerManager.s_Instance.Data.Coin >= Price && PlayerManager.s_Instance.Data.Level.CurrentLevel.MaxChair > ChairManager.s_Instance.ChairsInstanced)
             {
-               
+
                 PlayerManager.s_Instance.IncreaseCoin(-Price);
                 PlayerManager.s_Instance.IncreaseExp(Exp);
                 OnAddChair?.Invoke(this);
@@ -39,8 +39,8 @@ namespace AdverGame.Chair
             }
             else
             {
-                if(PlayerManager.s_Instance.Data.Coin < Price)
-                UIManager.s_Instance.ShowNotification("Coin anda tidak cukup untuk membeli set meja kursi");
+                if (PlayerManager.s_Instance.Data.Coin < Price)
+                    UIManager.s_Instance.ShowNotification("Coin anda tidak cukup untuk membeli set meja kursi");
                 else UIManager.s_Instance.ShowNotification("Tingkatkan level experience anda agar bisa membeli set meja kursi");
             }
 
