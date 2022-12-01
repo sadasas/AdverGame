@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3683602359359665908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,10 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2483b7f05e93ece488f1df89e437f5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TotCustomersWalking: 0
-  m_customerVariants:
-  - {fileID: 8844429343190365344, guid: 7d518e23da3fd2d4a90c47df05f52bbb, type: 3}
+  m_customerVariants: []
+  m_dummyVariantsPrefabs:
+  - {fileID: 1479231829488358141, guid: db78c119b2cdd3c4a8397c98cb0b703d, type: 3}
   m_taskHUDPrefab: {fileID: 6670355633020578430, guid: ab6717a3a65b026479ba8999bfea4f13, type: 3}
   m_orderTaskPrefab: {fileID: 3251720979543702477, guid: 1710a0160856a724e81cf90a9a20a3ee, type: 3}
-  m_maxCustomerRunning: 5
-  m_maxCustomerQueued: 10
+  m_maxCustomerRunning: 4
+  m_maxCustomerQueued: 8
+  DummyRunning: []
+  CustomersRunning: []

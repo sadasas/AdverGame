@@ -1,5 +1,4 @@
 ﻿using AdverGame.Player;
-using AdverGame.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,7 +15,7 @@ namespace AdverGame.Customer
             {
                 var camera = Camera.main;
                 camera.transform.position = new Vector3(CustomerOrder.Customer.transform.position.x, camera.transform.position.y, camera.transform.position.z);
-                UIManager.s_Instance.ForceHUD(HUDName.ITEM_AVAILABLE);
+                CustomerManager.s_Instance.SeeOrder(CustomerOrder.ItemOrder, CustomerOrder.Customer);
             }
         }
     }

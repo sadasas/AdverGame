@@ -23,7 +23,7 @@ namespace AdverGame.Player
            
         }
 
-        public void UpdateStack(int stack)
+        public void IncreaseStack(int stack)
         {
             Stack += stack;
         }

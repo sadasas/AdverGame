@@ -1,6 +1,9 @@
-﻿using System;
+﻿using AdverGame.Sound;
+using AdverGame.UI;
+using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,13 +18,17 @@ namespace AdverGame.Player
         int m_itemFound = 0;
         private float m_itemFoundMax;
         private float m_maxSearchTime = 0;
+        bool isInstantCookAllowed = true;
+        SoundManager sm;
         [SerializeField] Slider m_slider;
         [SerializeField] Transform m_itemPlace;
         [SerializeField] TextMeshProUGUI m_itemFounded;
         [SerializeField] GameObject m_adverHUDPrefab;
         [SerializeField] GameObject m_getInstantItemButton;
         [SerializeField] GameObject m_getItemButton;
-        [SerializeField] GameObject m_itemFoundedRawPrefab;
+        [SerializeField] GameObject m_itemFoundedPrefab;
+        [SerializeField] GameObject m_chef;
+        [SerializeField] TextMeshProUGUI m_btnFasterText;
 
         [field: SerializeField]
         public List<GameObject> m_itemDisplayed { get; private set; }
@@ -30,8 +37,27 @@ namespace AdverGame.Player
         public Action OnResetTriggered;
         public Action OnInstantSearchItemTriggered;
 
+        private void OnEnable()
+        {
+            SetupAmbience();
+        }
+        private void OnDisable()
+        {
+            sm = SoundManager.s_Instance;
+            if (sm != null) SoundManager.s_Instance.StopAmbience();
+        }
+        void SetupAmbience()
+        {
+            sm = SoundManager.s_Instance;
+            if (m_itemFound < m_itemFoundMax)
+            {
+                if (sm != null) sm.PlayAmbience(AmbienceType.KITCHEN);
+            }
+
+        }
         private void Update()
         {
+
             if (m_timeSlerp < m_maxSearchTime)
             {
                 var a = 1f / (m_itemFoundMax / m_itemFound);
@@ -42,15 +68,26 @@ namespace AdverGame.Player
 
             }
 
+            if (m_itemFound == m_itemFoundMax && m_chef.activeInHierarchy)
+            {
+                if (sm != null) sm.StopAmbience();
+                m_chef.SetActive(false);
+            }
+            else if (m_itemFound != m_itemFoundMax)
+            {
+
+                if (!m_chef.activeInHierarchy) m_chef.SetActive(true);
+            }
         }
 
         public void DisplayItemFounded(ItemSerializable itemfounded)
         {
             m_itemDisplayed ??= new();
-            var obj = Instantiate(m_itemFoundedRawPrefab, m_itemPlace.transform);
+            var obj = Instantiate(m_itemFoundedPrefab, m_itemPlace.transform);
             obj.transform.GetChild(0).GetComponent<Image>().sprite = itemfounded.Content.Image;
             obj.transform.GetChild(0).GetComponent<Image>().preserveAspect = true;
-            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = itemfounded.Content.Name;
+            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = itemfounded.Stack.ToString();
+            obj.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = itemfounded.Content.Name;
 
             m_itemDisplayed.Add(obj);
 
@@ -59,6 +96,7 @@ namespace AdverGame.Player
 
         public void TrackItemFinded(int itemfindedTot, float itemMaxFounded, float maxSearchTime)
         {
+
             m_timeSlerp = 0f;
             m_itemFound = itemfindedTot;
             m_itemFoundMax = itemMaxFounded;
@@ -76,16 +114,18 @@ namespace AdverGame.Player
 
         public void GetItemInstant()
         {
+            if (!isInstantCookAllowed) return;
+            m_getInstantItemButton.SetActive(false);
             Instantiate(m_adverHUDPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform);
 
             OnInstantSearchItemTriggered?.Invoke();
-            OnGetTriggered?.Invoke();
+
             m_itemPlace.parent.gameObject.SetActive(true);
 
         }
-        public void Exit()
+        public void Close()
         {
-            this.gameObject.SetActive(false);
+            UIManager.s_Instance.CloseHUD(gameObject);
         }
 
 
@@ -109,11 +149,23 @@ namespace AdverGame.Player
             }
             m_itemDisplayed = null;
             m_slider.value = 0;
-            m_itemFounded.text = "0 / 8";
+            m_itemFounded.text = "0 / 24";
             m_itemPlace.parent.gameObject.SetActive(false);
             m_getItemButton.SetActive(false);
             m_getInstantItemButton.SetActive(true);
             this.gameObject.SetActive(false);
+        }
+
+        public void DisableBtnFaster(float time)
+        {
+            isInstantCookAllowed = false;
+            m_btnFasterText.text = math.floor(time).ToString();
+        }
+
+        public void EnableBtnFaster()
+        {
+            isInstantCookAllowed = true;
+            m_btnFasterText.text = "Percepat";
         }
     }
 

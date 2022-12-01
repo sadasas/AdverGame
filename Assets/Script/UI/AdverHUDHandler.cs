@@ -1,12 +1,13 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace AdverGame.Player
 {
 
 
-    public class AdverHUDHandler : MonoBehaviour
+    public class AdverHUDHandler : MonoBehaviour, IPointerClickHandler
     {
         Image m_contentPlace;
 
@@ -36,8 +37,10 @@ namespace AdverGame.Player
             Time.timeScale = 1;
         }
 
-
-
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Application.OpenURL("https://gofood.co.id/semarang/restaurant/oishi-fried-chicken-jl-raya-muntal-gunungpati-7b93d121-1be2-44bc-bf94-fc549bfd5fa7");
+        }
     }
 
 

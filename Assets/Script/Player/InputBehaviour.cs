@@ -4,28 +4,31 @@ using UnityEngine.EventSystems;
 
 namespace AdverGame.Player
 {
-	public class InputBehaviour
-	{
-		public InputBehaviour(LayerMask customerMask)
-		{
-			m_clickablerMask = customerMask;
-		}
+    public class InputBehaviour
+    {
+        public InputBehaviour(LayerMask customerMask)
+        {
+            m_clickablerMask = customerMask;
+        }
 
-		Touch m_touch;
-		LayerMask m_clickablerMask;
+        Touch m_touch;
+        LayerMask m_clickablerMask;
 
-		public bool IsDrag;
-		public Action<GameObject> OnLeftClick;
-		public Action<Vector2> OnLeftDrag;
+        public bool IsDrag;
+        public bool isAllowSipeOverUI = false;
+        public Action<GameObject> OnLeftClick;
 
 
+        public Action<float> OnLeftEndDrag;
+        [SerializeField] Vector2 m_startPos;
 
-		public void Update()
-		{
-			DetecTouchTriggered();
-		}
-		private void DetecTouchTriggered()
-		{
+
+        public void Update()
+        {
+            DetecTouchTriggered();
+        }
+        private void DetecTouchTriggered()
+        {
 
 #if UNITY_STANDALONE_WIN
 
@@ -39,34 +42,82 @@ namespace AdverGame.Player
                 }
             }
 #elif UNITY_ANDROID
-			if (Input.touchCount <= 0) return;
+            if (Input.touchCount <= 0) return;
 
-			m_touch = Input.GetTouch(0);
+            m_touch = Input.GetTouch(0);
 
+            if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Began)
+            {
+                m_startPos = m_touch.position;
+                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
 
-			if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
-			{
-				if(!IsDrag)
+                if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
                 {
-					RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
-					if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
-					{
+                    OnLeftClick?.Invoke(hit.transform.gameObject);
 
-						OnLeftClick?.Invoke(hit.transform.gameObject);
-					}
-				}
-				IsDrag = false;
+                }
 
-			}
-			else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Moved )
-			{
-				IsDrag = true;
-				OnLeftDrag.Invoke(m_touch.deltaPosition);
-			}
+                else
+                {
+                    OnLeftClick?.Invoke(null);
+                }
+            }
+            else if (isAllowSipeOverUI && m_touch.phase == TouchPhase.Began)
+            {
+                m_startPos = m_touch.position;
+                RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(m_touch.position), Vector2.zero, m_clickablerMask);
+
+                if (hit.collider && EventSystem.current.IsPointerOverGameObject() == false)
+                {
+                    OnLeftClick?.Invoke(hit.transform.gameObject);
+
+                }
+
+                else
+                {
+                    OnLeftClick?.Invoke(null);
+                }
+            }
+
+            else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Ended)
+            {
+
+                if (!IsDrag) return;
+                var distance = m_touch.position.x - m_startPos.x;
+
+
+                OnLeftEndDrag?.Invoke(distance);
+
+
+                IsDrag = false;
+
+            }
+            else if (isAllowSipeOverUI && m_touch.phase == TouchPhase.Ended)
+            {
+
+                if (!IsDrag) return;
+                var distance = m_touch.position.x - m_startPos.x;
+
+
+                OnLeftEndDrag?.Invoke(distance);
+
+
+                IsDrag = false;
+            }
+            else if (EventSystem.current.IsPointerOverGameObject(m_touch.fingerId) == false && m_touch.phase == TouchPhase.Moved)
+            {
+                IsDrag = true;
+
+            }
+            else if (isAllowSipeOverUI && m_touch.phase == TouchPhase.Moved)
+            {
+                IsDrag = true;
+            }
+
 #endif
 
-		}
-	}
+        }
+    }
 }
 
 

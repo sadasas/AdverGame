@@ -44,3 +44,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7e653dadff94d44bdd7d41bab2854f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_currentHUDSelected: {fileID: 0}
+  m_notificationHUDPrefab: {fileID: 3608679444529740042, guid: 6461b4326a9f90e458c7604b409bf0d5, type: 3}
+  m_notifTime: 3
+  AnimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.0024112
+      outSlope: 1.0024112
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9998327
+      value: 1.0022435
+      inSlope: 0.5713032
+      outSlope: 0.5713032
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.88842976
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  AnimTime: 0.1
+  isProhibited: 0

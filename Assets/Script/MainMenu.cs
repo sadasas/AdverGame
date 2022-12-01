@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AdverGame.Sound;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,11 @@ namespace AdverGame.MainMenu
         [SerializeField] Sprite m_bgmOn;
 
 
+        private void Start()
+        {
+            m_isMute = PlayerPrefs.GetInt("BGM") == 1 ? true : false;
+            SetupBGM(m_isMute);
+        }
         public void LoadScene()
         {
             StartCoroutine(ProcessLoadScene());
@@ -25,10 +31,10 @@ namespace AdverGame.MainMenu
 
         IEnumerator ProcessLoadScene()
         {
+            m_loadHUD.SetActive(true);
             AsyncOperation asyncLoadScene = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
             while (!asyncLoadScene.isDone)
             {
-                m_loadHUD.SetActive(true);
                 m_loadSlider.value = asyncLoadScene.progress;
 
                 yield return null;
@@ -43,11 +49,36 @@ namespace AdverGame.MainMenu
         {
             if (m_isMute)
             {
+                PlayerPrefs.SetInt("BGM", 0);
                 m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
+                SoundManager.s_Instance.PlayBGM(Sound.BGMType.INGAME);
+
             }
-            else m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+            else
+            {
+                PlayerPrefs.SetInt("BGM", 1);
+                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+                SoundManager.s_Instance.StopBGM();
+            }
 
             m_isMute = !m_isMute;
+        }
+        public void SetupBGM(bool ismute)
+        {
+            if (!m_isMute)
+            {
+
+                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOn;
+
+            }
+            else
+            {
+
+                m_buttonBGM.GetComponent<Image>().sprite = m_bgmOff;
+
+            }
+
+
         }
     }
 }

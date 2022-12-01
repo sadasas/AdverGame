@@ -8,6 +8,14 @@ TagManager:
   - MainCanvas
   - Chair
   - Item
+  - TaskHUD
+  - BtnItemAvailable
+  - BtnCookItem
+  - BtnRandomItem
+  - ChairSet
+  - Table
+  - Dummy
+  - PanelBlur
   layers:
   - Default
   - TransparentFX

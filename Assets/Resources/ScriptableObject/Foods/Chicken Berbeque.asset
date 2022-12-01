@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ed631689c8c5384eba7dc6375298816, type: 3}
+  m_Name: Chicken Berbeque
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Chicken Barbeque
+  <Image>k__BackingField: {fileID: 21300000, guid: 07f6405d1ca77e346adb3d4b25b04ddd, type: 3}
+  <ItemPrefab>k__BackingField: {fileID: 3553442045103764657, guid: 25ce7649aaf935547bc890cc00424009, type: 3}

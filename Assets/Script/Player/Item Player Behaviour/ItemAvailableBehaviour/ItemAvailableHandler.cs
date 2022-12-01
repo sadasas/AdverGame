@@ -1,12 +1,13 @@
 ﻿using AdverGame.Customer;
 using AdverGame.UI;
+using AdverGame.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdverGame.Player
 {
     /// <summary>
-    /// TODO: Refactor displayupdteitem method
+    /// TODO: Refactor display update item method
     /// </summary>
     public class ItemAvailableHandler
     {
@@ -15,7 +16,7 @@ namespace AdverGame.Player
         ItemAvailableButtonHandler m_menuAvailableButtonHandler;
         GameObject m_menuAvailableHUDPrefab;
         GameObject m_buttonmenuAvailablePrefab;
-
+        List<ItemSerializable> m_allItems;
         ItemContainer m_itemContainer;
 
 
@@ -28,11 +29,12 @@ namespace AdverGame.Player
 
             m_mainCanvas = GameObject.FindGameObjectWithTag("MainCanvas").transform;
             m_itemContainer = itemContainer;
-
+            m_allItems = AssetHelpers.GetAllItemRegistered();
             InitItemAvailableHUD();
             InitItemAvailableButton();
 
         }
+
 
 
         void InitItemAvailableButton()
@@ -49,30 +51,26 @@ namespace AdverGame.Player
             m_menuAvailableHUDHandler = GameObject.Instantiate(m_menuAvailableHUDPrefab, m_mainCanvas).GetComponent<ItemAvailableHUDHandler>();
             m_menuAvailableHUDHandler.OnItemTouched += ItemTouched;
             m_menuAvailableHUDHandler.OnActive += DisplayUpdateItem;
+            //ResolutionHelper.ScaleToFitScreen(m_menuAvailableHUDHandler.gameObject);
+            foreach (var item in m_allItems)
+            {
+                item.IncreaseStack(-1);
+
+                m_menuAvailableHUDHandler.DisplayItem(item);
+            }
+
             m_menuAvailableHUDHandler.gameObject.SetActive(false);
             UIManager.s_Instance.HUDRegistered.Add(HUDName.ITEM_AVAILABLE, m_menuAvailableHUDHandler.gameObject);
 
-        
+
 
         }
 
 
         void DisplayUpdateItem()
         {
-            if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0)
-            {
-                if (m_menuAvailableHUDHandler.ItemsDisplayed != null && m_menuAvailableHUDHandler.ItemsDisplayed.Count > 0)
-                {
-                    foreach (var item in m_menuAvailableHUDHandler.ItemsDisplayed)
-                    {
+            if (m_itemContainer.Items == null || m_itemContainer.Items.Count == 0) return;
 
-                        m_menuAvailableHUDHandler.DestroyItem(item.Key);
-                    }
-                    m_menuAvailableHUDHandler.RemoveItem();
-                }
-
-                return;
-            }
             if (m_menuAvailableHUDHandler.ItemsDisplayed == null || m_menuAvailableHUDHandler.ItemsDisplayed.Count == 0)
             {
 
@@ -84,37 +82,15 @@ namespace AdverGame.Player
             }
             else
             {
-                if (m_menuAvailableHUDHandler.ItemsDisplayed.Count > m_itemContainer.Items.Count)
-                {
-                    var itemTrash = new List<Item>();
-                    foreach (var itemDisplayed in m_menuAvailableHUDHandler.ItemsDisplayed)
-                    {
-                        var isSame = false;
-                        foreach (var item in m_itemContainer.Items)
-                        {
-                            if (item == itemDisplayed.Value) isSame = true;
-                        }
-                        if (!isSame) itemTrash.Add(itemDisplayed.Key);
-                    }
-                    if (itemTrash.Count > 0)
-                    {
-                        foreach (var item in itemTrash)
-                        {
 
-                            m_menuAvailableHUDHandler.DestroyItem(item);
-                            m_menuAvailableHUDHandler.RemoveItem(item);
-                        }
-                    }
-
-                }
                 foreach (var itemInventory in m_itemContainer.Items)
                 {
                     var isSame = false;
                     foreach (var itemDisplayed in m_menuAvailableHUDHandler.ItemsDisplayed)
                     {
-                        if (itemDisplayed.Value == itemInventory)
+                        if (itemDisplayed.Value.Content.Name.Equals(itemInventory.Content.Name))
                         {
-                            /// VIOLETE SINGLE RESPONABILITY PRINCIPLE
+                            /// VIOLANCE SINGLE RESPONABILITY PRINCIPLE
                             itemDisplayed.Key.UpdateItem(itemInventory.Content, itemInventory.Stack);
                             isSame = true;
                         }
@@ -131,13 +107,24 @@ namespace AdverGame.Player
 
             if (CustomerManager.s_Instance.CheckOrder(item, out var order))
             {
-                CustomerManager.s_Instance.GetOrder(order);
                 m_itemContainer.DecreaseItem(item);
+                CustomerManager.s_Instance.GetOrder(order);
                 DisplayUpdateItem();
             }
 
         }
 
+
+
+        public void SelectItemInHUD(ItemSerializable item)
+        {
+            m_menuAvailableHUDHandler.SelectItem(item);
+        }
+
+        public void UnselectItemInHUD()
+        {
+            m_menuAvailableHUDHandler.UnselectItem();
+        }
     }
 
 
