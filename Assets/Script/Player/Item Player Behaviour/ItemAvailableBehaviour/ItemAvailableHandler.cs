@@ -107,8 +107,8 @@ namespace AdverGame.Player
 
             if (CustomerManager.s_Instance.CheckOrder(item, out var order))
             {
-                CustomerManager.s_Instance.GetOrder(order);
                 m_itemContainer.DecreaseItem(item);
+                CustomerManager.s_Instance.GetOrder(order);
                 DisplayUpdateItem();
             }
 

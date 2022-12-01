@@ -145,6 +145,7 @@ namespace AdverGame.Player
             task.m_HUDOrderDetail = m_HUDOrderDetail;
             task.OnShowDetail += ShowDetailOrder;
             m_tasksDisplayed.Add(task);
+           
         }
 
         void ShowDetailOrder(UncompletedTask task)

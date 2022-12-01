@@ -13,8 +13,8 @@ namespace AdverGame.UI
         {
             var digits = Math.Floor(Math.Log10(coin));
 
-           
             var multipleValue = math.floor(digits / 3);
+
 
             if (multipleValue == 1)
             {
@@ -26,8 +26,16 @@ namespace AdverGame.UI
             {
                 if (multipleValue >= 2)
                 {
-                    var length = (int)digits - 5;
-                    return coin.ToString().Substring(0, length) + "M";
+
+                    var a = coin.ToString().ToCharArray();
+
+                    var actualLength = (int)digits - 5;
+                    var length = 0;
+                    if (a[1] != '0') length++;
+                    if (a[2] != '0') length++;
+
+                    if (length > 0) return coin.ToString().Substring(0, actualLength) + "," + coin.ToString().Substring(0, actualLength + length) + "M";
+                    return coin.ToString().Substring(0, actualLength) + "M";
                 }
 
                 return coin.ToString();
@@ -36,10 +44,10 @@ namespace AdverGame.UI
     }
     public class CoinHUDHandler : MonoBehaviour
     {
-        [SerializeField] TextMeshProUGUI m_coin;
-        [SerializeField] TextMeshProUGUI m_increment;
-
-
+        [SerializeField]
+        TextMeshProUGUI m_coin;
+        [SerializeField]
+        TextMeshProUGUI m_increment;
 
         public void UpdateCoin(int coin, int increment)
         {
@@ -48,18 +56,16 @@ namespace AdverGame.UI
             StartCoroutine(IncrementNotif(increment));
         }
 
-
         IEnumerator IncrementNotif(int increment)
         {
 
-            if (increment == 0) yield break;
+            if (increment == 0)
+                yield break;
             var simbol = increment > 0 ? "+ " : "- ";
             m_increment.text = simbol + Mathf.Abs(increment);
             m_increment.transform.parent.gameObject.SetActive(true);
             yield return new WaitForSeconds(1);
             m_increment.transform.parent.gameObject.SetActive(false);
-
         }
-
     }
 }

@@ -17,7 +17,7 @@ namespace AdverGame.Customer
     /// </summary>
     public class CustomerController : MonoBehaviour
     {
-        ItemSerializable m_currentOrder;
+       public ItemSerializable m_currentOrder;
         List<ItemSerializable> m_itemsRegistered;
         Animator m_animCharacter;
         Collider2D m_collider;

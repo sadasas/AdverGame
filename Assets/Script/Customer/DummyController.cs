@@ -57,8 +57,8 @@ namespace AdverGame.Customer
                 var layer = pos < posOther ?
                      m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
 
-                m_spriteRenderer.sortingOrder = layer;
-                m_canvas.sortingOrder = layer;
+                m_spriteRenderer.sortingOrder = layer > 0 ? layer : 1;
+                m_canvas.sortingOrder = layer > 0 ? layer : 1;
 
             }
             if (collider.CompareTag("Dummy"))
@@ -70,8 +70,8 @@ namespace AdverGame.Customer
                 var layer = pos < posOther ?
                      m_spriteRenderer.sortingOrder > collider.GetComponent<SpriteRenderer>().sortingOrder ? m_spriteRenderer.sortingOrder : collider.GetComponent<SpriteRenderer>().sortingOrder + 1 : collider.GetComponent<SpriteRenderer>().sortingOrder - 1;
 
-                m_spriteRenderer.sortingOrder = layer;
-                m_canvas.sortingOrder = layer;
+                m_spriteRenderer.sortingOrder = layer > 0 ? layer : 1;
+                m_canvas.sortingOrder = layer > 0 ? layer : 1;
             }
 
 

@@ -519,11 +519,11 @@ namespace AdverGame.Customer
                     if (task.CustomerOrder.Customer == order.Customer)
                     {
 
-                        OnRemoveOrder?.Invoke(task);
                         var panel = m_taskHUD.transform.GetChild(0).GetComponent<RectTransform>();
                         panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
                         m_taskOrders.Remove(task);
                         Destroy(task.gameObject);
+                        OnRemoveOrder?.Invoke(task);
                         break;
                     }
                 }
@@ -542,6 +542,7 @@ namespace AdverGame.Customer
                     panel.sizeDelta = new Vector2(panel.sizeDelta.x - m_orderTaskPrefab.GetComponent<RectTransform>().sizeDelta.x, panel.sizeDelta.y);
                     m_taskOrders.Remove(task);
                     Destroy(task.gameObject);
+                    OnRemoveOrder?.Invoke(task);
                     break;
                 }
             }

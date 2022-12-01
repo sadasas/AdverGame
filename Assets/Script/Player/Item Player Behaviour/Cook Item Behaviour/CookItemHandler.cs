@@ -67,13 +67,16 @@ namespace AdverGame.Player
 
             foreach (var task in tasks)
             {
-                if (!m_tasks.Contains(task))
+                if (m_tasks == null || m_tasks.Count == 0 || !m_tasks.Contains(task))
                 {
+
                     foreach (var item in m_itemContainer.Items)
                     {
+
                         if (task.CustomerOrder.ItemOrder.Content.Name.Equals(item.Content.Name))
                         {
-                            if (item.Stack == 0)
+                            
+                            if (item.Stack <= 0)
                             {
                                 m_tasks ??= new();
                                 m_tasks.Add(task);
@@ -82,23 +85,31 @@ namespace AdverGame.Player
                         }
                     }
                 }
+
             }
+
         }
+
 
 
         public void RemoveUncompleteOrder(Task order)
         {
-            if (m_tasks == null || m_tasks.Count == 0) return;
-            foreach (var item in m_tasks.ToArray())
+
+            if (m_tasks != null && m_tasks.Count > 0)
             {
-                if (order.CustomerOrder.ItemOrder.Content.Name.Equals(item.CustomerOrder.ItemOrder.Content.Name) && order.CustomerOrder.Customer == item.CustomerOrder.Customer)
+                foreach (var item in m_tasks.ToArray())
                 {
-                    UpdateTaskUncompleted();
-                    m_tasks.Remove(item);
-                    HUDHandler.RemoveTaskUncompleted(order);
-                    break;
+                    if (order.CustomerOrder.ItemOrder.Content.Name.Equals(item.CustomerOrder.ItemOrder.Content.Name) && order.CustomerOrder.Customer == item.CustomerOrder.Customer)
+                    {
+
+                        m_tasks.Remove(item);
+                        HUDHandler.RemoveTaskUncompleted(order);
+                        break;
+                    }
                 }
             }
+
+            UpdateTaskUncompleted();
         }
         public void UpdatePlate(Level level)
         {
