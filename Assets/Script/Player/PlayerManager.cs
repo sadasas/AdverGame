@@ -58,7 +58,7 @@ public class DataLevel
 [Serializable]
 public class PlayerData
 {
-    public int Coin;
+    public long Coin;
     public DataRandomItem RandomItem;
     public DataLevel Level;
     public List<ItemSerializable> Items;
@@ -86,7 +86,7 @@ namespace AdverGame.Player
 
         public PlayerData Data => m_data;
 
-        public Action<int, int> OnIncreaseCoin;
+        public Action<long, int> OnIncreaseCoin;
         public Action<int, int> OnIncreaseExp;
         public Action<Level> OnIncreaseLevel;
         public Action<PlayerData> OnDataLoaded;

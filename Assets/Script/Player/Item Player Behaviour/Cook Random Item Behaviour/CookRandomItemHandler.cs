@@ -114,9 +114,17 @@ namespace AdverGame.Player
                 if (count + loadedData == m_maxItemCooked) OnFindItem?.Invoke(m_maxItemCooked, m_maxItemCooked, m_searchItemTime);
 
                 SetupEtalase(count);
+                SaveData();
             }
         }
+        void SaveData()
+        {
+            var data = new DataRandomItem();
+            data.CooldownBtnFaster = m_currentCooldownBtnFaster;
+            data.RandomItemGetted = ItemFounded;
 
+            PlayerManager.s_Instance.SaveDataRandomItem(data);
+        }
         void SetupEtalase(int itemFounded)
         {
 
@@ -206,6 +214,7 @@ namespace AdverGame.Player
             {
                 m_HUDHandler.DisableBtnFaster(m_currentCooldownBtnFaster);
                 m_currentCooldownBtnFaster -= Time.deltaTime;
+                SaveData();
                 yield return null;
 
             }
@@ -252,13 +261,9 @@ namespace AdverGame.Player
 
         public void OnExit()
         {
-
-            var data = new DataRandomItem();
-            data.CooldownBtnFaster = m_currentCooldownBtnFaster;
-            data.RandomItemGetted = ItemFounded;
-
-            PlayerManager.s_Instance.SaveDataRandomItem(data);
+            SaveData();
         }
+
 
     }
 
