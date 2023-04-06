@@ -114,6 +114,6 @@ namespace AdverGame.GameManager
 
         }
 
-      
+
     }
 }
